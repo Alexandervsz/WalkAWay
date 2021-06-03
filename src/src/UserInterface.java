@@ -4,4 +4,12 @@ public class UserInterface {
     private float walkingSpeed;
     private float kcal;
 
+    private void startUI(){
+
+    }
+
+    private void startCalculator(){
+
+    }
+
 }
