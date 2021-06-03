@@ -13,15 +13,18 @@ public class MetsInserter extends JFrame {
     private JPanel bottomPanel;
     private JButton confirmButton;
     private JTextField metsField;
-    private JTextField speedField;
+    private JTextField speedAField;
     private JTextField activityField;
     private JLabel metsLabel;
-    private JLabel speedLabel;
+    private JLabel speedALabel;
     private JLabel activityLabel;
+    private JLabel speedBLabel;
+    private JTextField speedBField;
 
     public MetsInserter() {
         metsLabel.setText("Please enter the mets value of your activity: ");
-        speedLabel.setText("Please enter the speed of the activity: ");
+        speedALabel.setText("Please enter the beginning of the speed range of the activity: ");
+        speedBLabel.setText("Please enter the end of the speed range of the activity: ");
         activityLabel.setText("Please enter a description of the activity: ");
         confirmButton.addActionListener(this::addMets);
 
@@ -33,11 +36,11 @@ public class MetsInserter extends JFrame {
     }
 
     private void addMets(ActionEvent actionEvent) {
-        Connection c = null;
-        Statement stmt = null;
+        Connection c;
         try {
             float mets = Float.parseFloat(metsField.getText());
-            float speed = Float.parseFloat(speedField.getText()) * 1.609344f;
+            float speedA = Float.parseFloat(speedAField.getText()) * 1.609344f; // convert to metric.
+            float speedB = Float.parseFloat(speedBField.getText()) * 1.609344f;
             String activity = activityField.getText();
             try {
                 Class.forName("org.postgresql.Driver");
@@ -45,15 +48,14 @@ public class MetsInserter extends JFrame {
                         .getConnection("jdbc:postgresql://localhost:5432/IPASS",
                                 "postgres", "postgres");
                 c.setAutoCommit(false);
-                System.out.println("Opened database successfully");
-                String sql = "INSERT INTO metvalues (metvalue, speed, activity) VALUES (?, ?, ?);";
+                String sql = "INSERT INTO metvalues (metvalue, speeda, speedb,  activity) VALUES (?, ?, ?, ?);";
                 PreparedStatement pst = c.prepareStatement(sql);
                 pst.setString(1, String.valueOf(mets));
-                pst.setString(2, String.valueOf(speed));
-                pst.setString(3, activity);
+                pst.setString(2, String.valueOf(speedA));
+                pst.setString(3, String.valueOf(speedB));
+                pst.setString(4, activity);
                 pst.executeUpdate();
                 c.commit();
-                System.out.println("Records created successfully");
                 c.close();
                 System.exit(0);
             } catch (Exception e) {
@@ -63,7 +65,8 @@ public class MetsInserter extends JFrame {
 
         } catch (NumberFormatException e) {
             metsField.setText("");
-            speedField.setText("");
+            speedAField.setText("");
+            speedBField.setText("");
             activityField.setText("");
 
         }
