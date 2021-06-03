@@ -1,4 +1,4 @@
-public class Calculator {
+public class User {
     private float mets;
     private float weight;
     private float walkingSpeed;
