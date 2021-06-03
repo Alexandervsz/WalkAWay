@@ -15,11 +15,12 @@ public class UserInputScreen extends JFrame {
     private JTextField weightField;
     private JTextField walkingSpeedField;
     private JTextField kcalField;
+    private JComboBox<MetValue> metsBox;
 
     // Ununsed but required for form to work.
     private JPanel southPanel;
     private JPanel northPanel;
-    private JComboBox<MetValue> metsBox;
+
 
     public UserInputScreen(){
         metsLabel.setText("Please enter the mets value of your activity: ");
