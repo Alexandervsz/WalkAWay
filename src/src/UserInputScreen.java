@@ -16,6 +16,10 @@ public class UserInputScreen extends JFrame {
     private JTextField walkingSpeedField;
     private JTextField kcalField;
 
+    // Ununsed but required for form to work.
+    private JPanel southPanel;
+    private JPanel northPanel;
+
     public UserInputScreen(){
         metsLabel.setText("Please enter the mets value of your activity: ");
         weightLabel.setText("Please enter your weight: ");
