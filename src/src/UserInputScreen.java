@@ -2,6 +2,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,13 +26,13 @@ public class UserInputScreen extends JFrame {
     private JPanel northPanel;
 
 
-    public UserInputScreen(){
+    public UserInputScreen() {
         metsLabel.setText("Please enter the mets value of your activity: ");
         weightLabel.setText("Please enter your weight: ");
         walkingSpeedLabel.setText("Please enter your walking speed: ");
         kcalLabel.setText("Please enter the amount of Calories you want to burn during the exercise: ");
         confirmButton.addActionListener(this::createUser);
-        for (MetValue mets: getBoxOptions()){
+        for (MetValue mets : getBoxOptions()) {
             setData(mets);
         }
 
@@ -39,18 +43,50 @@ public class UserInputScreen extends JFrame {
         validate();
     }
 
-    private List<MetValue> getBoxOptions(){
-        List<MetValue> test = new ArrayList<>();
-        test.add(new MetValue(1, 1, "test"));
-        return test;
+    private List<MetValue> getBoxOptions() {
+        List<MetValue> metValues = new ArrayList<>();
+        try {
+            Class.forName("org.postgresql.Driver");
+            Connection c = DriverManager
+                    .getConnection("jdbc:postgresql://localhost:5432/IPASS",
+                            "postgres", "postgres");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
 
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM metvalues;");
+            while (rs.next()) {
+                metValues.add(new MetValue(rs.getString("metvalue"), rs.getString("speeda"), rs.getString("speedb"), rs.getString("activity")));
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+
+
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        return metValues;
     }
 
     private void createUser(ActionEvent actionEvent) {
-        System.out.println(metsBox.getSelectedItem());
-        System.out.println(weightField.getText());
-        System.out.println(walkingSpeedField.getText());
-        System.out.println(kcalField.getText());
+        MetValue metValue = (MetValue) metsBox.getSelectedItem();
+        try {
+            float weight = Float.parseFloat(weightField.getText());
+            float walkingSpeed = Float.parseFloat(walkingSpeedField.getText());
+            float kcal = Float.parseFloat(kcalField.getText());
+            assert metValue != null;
+            float mets = metValue.getMetValue();
+            User user = new User(mets, weight, walkingSpeed, kcal);
+            System.out.println(user.getKilometers());
+        }
+        catch (NumberFormatException e) {
+            weightField.setText("");
+            walkingSpeedField.setText("");
+            kcalField.setText("");
+        }
+
     }
 
     public static void main(String[] args) {
