@@ -42,11 +42,16 @@ public class UserInputScreen extends JFrame {
 
     private void createUser(ActionEvent actionEvent) {
         MetValue metValue = (MetValue) metsBox.getSelectedItem();
+        assert metValue != null;
         try {
+            float walkingSpeed;
             float weight = Float.parseFloat(weightField.getText());
-            float walkingSpeed = Float.parseFloat(walkingSpeedField.getText());
+            if (metValue.getSpeedA() == -1 || metValue.getSpeedB() != -1){
+            walkingSpeed = Float.parseFloat(walkingSpeedField.getText());}
+            else{
+                walkingSpeed = metValue.getSpeedA();
+            }
             float kcal = Float.parseFloat(kcalField.getText());
-            assert metValue != null;
             float mets = metValue.getMetValue();
             User user = new User(mets, weight, walkingSpeed, kcal);
             System.out.println(user.getDistance());
