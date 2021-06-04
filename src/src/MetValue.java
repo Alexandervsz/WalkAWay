@@ -33,7 +33,11 @@ public class MetValue {
     public String toString() {
         DecimalFormat decimalFormat = new DecimalFormat("#.#");
         if (speedB == -1) {
-            return activity + " at " + decimalFormat.format(speedA) + "km/h";
+            if (speedA == -1) {
+                return activity;
+            } else {
+                return activity + " at " + decimalFormat.format(speedA) + "km/h";
+            }
         } else {
             return activity + " between " + decimalFormat.format(speedA) + " and " + decimalFormat.format(speedB) + "km/h";
         }
