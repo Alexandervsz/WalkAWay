@@ -19,7 +19,6 @@ public class UserInputScreen extends JFrame {
     private JPanel southPanel;
     private JPanel northPanel;
 
-
     public UserInputScreen() {
         metsLabel.setText("Please enter the mets value of your activity: ");
         weightLabel.setText("Please enter your weight: ");
@@ -40,45 +39,41 @@ public class UserInputScreen extends JFrame {
         validate();
     }
 
-
     private void createUser(ActionEvent actionEvent) {
         MetValue metValue = (MetValue) metsBox.getSelectedItem();
         assert metValue != null;
         try {
             float walkingSpeed;
             float weight = Float.parseFloat(weightField.getText());
-            if (metValue.getSpeedA() == -1 || metValue.getSpeedB() != -1){
-            walkingSpeed = Float.parseFloat(walkingSpeedField.getText());}
-            else{
+            if (metValue.getSpeedA() == -1 || metValue.getSpeedB() != -1) {
+                walkingSpeed = Float.parseFloat(walkingSpeedField.getText());
+            } else {
                 walkingSpeed = metValue.getSpeedA();
             }
             float kcal = Float.parseFloat(kcalField.getText());
             float mets = metValue.getMetValue();
             User user = new User(mets, weight, walkingSpeed, kcal);
             System.out.println(user.getDistance());
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             weightField.setText("");
             walkingSpeedField.setText("");
             kcalField.setText("");
         }
-
-
     }
 
-    private void changeUI(ActionEvent actionEvent){
+    private void changeUI(ActionEvent actionEvent) {
         MetValue metValue = (MetValue) metsBox.getSelectedItem();
         assert metValue != null;
-        walkingSpeedLabel.setText("Please enter your "+metValue.getActivity()+" speed: ");
-        if (metValue.getSpeedA() != -1){
-            if (metValue.getSpeedB() != -1){
+        walkingSpeedLabel.setText("Please enter your " + metValue.getActivity() + " speed: ");
+        if (metValue.getSpeedA() != -1) {
+            if (metValue.getSpeedB() != -1) {
                 walkingSpeedLabel.setVisible(true);
                 walkingSpeedField.setVisible(true);
-            }else{
-            walkingSpeedLabel.setVisible(false);
-            walkingSpeedField.setVisible(false);}
-        }
-        else{
+            } else {
+                walkingSpeedLabel.setVisible(false);
+                walkingSpeedField.setVisible(false);
+            }
+        } else {
             walkingSpeedLabel.setVisible(true);
             walkingSpeedField.setVisible(true);
         }
@@ -94,12 +89,5 @@ public class UserInputScreen extends JFrame {
 
     public void setData(MetValue data) {
         metsBox.addItem(data);
-    }
-
-    public void getData(MetValue data) {
-    }
-
-    public boolean isModified(MetValue data) {
-        return false;
     }
 }

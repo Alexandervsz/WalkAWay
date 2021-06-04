@@ -23,7 +23,6 @@ public class MetsInserter extends JFrame {
         speedBLabel.setText("Please enter the end of the speed range of the activity: ");
         activityLabel.setText("Please enter a description of the activity: ");
         confirmButton.addActionListener(this::addMets);
-
         Image icon = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB_PRE); //Removes the ugly icon...
         setIconImage(icon);
         setLayout(new GridLayout());
@@ -46,7 +45,6 @@ public class MetsInserter extends JFrame {
             } else {
                 speedB = Float.parseFloat(speedBField.getText()) * 1.609344f; // convert to metric.
             }
-
             String activity = activityField.getText();
             DatabaseManager databaseManager = new DatabaseManager();
             databaseManager.insertMets(mets, speedA, speedB, activity);
@@ -57,7 +55,6 @@ public class MetsInserter extends JFrame {
             speedAField.setText("");
             speedBField.setText("");
             activityField.setText("");
-
         }
     }
 
