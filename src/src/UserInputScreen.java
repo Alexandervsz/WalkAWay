@@ -32,7 +32,8 @@ public class UserInputScreen extends JFrame {
         walkingSpeedLabel.setText("Please enter your walking speed: ");
         kcalLabel.setText("Please enter the amount of Calories you want to burn during the exercise: ");
         confirmButton.addActionListener(this::createUser);
-        for (MetValue mets : getBoxOptions()) {
+        DatabaseManager databaseManager = new DatabaseManager();
+        for (MetValue mets : databaseManager.getBoxOptions()) {
             setData(mets);
         }
 
@@ -43,32 +44,6 @@ public class UserInputScreen extends JFrame {
         validate();
     }
 
-    private List<MetValue> getBoxOptions() {
-        List<MetValue> metValues = new ArrayList<>();
-        try {
-            Class.forName("org.postgresql.Driver");
-            Connection c = DriverManager
-                    .getConnection("jdbc:postgresql://localhost:5432/IPASS",
-                            "postgres", "postgres");
-            c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
-
-            Statement stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM metvalues;");
-            while (rs.next()) {
-                metValues.add(new MetValue(rs.getString("metvalue"), rs.getString("speeda"), rs.getString("speedb"), rs.getString("activity")));
-            }
-            rs.close();
-            stmt.close();
-            c.close();
-
-
-        } catch (Exception e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-        }
-        return metValues;
-    }
 
     private void createUser(ActionEvent actionEvent) {
         MetValue metValue = (MetValue) metsBox.getSelectedItem();

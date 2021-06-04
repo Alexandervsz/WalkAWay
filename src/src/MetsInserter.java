@@ -39,31 +39,15 @@ public class MetsInserter extends JFrame {
         try {
             float mets = Float.parseFloat(metsField.getText());
             float speedA = Float.parseFloat(speedAField.getText()) * 1.609344f; // convert to metric.
+            float speedB;
             if (speedBField.getText().equals("")) {
-                float speedB = -1;
+                speedB = -1;
+            } else {
+                speedB = Float.parseFloat(speedBField.getText()) * 1.609344f;
             }
-            float speedB = Float.parseFloat(speedBField.getText()) * 1.609344f;
             String activity = activityField.getText();
-            try {
-                Class.forName("org.postgresql.Driver");
-                c = DriverManager
-                        .getConnection("jdbc:postgresql://localhost:5432/IPASS",
-                                "postgres", "postgres");
-                c.setAutoCommit(false);
-                String sql = "INSERT INTO metvalues (metvalue, speeda, speedb,  activity) VALUES (?, ?, ?, ?);";
-                PreparedStatement pst = c.prepareStatement(sql);
-                pst.setString(1, String.valueOf(mets));
-                pst.setString(2, String.valueOf(speedA));
-                pst.setString(3, String.valueOf(speedB));
-                pst.setString(4, activity);
-                pst.executeUpdate();
-                c.commit();
-                c.close();
-                System.exit(0);
-            } catch (Exception e) {
-                System.err.println(e.getClass().getName() + ": " + e.getMessage());
-                System.exit(0);
-            }
+            DatabaseManager databaseManager = new DatabaseManager();
+            databaseManager.insertMets(mets, speedA, speedB, activity);
 
         } catch (NumberFormatException e) {
             metsField.setText("");
