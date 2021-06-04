@@ -25,10 +25,6 @@ public class MetValue {
         return speedB;
     }
 
-    public String getActivity() {
-        return activity;
-    }
-
     @Override
     public String toString() {
         DecimalFormat decimalFormat = new DecimalFormat("#.#");
