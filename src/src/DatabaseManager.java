@@ -35,6 +35,7 @@ public class DatabaseManager {
             System.exit(0);
         }
     }
+
     public List<MetValue> getBoxOptions() {
         List<MetValue> metValues = new ArrayList<>();
         try {
@@ -42,7 +43,8 @@ public class DatabaseManager {
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM metvalues;");
             while (rs.next()) {
-                metValues.add(new MetValue(rs.getString("metvalue"), rs.getString("speeda"), rs.getString("speedb"), rs.getString("activity")));
+                metValues.add(new MetValue(rs.getString("metvalue"), rs.getString("speeda"),
+                        rs.getString("speedb"), rs.getString("activity")));
             }
             rs.close();
             stmt.close();
