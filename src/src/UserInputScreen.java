@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 public class UserInputScreen extends JFrame {
     private JButton confirmButton;
@@ -22,13 +23,13 @@ public class UserInputScreen extends JFrame {
     public UserInputScreen() {
         metsLabel.setText("Please enter the mets value of your activity: ");
         weightLabel.setText("Please enter your weight: ");
-        MetValue metValue = (MetValue) metsBox.getSelectedItem();
-        walkingSpeedLabel.setText("Please enter your walking speed: ");
+        DatabaseManager databaseManager = new DatabaseManager();
+        List<MetValue> metValues = databaseManager.getBoxOptions();
+        walkingSpeedLabel.setText("Please enter your "+metValues.get(0).getActivity()+" speed: ");
         kcalLabel.setText("Please enter the amount of Calories you want to burn during the exercise: ");
         confirmButton.addActionListener(this::createUser);
         metsBox.addActionListener(this::changeUI);
-        DatabaseManager databaseManager = new DatabaseManager();
-        for (MetValue mets : databaseManager.getBoxOptions()) {
+        for (MetValue mets : metValues) {
             setData(mets);
         }
 
@@ -83,6 +84,7 @@ public class UserInputScreen extends JFrame {
         UserInputScreen gui = new UserInputScreen();
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gui.setVisible(true);
+        gui.setLocationRelativeTo(null);
         gui.pack();
         gui.setTitle("Enter your data");
     }
