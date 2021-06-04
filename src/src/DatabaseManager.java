@@ -20,7 +20,6 @@ public class DatabaseManager {
 
     public void insertMets(float mets, float speedA, float speedB, String activity) {
         try {
-
             String sql = "INSERT INTO metvalues (metvalue, speeda, speedb,  activity) VALUES (?, ?, ?, ?);";
             PreparedStatement pst = c.prepareStatement(sql);
             pst.setString(1, String.valueOf(mets));
@@ -39,7 +38,6 @@ public class DatabaseManager {
     public List<MetValue> getBoxOptions() {
         List<MetValue> metValues = new ArrayList<>();
         try {
-
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM metvalues;");
             while (rs.next()) {
@@ -49,8 +47,6 @@ public class DatabaseManager {
             rs.close();
             stmt.close();
             c.close();
-
-
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
