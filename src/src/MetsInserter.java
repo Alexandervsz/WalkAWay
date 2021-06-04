@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.Statement;
 
 public class MetsInserter extends JFrame {
     private JPanel mainPanel;
@@ -40,6 +39,9 @@ public class MetsInserter extends JFrame {
         try {
             float mets = Float.parseFloat(metsField.getText());
             float speedA = Float.parseFloat(speedAField.getText()) * 1.609344f; // convert to metric.
+            if (speedBField.getText().equals("")) {
+                float speedB = -1;
+            }
             float speedB = Float.parseFloat(speedBField.getText()) * 1.609344f;
             String activity = activityField.getText();
             try {
