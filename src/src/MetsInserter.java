@@ -50,6 +50,7 @@ public class MetsInserter extends JFrame {
             String activity = activityField.getText();
             DatabaseManager databaseManager = new DatabaseManager();
             databaseManager.insertMets(mets, speedA, speedB, activity);
+            System.exit(0);
 
         } catch (NumberFormatException e) {
             metsField.setText("");
