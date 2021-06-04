@@ -79,7 +79,7 @@ public class UserInputScreen extends JFrame {
             assert metValue != null;
             float mets = metValue.getMetValue();
             User user = new User(mets, weight, walkingSpeed, kcal);
-            System.out.println(user.getKilometers());
+            System.out.println(user.getDistance());
         }
         catch (NumberFormatException e) {
             weightField.setText("");
