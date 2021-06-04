@@ -23,6 +23,7 @@ public class UserInputScreen extends JFrame {
     public UserInputScreen() {
         metsLabel.setText("Please enter the mets value of your activity: ");
         weightLabel.setText("Please enter your weight: ");
+        MetValue metValue = (MetValue) metsBox.getSelectedItem();
         walkingSpeedLabel.setText("Please enter your walking speed: ");
         kcalLabel.setText("Please enter the amount of Calories you want to burn during the exercise: ");
         confirmButton.addActionListener(this::createUser);
@@ -62,11 +63,13 @@ public class UserInputScreen extends JFrame {
             kcalField.setText("");
         }
 
+
     }
 
     private void changeUI(ActionEvent actionEvent){
         MetValue metValue = (MetValue) metsBox.getSelectedItem();
         assert metValue != null;
+        walkingSpeedLabel.setText("Please enter your "+metValue.getActivity()+" speed: ");
         if (metValue.getSpeedA() != -1){
             if (metValue.getSpeedB() != -1){
                 walkingSpeedLabel.setVisible(true);
