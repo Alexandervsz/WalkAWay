@@ -1,17 +1,10 @@
 import java.text.DecimalFormat;
 
 public class MetValue {
-    private float metValue;
-    private float speedA;
-    private float speedB;
-    private String activity;
-
-    public MetValue(float metValue, float speedA, float speedB, String activity) {
-        this.metValue = metValue;
-        this.speedA = speedA;
-        this.speedB = speedB;
-        this.activity = activity;
-    }
+    private final float metValue;
+    private final float speedA;
+    private final float speedB;
+    private final String activity;
 
     public MetValue(String metValue, String speedA, String speedB, String activity) {
         this.metValue = Float.parseFloat(metValue);
