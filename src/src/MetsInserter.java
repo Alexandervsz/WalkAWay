@@ -2,9 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 
 public class MetsInserter extends JFrame {
     private JPanel mainPanel;
@@ -35,7 +32,6 @@ public class MetsInserter extends JFrame {
     }
 
     private void addMets(ActionEvent actionEvent) {
-        Connection c;
         try {
             float mets = Float.parseFloat(metsField.getText());
             float speedA = Float.parseFloat(speedAField.getText()) * 1.609344f; // convert to metric.
