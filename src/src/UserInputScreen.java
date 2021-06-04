@@ -26,6 +26,7 @@ public class UserInputScreen extends JFrame {
         walkingSpeedLabel.setText("Please enter your walking speed: ");
         kcalLabel.setText("Please enter the amount of Calories you want to burn during the exercise: ");
         confirmButton.addActionListener(this::createUser);
+        metsBox.addActionListener(this::changeUI);
         DatabaseManager databaseManager = new DatabaseManager();
         for (MetValue mets : databaseManager.getBoxOptions()) {
             setData(mets);
@@ -56,6 +57,23 @@ public class UserInputScreen extends JFrame {
             kcalField.setText("");
         }
 
+    }
+
+    private void changeUI(ActionEvent actionEvent){
+        MetValue metValue = (MetValue) metsBox.getSelectedItem();
+        assert metValue != null;
+        if (metValue.getSpeedA() != -1){
+            if (metValue.getSpeedB() != -1){
+                walkingSpeedLabel.setVisible(true);
+                walkingSpeedField.setVisible(true);
+            }else{
+            walkingSpeedLabel.setVisible(false);
+            walkingSpeedField.setVisible(false);}
+        }
+        else{
+            walkingSpeedLabel.setVisible(true);
+            walkingSpeedField.setVisible(true);
+        }
     }
 
     public static void main(String[] args) {
