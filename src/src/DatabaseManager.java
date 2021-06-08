@@ -53,4 +53,22 @@ public class DatabaseManager {
         }
         return metValues;
     }
+
+    public List<NodeType> getNodeTypes(){
+        List<NodeType> nodeTypes = new ArrayList<>();
+        try {
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM nodetype;");
+            while (rs.next()) {
+                nodeTypes.add(new NodeType(rs.getString("main_type"), rs.getString("sub_type")));
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        return nodeTypes;
+    }
 }
