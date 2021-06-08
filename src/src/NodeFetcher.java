@@ -6,9 +6,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -53,11 +52,12 @@ public class NodeFetcher {
         Object obj = parser.parse(new FileReader("SampleJson.json"));
 
         JSONObject jsonObject = (JSONObject) obj;
+        System.out.println(jsonObject.keySet());
         JSONArray elements = (JSONArray) jsonObject.get("elements");
-        List<OsmNode> nodeList = new ArrayList<>();
+        Set<OsmNode> nodeSet = new HashSet<>();
         for (Object object: elements) {
-            if (!object.toString().startsWith("{\"nodes")){
-                String string = object.toString();
+            String string = object.toString();
+            if (!string.startsWith("{\"nodes")){
                 System.out.println(string);
                 double lon = Float.parseFloat(string.substring(string.indexOf("\"lon\""),string.indexOf(",\"id")).substring(6));
                 String id = string.substring(string.indexOf(",\"id"),string.indexOf(",\"type\"")).substring(6);
@@ -68,11 +68,15 @@ public class NodeFetcher {
                 else{
                     lat = Double.parseDouble(string.substring(string.indexOf(",\"lat\":"), string.indexOf(",\"tags")).substring(7));
                 }
-                nodeList.add(new OsmNode(id, lon, lat));
+                nodeSet.add(new OsmNode(id, lon, lat));
 
+            }
+            else {
+                System.out.println(string);
             }
 
         }
+        System.out.println(nodeSet);
     }
 
     public static void main(String[] args) throws IOException, InterruptedException, ParseException {
