@@ -50,33 +50,28 @@ public class NodeFetcher {
         JSONObject jsonObject = new JSONObject(response.body());*/
         JSONParser parser = new JSONParser();
         Object obj = parser.parse(new FileReader("SampleJson.json"));
-
         JSONObject jsonObject = (JSONObject) obj;
-        System.out.println(jsonObject.keySet());
         JSONArray elements = (JSONArray) jsonObject.get("elements");
         Set<OsmNode> nodeSet = new HashSet<>();
         for (Object object: elements) {
             String string = object.toString();
             if (!string.startsWith("{\"nodes")){
-                System.out.println(string);
-                double lon = Float.parseFloat(string.substring(string.indexOf("\"lon\""),string.indexOf(",\"id")).substring(6));
-                String id = string.substring(string.indexOf(",\"id"),string.indexOf(",\"type\"")).substring(6);
-                double lat;
-                if(!string.contains(",\"tags")){
-                    lat = Double.parseDouble(string.substring(string.indexOf(",\"lat\":"), string.length()-1).substring(7));
-                }
-                else{
-                    lat = Double.parseDouble(string.substring(string.indexOf(",\"lat\":"), string.indexOf(",\"tags")).substring(7));
-                }
+                string = string.replace("{", "");
+                string = string.replace("}", "");
+                String[] nodelist = string.split(",");
+                double lon =  Double.parseDouble(nodelist[0].substring(6));
+                String id = nodelist[1].substring(5);
+                double lat = Double.parseDouble(nodelist[3].substring(6));
                 nodeSet.add(new OsmNode(id, lon, lat));
-
             }
             else {
-                System.out.println(string);
+                //System.out.println(string);
+                String query = "[out:json];node(id:7802055775);out;";
             }
 
         }
-        System.out.println(nodeSet);
+        OsmNode osmNode = nodeSet.iterator().next();
+        System.out.println(osmNode.toString());
     }
 
     public static void main(String[] args) throws IOException, InterruptedException, ParseException {
