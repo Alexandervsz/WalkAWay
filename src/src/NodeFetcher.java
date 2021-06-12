@@ -100,11 +100,13 @@ public class NodeFetcher {
                     }
                     List<Node> nodeList = new ArrayList<>();
                     List<Node> nodesList = new ArrayList<>(nodeSet);
+                    Way newWay = new Way(wayId, typesList);
                     for (String nodeId : nodes) {
                         Node node = nodesList.get(nodesList.indexOf(new Node(nodeId)));
+                        node.setWay(newWay);
                         nodeList.add(node);
                     }
-                    waySet.add(new Way(wayId, nodeList, typesList));
+                    waySet.add(newWay);
 
 
                 }
@@ -133,15 +135,12 @@ public class NodeFetcher {
 
     }
 
-    public void calculateDistances() {
-        for (Node node : nodeSet) {
-            node.getDistanceTo(currentNode);
-        }
-    }
 
     public void getClosestNode() {
         while (distanceTraveled < totalDistance) {
-            calculateDistances();
+            for (Node node : nodeSet) {
+                node.getDistanceTo(currentNode);
+            }
             List<Node> sortedList = new ArrayList<>(nodeSet);
             Collections.sort(sortedList);
             Node closestNode = sortedList.get(0);
@@ -150,22 +149,20 @@ public class NodeFetcher {
             distanceTraveled += closestNode.getDistanceToCurrentNode();
             path.add(closestNode);
 
-            getClosestWay(closestNode);
-
-            int startIndex = currentWay.getNodes().indexOf(closestNode);
-            Node subNode = closestNode;
-            for (int i = startIndex + 1; i < currentWay.getNodes().size(); i++) {
-                subNode.getDistanceTo(currentWay.getNodes().get(i));
-                distanceTraveled += subNode.getDistanceToCurrentNode();
-                path.add(subNode);
-                nodeSet.remove(subNode);
-                subNode = currentWay.getNodes().get(i);
-                if (distanceTraveled >= totalDistance) {
-                    break;
+            List<Node> wayNodes = getAllWayNodes(closestNode.getWay());
+            while (wayNodes.size() != 0) {
+                for (Node node : wayNodes) {
+                    node.getDistanceTo(closestNode);
                 }
-
+                Collections.sort(wayNodes);
+                closestNode = wayNodes.get(0);
+                distanceTraveled += closestNode.getDistanceToCurrentNode();
+                path.add(closestNode);
+                nodeSet.remove(closestNode);
+                wayNodes.remove(closestNode);
+                currentNode = closestNode;
             }
-            currentNode = subNode;
+
 
 
         }
@@ -184,15 +181,15 @@ public class NodeFetcher {
         generateGpx(file, "test", path);
     }
 
-    public void getClosestWay(Node target) {
-        for (Way way : waySet) {
-            List<Node> nodes = way.getNodes();
-            if (nodes.contains(target)) {
-                currentWay = way;
-                waySet.remove(way);
-                return;
+
+    public List<Node> getAllWayNodes(Way way){
+        List<Node> nodeList = new ArrayList<>();
+        for (Node node:nodeSet){
+            if (node.getWay().equals(way)){
+                nodeList.add(node);
             }
         }
+        return nodeList;
     }
 
     public static void generateGpx(File file, String name, List<Node> points) {
@@ -224,8 +221,8 @@ public class NodeFetcher {
 
     public static void main(String[] args) throws IOException, ParseException, InterruptedException {
         JSONParser parser = new JSONParser();
-        Node start = new Node("start", 5.061951, 52.650627);
-        NodeFetcher nodeFetcher = new NodeFetcher(start, 5000);
+        Node start = new Node("start", 5.069284, 52.636537);
+        NodeFetcher nodeFetcher = new NodeFetcher(start, 4000);
         JSONObject jsonObject = nodeFetcher.getOverpassData();
         nodeFetcher.parseJson(jsonObject);
         nodeFetcher.getClosestNode();
