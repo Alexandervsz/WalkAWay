@@ -1,6 +1,6 @@
 # Compiled class file
 *.class
-test.gpx
+/test.gpx
 # Log file
 *.log
 
