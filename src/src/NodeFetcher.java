@@ -14,13 +14,13 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class NodeFetcher {
-    private final Set<OsmNode> nodeSet;
+    private final Set<Node> nodeSet;
     private double distanceTraveled;
-    private OsmNode start;
+    private Node start;
     private double totalDistance;
-    private List<OsmNode> path;
+    private List<Node> path;
 
-    public NodeFetcher(OsmNode start, double totalDistance) {
+    public NodeFetcher(Node start, double totalDistance) {
         this.nodeSet = new HashSet<>();
         this.path = new ArrayList<>();
         this.distanceTraveled = 0;
@@ -53,8 +53,6 @@ public class NodeFetcher {
             }
         }
         stringBuilder.append(");(._;>;);out;");
-        System.out.println(stringBuilder);
-        System.exit(0);
         String query = URLEncoder.encode(stringBuilder.toString(), StandardCharsets.UTF_8);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -80,19 +78,19 @@ public class NodeFetcher {
                 double lon = Double.parseDouble(nodelist[0].substring(6));
                 String id = nodelist[1].substring(5);
                 double lat = Double.parseDouble(nodelist[3].substring(6));
-                nodeSet.add(new OsmNode(id, lon, lat));
+                nodeSet.add(new Node(id, lon, lat));
             }
         }
     }
 
     public void getClosestNode() {
         while (distanceTraveled < totalDistance) {
-            for (OsmNode osmNode : nodeSet) {
-                osmNode.getDistanceTo(start);
+            for (Node node : nodeSet) {
+                node.getDistanceTo(start);
             }
-            List<OsmNode> sortedList = new ArrayList<>(nodeSet);
+            List<Node> sortedList = new ArrayList<>(nodeSet);
             Collections.sort(sortedList);
-            OsmNode closestNode = sortedList.get(0);
+            Node closestNode = sortedList.get(0);
             distanceTraveled += closestNode.getDistanceToCurrentNode();
             start = closestNode;
             nodeSet.remove(closestNode);
@@ -101,21 +99,21 @@ public class NodeFetcher {
         }
         StringBuilder output = new StringBuilder();
         output.append("[out:json];node(id:");
-        for (OsmNode osmNode: path){
-            output.append(osmNode.getId());
+        for (Node node: path){
+            output.append(node.getId());
             output.append(",");
         }
         output.append(");out skel;");
         System.out.println(output);
     }
 
-    public static void main(String[] args) throws IOException, ParseException, InterruptedException {
+    public static void main(String[] args) throws IOException, ParseException {
         JSONParser parser = new JSONParser();
-        OsmNode start = new OsmNode("start", 5.061405, 52.650243);
+        Node start = new Node("start", 5.061405, 52.650243);
         Object obj = parser.parse(new FileReader("SampleJson.json"));
         JSONObject jsonObject = (JSONObject) obj;
         NodeFetcher nodeFetcher = new NodeFetcher(start, 1000);
-        nodeFetcher.getOverpassData();
+        //nodeFetcher.getOverpassData();
         nodeFetcher.parseJson(jsonObject);
         nodeFetcher.getClosestNode();
 

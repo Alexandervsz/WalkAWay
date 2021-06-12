@@ -1,6 +1,6 @@
 import java.util.Objects;
 
-public class OsmNode implements Comparable<OsmNode> {
+public class Node implements Comparable<Node> {
     private final String id;
     private final double lon;
     private final double lat;
@@ -10,13 +10,13 @@ public class OsmNode implements Comparable<OsmNode> {
         return id;
     }
 
-    public OsmNode(String id, double lon, double lat) {
+    public Node(String id, double lon, double lat) {
         this.id = id;
         this.lon = lon;
         this.lat = lat;
     }
 
-    public void getDistanceTo(OsmNode osmNode){
+    public void getDistanceTo(Node osmNode){
         double R = 6371e3;
         double phi1 = osmNode.getLat() * Math.PI/180;
         double phi2 = this.lat * Math.PI/180;
@@ -44,7 +44,7 @@ public class OsmNode implements Comparable<OsmNode> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        OsmNode node = (OsmNode) o;
+        Node node = (Node) o;
         return Objects.equals(id, node.id);
     }
 
@@ -65,7 +65,7 @@ public class OsmNode implements Comparable<OsmNode> {
 
 
     @Override
-    public int compareTo(OsmNode o) {
+    public int compareTo(Node o) {
         return Double.compare(distanceToCurrentNode, o.distanceToCurrentNode);
     }
 }
