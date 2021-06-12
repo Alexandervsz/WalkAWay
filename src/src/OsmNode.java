@@ -1,9 +1,14 @@
 import java.util.Objects;
 
-public class OsmNode {
+public class OsmNode implements Comparable<OsmNode> {
     private final String id;
     private final double lon;
     private final double lat;
+    private double distanceToCurrentNode;
+
+    public String getId() {
+        return id;
+    }
 
     public OsmNode(String id, double lon, double lat) {
         this.id = id;
@@ -11,7 +16,7 @@ public class OsmNode {
         this.lat = lat;
     }
 
-    public double getDistanceTo(OsmNode osmNode){
+    public void getDistanceTo(OsmNode osmNode){
         double R = 6371e3;
         double phi1 = osmNode.getLat() * Math.PI/180;
         double phi2 = this.lat * Math.PI/180;
@@ -20,7 +25,11 @@ public class OsmNode {
         double a = Math.sin(deltaphi/2) * Math.sin(deltaphi / 2) + Math.cos(phi1) * Math.cos(phi2) *
                 Math.sin(deltalambda / 2) * Math.sin(deltalambda / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c;
+        distanceToCurrentNode = R * c;
+    }
+
+    public double getDistanceToCurrentNode() {
+        return distanceToCurrentNode;
     }
 
     public double getLon() {
@@ -39,6 +48,7 @@ public class OsmNode {
         return Objects.equals(id, node.id);
     }
 
+
     @Override
     public int hashCode() {
         return Objects.hash(id);
@@ -51,5 +61,11 @@ public class OsmNode {
                 ", lon=" + lon +
                 ", lat=" + lat +
                 '}';
+    }
+
+
+    @Override
+    public int compareTo(OsmNode o) {
+        return Double.compare(distanceToCurrentNode, o.distanceToCurrentNode);
     }
 }
