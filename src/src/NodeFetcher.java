@@ -15,11 +15,9 @@ import org.json.simple.parser.ParseException;
 
 public class NodeFetcher {
     private final Set<OsmNode> completeNodeSet;
-    private final Set<String> incompleteNodeSet;
 
     public NodeFetcher() {
         this.completeNodeSet = new HashSet<>();
-        this.incompleteNodeSet = new HashSet<>();
     }
 
     public JSONObject getOverpassData() throws IOException, InterruptedException, ParseException {
@@ -77,9 +75,8 @@ public class NodeFetcher {
         }
     }
 
-    public void getClosestNode(){
+    public void getClosestNode() {
         Iterator<OsmNode> iter = completeNodeSet.iterator();
-
         OsmNode first = iter.next();
         OsmNode second = iter.next();
         System.out.println(first);
@@ -87,7 +84,6 @@ public class NodeFetcher {
         System.out.println(first.getDistanceTo(second));
         System.out.println(second.getDistanceTo(first));
     }
-
 
     public static void main(String[] args) throws IOException, ParseException {
         JSONParser parser = new JSONParser();
