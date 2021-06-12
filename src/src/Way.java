@@ -1,21 +1,15 @@
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 public class Way {
     public String id;
-    public List<Node> nodes;
     public String[] type;
 
-    public Way(String id, List<Node> nodes, String[] type) {
+    public Way(String id,  String[] type) {
         this.id = id;
-        this.nodes = nodes;
         this.type = type;
     }
 
-    public List<Node> getNodes() {
-        return nodes;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -25,9 +19,13 @@ public class Way {
         return Objects.equals(id, way.id);
     }
 
+    public String[] getType() {
+        return type;
+    }
+
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, nodes);
+        int result = Objects.hash(id);
         result = 31 * result + Arrays.hashCode(type);
         return result;
     }
