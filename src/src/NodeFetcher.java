@@ -15,6 +15,7 @@ import org.json.simple.parser.ParseException;
 
 public class NodeFetcher {
     private final Set<Node> nodeSet;
+    private final Set<Way> waySet;
     private double distanceTraveled;
     private Node start;
     private double totalDistance;
@@ -22,6 +23,7 @@ public class NodeFetcher {
 
     public NodeFetcher(Node start, double totalDistance) {
         this.nodeSet = new HashSet<>();
+        this.waySet = new HashSet<>();
         this.path = new ArrayList<>();
         this.distanceTraveled = 0;
         this.start = start;
@@ -67,19 +69,46 @@ public class NodeFetcher {
 
     }
 
-    public void parseJson(JSONObject jsonObject) {
+    public void parseJson(JSONObject jsonObject) throws ParseException {
         JSONArray elements = (JSONArray) jsonObject.get("elements");
         for (Object object : elements) {
-            String string = object.toString();
-            if (!string.startsWith("{\"nodes")) {
-                string = string.replace("{", "");
-                string = string.replace("}", "");
-                String[] nodelist = string.split(",");
-                double lon = Double.parseDouble(nodelist[0].substring(6));
-                String id = nodelist[1].substring(5);
-                double lat = Double.parseDouble(nodelist[3].substring(6));
-                nodeSet.add(new Node(id, lon, lat));
+            JSONParser parser = new JSONParser();
+            JSONObject osmObject = (JSONObject) parser.parse(object.toString());
+            switch (osmObject.get("type").toString()) {
+                case "node" -> {
+                    String id = osmObject.get("id").toString();
+                    double lon = Double.parseDouble(osmObject.get("lon").toString());
+                    double lat = Double.parseDouble(osmObject.get("lat").toString());
+                    nodeSet.add(new Node(id, lon, lat));
+                }
+                case "way" -> {
+                    String wayId = osmObject.get("id").toString();
+                    String tags = osmObject.get("tags").toString();
+                    String[] tagList = tags.split(",");
+                    String type = tagList[tagList.length - 1];
+                    type = type.replace("{", "");
+                    type = type.replace("}", "");
+                    type = type.replace("\"", "");
+                    String[] typesList = type.split(":");
+                    System.out.println(typesList[0] + typesList[1]);
+                    String nodesString = osmObject.get("nodes").toString();
+                    String[] nodes = nodesString.split(",");
+                    for (int x = 0; x < nodes.length; x++) {
+                        nodes[x] = nodes[x].replace("[", "");
+                        nodes[x] = nodes[x].replace("]", "");
+
+                    }
+                    List<Node> nodeList = new ArrayList<>();
+                    List<Node> nodesList = new ArrayList<>(nodeSet);
+                    for (String nodeId : nodes) {
+                        nodesList.add(nodesList.get(nodesList.indexOf(new Node(nodeId))));
+                    }
+                    waySet.add(new Way(wayId, nodeList, typesList));
+
+
+                }
             }
+
         }
     }
 
@@ -99,7 +128,7 @@ public class NodeFetcher {
         }
         StringBuilder output = new StringBuilder();
         output.append("[out:json];node(id:");
-        for (Node node: path){
+        for (Node node : path) {
             output.append(node.getId());
             output.append(",");
         }
