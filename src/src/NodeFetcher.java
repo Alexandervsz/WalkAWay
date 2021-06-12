@@ -17,21 +17,23 @@ public class NodeFetcher {
     private final Set<Node> nodeSet;
     private final Set<Way> waySet;
     private double distanceTraveled;
-    private Node start;
+    private Node currentNode;
     private double totalDistance;
     private List<Node> path;
+    private Way currentWay;
 
     public NodeFetcher(Node start, double totalDistance) {
         this.nodeSet = new HashSet<>();
         this.waySet = new HashSet<>();
         this.path = new ArrayList<>();
         this.distanceTraveled = 0;
-        this.start = start;
+        this.currentNode = start;
         this.totalDistance = totalDistance;
     }
 
     public JSONObject getOverpassData() throws IOException, InterruptedException, ParseException {
-        String bbox = "52.646617767509,5.0588822364807,52.652287173554,5.0702011585236";
+        String bbox = "52.632177315403,5.0610065460205,52.644261265406,5.0817775726318";
+        //String bbox = "52.646617767509,5.0588822364807,52.652287173554,5.0702011585236";
         DatabaseManager databaseManager = new DatabaseManager();
         List<NodeType> nodeTypes = databaseManager.getNodeTypes();
         List<String> options = new ArrayList<>();
@@ -90,7 +92,6 @@ public class NodeFetcher {
                     type = type.replace("}", "");
                     type = type.replace("\"", "");
                     String[] typesList = type.split(":");
-                    System.out.println(typesList[0] + typesList[1]);
                     String nodesString = osmObject.get("nodes").toString();
                     String[] nodes = nodesString.split(",");
                     for (int x = 0; x < nodes.length; x++) {
@@ -101,7 +102,8 @@ public class NodeFetcher {
                     List<Node> nodeList = new ArrayList<>();
                     List<Node> nodesList = new ArrayList<>(nodeSet);
                     for (String nodeId : nodes) {
-                        nodesList.add(nodesList.get(nodesList.indexOf(new Node(nodeId))));
+                        Node node = nodesList.get(nodesList.indexOf(new Node(nodeId)));
+                        nodeList.add(node);
                     }
                     waySet.add(new Way(wayId, nodeList, typesList));
 
@@ -112,37 +114,75 @@ public class NodeFetcher {
         }
     }
 
+    public void calculateDistances(){
+        for (Node node : nodeSet) {
+            node.getDistanceTo(currentNode);
+        }
+    }
+
     public void getClosestNode() {
         while (distanceTraveled < totalDistance) {
-            for (Node node : nodeSet) {
-                node.getDistanceTo(start);
-            }
+            calculateDistances();
             List<Node> sortedList = new ArrayList<>(nodeSet);
             Collections.sort(sortedList);
             Node closestNode = sortedList.get(0);
-            distanceTraveled += closestNode.getDistanceToCurrentNode();
-            start = closestNode;
             nodeSet.remove(closestNode);
+            closestNode.getDistanceTo(currentNode);
+            distanceTraveled += closestNode.getDistanceToCurrentNode();
             path.add(closestNode);
+
+            getClosestWay(closestNode);
+
+            int startIndex = currentWay.getNodes().indexOf(closestNode);
+            System.out.println(currentWay.getNodes());
+            Node subNode = closestNode;
+            System.out.println(subNode);
+            for (int i = startIndex + 1; i < currentWay.getNodes().size(); i++){
+                subNode.getDistanceTo(currentWay.getNodes().get(i));
+                distanceTraveled += subNode.getDistanceToCurrentNode();
+                path.add(subNode);
+                subNode = currentWay.getNodes().get(i);
+                if (distanceTraveled >= totalDistance){
+                    break;
+                }
+
+            }
+            currentNode = subNode;
+
+
+
 
         }
         StringBuilder output = new StringBuilder();
         output.append("[out:json];node(id:");
         for (Node node : path) {
             output.append(node.getId());
-            output.append(",");
+            if (path.indexOf(node) != path.size()-1){
+            output.append(",");}
         }
         output.append(");out skel;");
         System.out.println(output);
+        System.out.println(distanceTraveled);
     }
 
-    public static void main(String[] args) throws IOException, ParseException {
+    public void getClosestWay(Node target){
+        for (Way way: waySet) {
+            List<Node> nodes = way.getNodes();
+            if (nodes.contains(target)) {
+                currentWay = way;
+                waySet.remove(way);
+                return;
+            }
+        }
+    }
+
+    public static void main(String[] args) throws IOException, ParseException, InterruptedException {
         JSONParser parser = new JSONParser();
-        Node start = new Node("start", 5.061405, 52.650243);
-        Object obj = parser.parse(new FileReader("SampleJson.json"));
-        JSONObject jsonObject = (JSONObject) obj;
+        Node start = new Node("start", 5.069021, 52.636253);
+        //Object obj = parser.parse(new FileReader("SampleJson.json"));
+        //JSONObject jsonObject = (JSONObject) obj;
         NodeFetcher nodeFetcher = new NodeFetcher(start, 1000);
-        //nodeFetcher.getOverpassData();
+        JSONObject jsonObject = nodeFetcher.getOverpassData();
         nodeFetcher.parseJson(jsonObject);
         nodeFetcher.getClosestNode();
 
