@@ -60,7 +60,7 @@ public class Node implements Comparable<Node> {
 
     @Override
     public String toString() {
-        return "OsmNode{" +
+        return "Node{" +
                 "id='" + id + '\'' +
                 ", lon=" + lon +
                 ", lat=" + lat +
