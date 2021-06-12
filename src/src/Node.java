@@ -5,6 +5,7 @@ public class Node implements Comparable<Node> {
     private double lon;
     private double lat;
     private double distanceToCurrentNode;
+    private Way way;
 
     public String getId() {
         return id;
@@ -18,6 +19,14 @@ public class Node implements Comparable<Node> {
         this.id = id;
         this.lon = lon;
         this.lat = lat;
+    }
+
+    public Way getWay() {
+        return way;
+    }
+
+    public void setWay(Way way) {
+        this.way = way;
     }
 
     public void getDistanceTo(Node osmNode){
