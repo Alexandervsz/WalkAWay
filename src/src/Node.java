@@ -2,12 +2,16 @@ import java.util.Objects;
 
 public class Node implements Comparable<Node> {
     private final String id;
-    private final double lon;
-    private final double lat;
+    private double lon;
+    private double lat;
     private double distanceToCurrentNode;
 
     public String getId() {
         return id;
+    }
+
+    public Node(String id) {
+        this.id = id;
     }
 
     public Node(String id, double lon, double lat) {
@@ -68,4 +72,5 @@ public class Node implements Comparable<Node> {
     public int compareTo(Node o) {
         return Double.compare(distanceToCurrentNode, o.distanceToCurrentNode);
     }
+
 }
