@@ -9,7 +9,7 @@ public class DatabaseManager {
         try {
             Class.forName("org.postgresql.Driver");
             c = DriverManager
-                    .getConnection("jdbc:postgresql://localhost:5432/IPASS",
+                    .getConnection("jdbc:postgresql://localhost:5432/ipass",
                             "postgres", "postgres");
             c.setAutoCommit(false);
         } catch (Exception e) {
