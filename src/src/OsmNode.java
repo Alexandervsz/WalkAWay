@@ -11,6 +11,18 @@ public class OsmNode {
         this.lat = lat;
     }
 
+    public double getDistanceTo(OsmNode osmNode){
+        double R = 6371e3;
+        double phi1 = osmNode.getLat() * Math.PI/180;
+        double phi2 = this.lat * Math.PI/180;
+        double deltaphi = (this.lat - osmNode.getLat()) * Math.PI/180;
+        double deltalambda = (this.lon - osmNode.getLon()) * Math.PI/180;
+        double a = Math.sin(deltaphi/2) * Math.sin(deltaphi / 2) + Math.cos(phi1) * Math.cos(phi2) *
+                Math.sin(deltalambda / 2) * Math.sin(deltalambda / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    }
+
     public double getLon() {
         return lon;
     }
