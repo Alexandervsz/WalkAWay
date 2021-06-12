@@ -21,8 +21,8 @@ public class NodeFetcher {
     private final Set<Way> waySet;
     private double distanceTraveled;
     private Node currentNode;
-    private double totalDistance;
-    private List<Node> path;
+    private final double totalDistance;
+    private final List<Node> path;
     private Way currentWay;
 
     public NodeFetcher(Node start, double totalDistance) {
@@ -36,13 +36,10 @@ public class NodeFetcher {
 
     public JSONObject getOverpassData() throws IOException, InterruptedException, ParseException {
         String bbox = generateBbox();
-        //String bbox = "52.646617767509,5.0588822364807,52.652287173554,5.0702011585236";
         DatabaseManager databaseManager = new DatabaseManager();
         List<NodeType> nodeTypes = databaseManager.getNodeTypes();
         List<String> options = new ArrayList<>();
-        //options.add("node");
         options.add("way");
-        //options.add("relation");
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("[out:json];(");
         for (NodeType nodeType : nodeTypes) {
@@ -116,32 +113,27 @@ public class NodeFetcher {
         }
     }
 
-    public String generateBbox(){
+    public String generateBbox() {
         //Position, decimal degrees
         double lat = currentNode.getLat();
         double lon = currentNode.getLon();
 
         //Earth’s radius, sphere
-        double R=6378137;
-
-        //offsets in meters
-        double dn = totalDistance;
-        double de = totalDistance;
-
+        double R = 6378137;
         //Coordinate offsets in radians
-        double dLat = dn/R;
-        double dLon = de/(R*Math.cos(Math.PI*lat/180));
+        double dLat = totalDistance / R;
+        double dLon = totalDistance / (R * Math.cos(Math.PI * lat / 180));
 
         //OffsetPosition, decimal degrees
-        double latO = lat - dLat * 180/Math.PI;
-        double lonO = lon - dLon * 180/Math.PI;
-        double lat1 = lat + dLat * 180/Math.PI;
-        double lon1 = lon + dLon * 180/Math.PI;
-        return latO+","+lonO+","+lat1+","+lon1;
+        double latO = lat - dLat * 180 / Math.PI;
+        double lonO = lon - dLon * 180 / Math.PI;
+        double lat1 = lat + dLat * 180 / Math.PI;
+        double lon1 = lon + dLon * 180 / Math.PI;
+        return latO + "," + lonO + "," + lat1 + "," + lon1;
 
     }
 
-    public void calculateDistances(){
+    public void calculateDistances() {
         for (Node node : nodeSet) {
             node.getDistanceTo(currentNode);
         }
@@ -162,12 +154,13 @@ public class NodeFetcher {
 
             int startIndex = currentWay.getNodes().indexOf(closestNode);
             Node subNode = closestNode;
-            for (int i = startIndex + 1; i < currentWay.getNodes().size(); i++){
+            for (int i = startIndex + 1; i < currentWay.getNodes().size(); i++) {
                 subNode.getDistanceTo(currentWay.getNodes().get(i));
                 distanceTraveled += subNode.getDistanceToCurrentNode();
                 path.add(subNode);
+                nodeSet.remove(subNode);
                 subNode = currentWay.getNodes().get(i);
-                if (distanceTraveled >= totalDistance){
+                if (distanceTraveled >= totalDistance) {
                     break;
                 }
 
@@ -175,15 +168,14 @@ public class NodeFetcher {
             currentNode = subNode;
 
 
-
-
         }
         StringBuilder output = new StringBuilder();
         output.append("[out:json];node(id:");
         for (Node node : path) {
             output.append(node.getId());
-            if (path.indexOf(node) != path.size()-1){
-            output.append(",");}
+            if (path.indexOf(node) != path.size() - 1) {
+                output.append(",");
+            }
         }
         output.append(");out skel;");
         System.out.println(output);
@@ -192,8 +184,8 @@ public class NodeFetcher {
         generateGpx(file, "test", path);
     }
 
-    public void getClosestWay(Node target){
-        for (Way way: waySet) {
+    public void getClosestWay(Node target) {
+        for (Way way : waySet) {
             List<Node> nodes = way.getNodes();
             if (nodes.contains(target)) {
                 currentWay = way;
@@ -202,6 +194,7 @@ public class NodeFetcher {
             }
         }
     }
+
     public static void generateGpx(File file, String name, List<Node> points) {
 
         String header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?><gpx xmlns=\"http://www.topografix.com/GPX/1/1\" creator=\"MapSource 6.15.5\" version=\"1.1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"  xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\"><trk>\n";
@@ -225,14 +218,14 @@ public class NodeFetcher {
             writer.close();
 
         } catch (IOException e) {
-            System.out.println( "Error Writting Path"+e);
+            System.out.println("Error Writting Path" + e);
         }
     }
 
     public static void main(String[] args) throws IOException, ParseException, InterruptedException {
         JSONParser parser = new JSONParser();
-        Node start = new Node("start", 4.899945, 52.378324);
-        NodeFetcher nodeFetcher = new NodeFetcher(start, 4000);
+        Node start = new Node("start", 5.061951, 52.650627);
+        NodeFetcher nodeFetcher = new NodeFetcher(start, 5000);
         JSONObject jsonObject = nodeFetcher.getOverpassData();
         nodeFetcher.parseJson(jsonObject);
         nodeFetcher.getClosestNode();
