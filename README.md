@@ -1,2 +1,2 @@
 # IPASS
-IPASS for school
+IPASS for school.
