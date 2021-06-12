@@ -14,10 +14,18 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class NodeFetcher {
-    private final Set<OsmNode> completeNodeSet;
+    private final Set<OsmNode> nodeSet;
+    private double distanceTraveled;
+    private OsmNode start;
+    private double totalDistance;
+    private List<OsmNode> path;
 
-    public NodeFetcher() {
-        this.completeNodeSet = new HashSet<>();
+    public NodeFetcher(OsmNode start, double totalDistance) {
+        this.nodeSet = new HashSet<>();
+        this.path = new ArrayList<>();
+        this.distanceTraveled = 0;
+        this.start = start;
+        this.totalDistance = totalDistance;
     }
 
     public JSONObject getOverpassData() throws IOException, InterruptedException, ParseException {
@@ -25,9 +33,9 @@ public class NodeFetcher {
         DatabaseManager databaseManager = new DatabaseManager();
         List<NodeType> nodeTypes = databaseManager.getNodeTypes();
         List<String> options = new ArrayList<>();
-        options.add("node");
+        //options.add("node");
         options.add("way");
-        options.add("relation");
+        //options.add("relation");
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("[out:json];(");
         for (NodeType nodeType : nodeTypes) {
@@ -45,6 +53,8 @@ public class NodeFetcher {
             }
         }
         stringBuilder.append(");(._;>;);out;");
+        System.out.println(stringBuilder);
+        System.exit(0);
         String query = URLEncoder.encode(stringBuilder.toString(), StandardCharsets.UTF_8);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -70,26 +80,42 @@ public class NodeFetcher {
                 double lon = Double.parseDouble(nodelist[0].substring(6));
                 String id = nodelist[1].substring(5);
                 double lat = Double.parseDouble(nodelist[3].substring(6));
-                completeNodeSet.add(new OsmNode(id, lon, lat));
+                nodeSet.add(new OsmNode(id, lon, lat));
             }
         }
     }
 
     public void getClosestNode() {
-        Iterator<OsmNode> iter = completeNodeSet.iterator();
-        OsmNode first = iter.next();
-        OsmNode second = iter.next();
-        System.out.println(first);
-        System.out.println(second);
-        System.out.println(first.getDistanceTo(second));
-        System.out.println(second.getDistanceTo(first));
+        while (distanceTraveled < totalDistance) {
+            for (OsmNode osmNode : nodeSet) {
+                osmNode.getDistanceTo(start);
+            }
+            List<OsmNode> sortedList = new ArrayList<>(nodeSet);
+            Collections.sort(sortedList);
+            OsmNode closestNode = sortedList.get(0);
+            distanceTraveled += closestNode.getDistanceToCurrentNode();
+            start = closestNode;
+            nodeSet.remove(closestNode);
+            path.add(closestNode);
+
+        }
+        StringBuilder output = new StringBuilder();
+        output.append("[out:json];node(id:");
+        for (OsmNode osmNode: path){
+            output.append(osmNode.getId());
+            output.append(",");
+        }
+        output.append(");out skel;");
+        System.out.println(output);
     }
 
-    public static void main(String[] args) throws IOException, ParseException {
+    public static void main(String[] args) throws IOException, ParseException, InterruptedException {
         JSONParser parser = new JSONParser();
+        OsmNode start = new OsmNode("start", 5.061405, 52.650243);
         Object obj = parser.parse(new FileReader("SampleJson.json"));
         JSONObject jsonObject = (JSONObject) obj;
-        NodeFetcher nodeFetcher = new NodeFetcher();
+        NodeFetcher nodeFetcher = new NodeFetcher(start, 1000);
+        nodeFetcher.getOverpassData();
         nodeFetcher.parseJson(jsonObject);
         nodeFetcher.getClosestNode();
 
