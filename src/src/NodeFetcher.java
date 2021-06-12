@@ -14,10 +14,12 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class NodeFetcher {
-    private final Set<OsmNode> nodeSet;
+    private final Set<OsmNode> completeNodeSet;
+    private final Set<String> incompleteNodeSet;
 
     public NodeFetcher() {
-        this.nodeSet = new HashSet<>();
+        this.completeNodeSet = new HashSet<>();
+        this.incompleteNodeSet = new HashSet<>();
     }
 
     public JSONObject getOverpassData() throws IOException, InterruptedException, ParseException {
@@ -48,7 +50,7 @@ public class NodeFetcher {
         String query = URLEncoder.encode(stringBuilder.toString(), StandardCharsets.UTF_8);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://overpass-api.de/api/interpreter?data=" + query))
+                .uri(URI.create("https://overpass.kumi.systems/api/interpreter?data=" + query))
                 .GET()
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -59,7 +61,7 @@ public class NodeFetcher {
 
     }
 
-    public void parseJson(JSONObject jsonObject) throws IOException, InterruptedException, ParseException {
+    public void parseJson(JSONObject jsonObject) {
         JSONArray elements = (JSONArray) jsonObject.get("elements");
         for (Object object : elements) {
             String string = object.toString();
@@ -70,69 +72,30 @@ public class NodeFetcher {
                 double lon = Double.parseDouble(nodelist[0].substring(6));
                 String id = nodelist[1].substring(5);
                 double lat = Double.parseDouble(nodelist[3].substring(6));
-                nodeSet.add(new OsmNode(id, lon, lat));
-            } else {
-                parseWays(string);
-            }
-        }
-        OsmNode osmNode = nodeSet.iterator().next();
-        System.out.println(osmNode.toString());
-    }
-
-    private void parseWays(String string) throws IOException, InterruptedException, ParseException {
-        string = string.replace("{", "");
-        string = string.replace("}", "");
-        String[] nodelist = string.split(":");
-        String[] nodelist2 = nodelist[1].split(",");
-        for (int x = 0; x <= nodelist2.length - 2; x++) {
-            String nodeId = nodelist2[x];
-            if (x == 0) {
-                nodeId = nodeId.substring(1);
-            }
-            if (x == nodelist2.length - 2) {
-                nodeId = nodeId.substring(0, nodeId.length() - 1);
-            }
-            String query = "[out:json];node(id:" + nodeId + ");out;";
-            query = URLEncoder.encode(query, StandardCharsets.UTF_8);
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://overpass-api.de/api/interpreter?data=" + query))
-                    .GET()
-                    .build();
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            JSONParser parser = new JSONParser();
-            System.out.println(response.body());
-            Object obj = parser.parse(response.body());
-            JSONObject nodeObject = (JSONObject) obj;
-            JSONArray nodeElements = (JSONArray) nodeObject.get("elements");
-            for (Object node : nodeElements) {
-                String nodeVariables = node.toString();
-                nodeVariables = nodeVariables.replace("{", "");
-                nodeVariables = nodeVariables.replace("}", "");
-                String[] nodeElementlist = nodeVariables.split(",");
-                System.out.println(Arrays.toString(nodeElementlist));
-                for (String f : nodeElementlist) {
-                    System.out.println(f);
-                }
-                int subInt = 6;
-                if (nodeElementlist[0].substring(6).startsWith("\":[")) {
-                    subInt += 3;
-                }
-                double lat = Double.parseDouble(nodeElementlist[0].substring(subInt));
-                double lon = Double.parseDouble(nodeElementlist[3].substring(6));
-                nodeSet.add(new OsmNode(nodeId, lon, lat));
-
-
+                completeNodeSet.add(new OsmNode(id, lon, lat));
             }
         }
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException, ParseException {
+    public void getClosestNode(){
+        Iterator<OsmNode> iter = completeNodeSet.iterator();
+
+        OsmNode first = iter.next();
+        OsmNode second = iter.next();
+        System.out.println(first);
+        System.out.println(second);
+        System.out.println(first.getDistanceTo(second));
+        System.out.println(second.getDistanceTo(first));
+    }
+
+
+    public static void main(String[] args) throws IOException, ParseException {
         JSONParser parser = new JSONParser();
         Object obj = parser.parse(new FileReader("SampleJson.json"));
         JSONObject jsonObject = (JSONObject) obj;
         NodeFetcher nodeFetcher = new NodeFetcher();
         nodeFetcher.parseJson(jsonObject);
+        nodeFetcher.getClosestNode();
 
     }
 }
