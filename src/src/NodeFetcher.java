@@ -32,7 +32,7 @@ public class NodeFetcher {
     }
 
     public JSONObject getOverpassData() throws IOException, InterruptedException, ParseException {
-        String bbox = "52.632177315403,5.0610065460205,52.644261265406,5.0817775726318";
+        String bbox = generateBbox();
         //String bbox = "52.646617767509,5.0588822364807,52.652287173554,5.0702011585236";
         DatabaseManager databaseManager = new DatabaseManager();
         List<NodeType> nodeTypes = databaseManager.getNodeTypes();
@@ -64,7 +64,6 @@ public class NodeFetcher {
                 .GET()
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.body());
         JSONParser parser = new JSONParser();
         Object obj = parser.parse(response.body());
         return (JSONObject) obj;
@@ -114,6 +113,31 @@ public class NodeFetcher {
         }
     }
 
+    public String generateBbox(){
+        //Position, decimal degrees
+        double lat = currentNode.getLat();
+        double lon = currentNode.getLon();
+
+        //Earth’s radius, sphere
+        double R=6378137;
+
+        //offsets in meters
+        double dn = totalDistance;
+        double de = totalDistance;
+
+        //Coordinate offsets in radians
+        double dLat = dn/R;
+        double dLon = de/(R*Math.cos(Math.PI*lat/180));
+
+        //OffsetPosition, decimal degrees
+        double latO = lat - dLat * 180/Math.PI;
+        double lonO = lon - dLon * 180/Math.PI;
+        double lat1 = lat + dLat * 180/Math.PI;
+        double lon1 = lon + dLon * 180/Math.PI;
+        return latO+","+lonO+","+lat1+","+lon1;
+
+    }
+
     public void calculateDistances(){
         for (Node node : nodeSet) {
             node.getDistanceTo(currentNode);
@@ -140,7 +164,7 @@ public class NodeFetcher {
             for (int i = startIndex + 1; i < currentWay.getNodes().size(); i++){
                 subNode.getDistanceTo(currentWay.getNodes().get(i));
                 distanceTraveled += subNode.getDistanceToCurrentNode();
-                path.add(subNode);
+                //path.add(subNode);
                 subNode = currentWay.getNodes().get(i);
                 if (distanceTraveled >= totalDistance){
                     break;
@@ -178,10 +202,10 @@ public class NodeFetcher {
 
     public static void main(String[] args) throws IOException, ParseException, InterruptedException {
         JSONParser parser = new JSONParser();
-        Node start = new Node("start", 5.069021, 52.636253);
+        Node start = new Node("start", 5.058249, 52.641260);
         //Object obj = parser.parse(new FileReader("SampleJson.json"));
         //JSONObject jsonObject = (JSONObject) obj;
-        NodeFetcher nodeFetcher = new NodeFetcher(start, 1000);
+        NodeFetcher nodeFetcher = new NodeFetcher(start, 4000);
         JSONObject jsonObject = nodeFetcher.getOverpassData();
         nodeFetcher.parseJson(jsonObject);
         nodeFetcher.getClosestNode();
