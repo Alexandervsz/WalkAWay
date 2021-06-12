@@ -1,4 +1,5 @@
-import java.io.FileReader;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -6,6 +7,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.json.simple.JSONArray;
@@ -158,13 +161,11 @@ public class NodeFetcher {
             getClosestWay(closestNode);
 
             int startIndex = currentWay.getNodes().indexOf(closestNode);
-            System.out.println(currentWay.getNodes());
             Node subNode = closestNode;
-            System.out.println(subNode);
             for (int i = startIndex + 1; i < currentWay.getNodes().size(); i++){
                 subNode.getDistanceTo(currentWay.getNodes().get(i));
                 distanceTraveled += subNode.getDistanceToCurrentNode();
-                //path.add(subNode);
+                path.add(subNode);
                 subNode = currentWay.getNodes().get(i);
                 if (distanceTraveled >= totalDistance){
                     break;
@@ -187,6 +188,8 @@ public class NodeFetcher {
         output.append(");out skel;");
         System.out.println(output);
         System.out.println(distanceTraveled);
+        File file = new File("test.gpx");
+        generateGpx(file, "test", path);
     }
 
     public void getClosestWay(Node target){
@@ -199,12 +202,36 @@ public class NodeFetcher {
             }
         }
     }
+    public static void generateGpx(File file, String name, List<Node> points) {
+
+        String header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?><gpx xmlns=\"http://www.topografix.com/GPX/1/1\" creator=\"MapSource 6.15.5\" version=\"1.1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"  xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\"><trk>\n";
+        name = "<name>" + name + "</name><trkseg>\n";
+
+        StringBuilder segments = new StringBuilder();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+        for (Node location : points) {
+            segments.append("<trkpt lat=\"").append(location.getLat()).append("\" lon=\"").append(location.getLon()).append("\"><time>").append(df.format(new Date(System.currentTimeMillis()))).append("</time></trkpt>\n");
+        }
+
+        String footer = "</trkseg></trk></gpx>";
+
+        try {
+            FileWriter writer = new FileWriter(file, false);
+            writer.append(header);
+            writer.append(name);
+            writer.append(segments.toString());
+            writer.append(footer);
+            writer.flush();
+            writer.close();
+
+        } catch (IOException e) {
+            System.out.println( "Error Writting Path"+e);
+        }
+    }
 
     public static void main(String[] args) throws IOException, ParseException, InterruptedException {
         JSONParser parser = new JSONParser();
-        Node start = new Node("start", 5.058249, 52.641260);
-        //Object obj = parser.parse(new FileReader("SampleJson.json"));
-        //JSONObject jsonObject = (JSONObject) obj;
+        Node start = new Node("start", 4.899945, 52.378324);
         NodeFetcher nodeFetcher = new NodeFetcher(start, 4000);
         JSONObject jsonObject = nodeFetcher.getOverpassData();
         nodeFetcher.parseJson(jsonObject);
