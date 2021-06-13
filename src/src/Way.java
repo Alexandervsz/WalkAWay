@@ -33,4 +33,12 @@ public class Way {
     public String getid() {
         return this.id;
     }
+
+    @Override
+    public String toString() {
+        return "Way{" +
+                "id='" + id + '\'' +
+                ", type=" + Arrays.toString(type) +
+                '}';
+    }
 }
