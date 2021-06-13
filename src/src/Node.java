@@ -29,13 +29,13 @@ public class Node implements Comparable<Node> {
         this.way = way;
     }
 
-    public void getDistanceTo(Node osmNode){
+    public void getDistanceTo(Node osmNode) {
         double R = 6371e3;
-        double phi1 = osmNode.getLat() * Math.PI/180;
-        double phi2 = this.lat * Math.PI/180;
-        double deltaphi = (this.lat - osmNode.getLat()) * Math.PI/180;
-        double deltalambda = (this.lon - osmNode.getLon()) * Math.PI/180;
-        double a = Math.sin(deltaphi/2) * Math.sin(deltaphi / 2) + Math.cos(phi1) * Math.cos(phi2) *
+        double phi1 = osmNode.getLat() * Math.PI / 180;
+        double phi2 = this.lat * Math.PI / 180;
+        double deltaphi = (this.lat - osmNode.getLat()) * Math.PI / 180;
+        double deltalambda = (this.lon - osmNode.getLon()) * Math.PI / 180;
+        double a = Math.sin(deltaphi / 2) * Math.sin(deltaphi / 2) + Math.cos(phi1) * Math.cos(phi2) *
                 Math.sin(deltalambda / 2) * Math.sin(deltalambda / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         distanceToCurrentNode = R * c;
@@ -73,13 +73,12 @@ public class Node implements Comparable<Node> {
                 "id='" + id + '\'' +
                 ", lon=" + lon +
                 ", lat=" + lat +
+                ", way=" + way +
                 '}';
     }
-
 
     @Override
     public int compareTo(Node o) {
         return Double.compare(distanceToCurrentNode, o.distanceToCurrentNode);
     }
-
 }
