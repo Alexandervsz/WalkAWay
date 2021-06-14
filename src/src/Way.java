@@ -1,15 +1,30 @@
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
 
 public class Way {
     public String id;
     public String[] type;
+    public Set<Node> nodePositions;
+    private double distanceToCurrentNode;
 
     public Way(String id,  String[] type) {
         this.id = id;
         this.type = type;
+        nodePositions = new HashSet<>();
+    }
+    public void addNode( Node node){
+        nodePositions.add(node);
     }
 
+    public void calculatePositionsToNode(Node target){
+        for (Node node: nodePositions){
+            node.getDistanceTo(target);
+        }
+
+    }
+
+    public Set<Node> getNodePositions() {
+        return nodePositions;
+    }
 
     @Override
     public boolean equals(Object o) {
