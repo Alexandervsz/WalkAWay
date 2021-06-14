@@ -9,7 +9,7 @@ public class DatabaseManager {
         try {
             Class.forName("org.postgresql.Driver");
             c = DriverManager
-                    .getConnection("jdbc:postgresql://localhost:5432/IPASS",
+                    .getConnection("jdbc:postgresql://localhost:5432/ipass",
                             "postgres", "postgres");
             c.setAutoCommit(false);
         } catch (Exception e) {
@@ -52,5 +52,23 @@ public class DatabaseManager {
             System.exit(0);
         }
         return metValues;
+    }
+
+    public List<NodeType> getNodeTypes(){
+        List<NodeType> nodeTypes = new ArrayList<>();
+        try {
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM nodetype;");
+            while (rs.next()) {
+                nodeTypes.add(new NodeType(rs.getString("main_type"), rs.getString("sub_type")));
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        return nodeTypes;
     }
 }
