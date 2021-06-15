@@ -1,7 +1,10 @@
+import org.json.simple.parser.ParseException;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.List;
 
 public class UserInputScreen extends JFrame {
@@ -19,14 +22,23 @@ public class UserInputScreen extends JFrame {
     // Ununsed but required for form to work.
     private JPanel southPanel;
     private JPanel northPanel;
+    private JTextField lonField;
+    private JLabel lonLabel;
+    private JTextField latField;
+    private JLabel latLabel;
 
     public UserInputScreen() {
-        metsLabel.setText("Please enter the mets value of your activity: ");
-        weightLabel.setText("Please enter your weight: ");
+        metsLabel.setText("Activity: ");
+        weightLabel.setText("Weight: ");
         DatabaseManager databaseManager = new DatabaseManager();
         List<MetValue> metValues = databaseManager.getBoxOptions();
-        walkingSpeedLabel.setText("Please enter your "+metValues.get(0).getActivity()+" speed: ");
-        kcalLabel.setText("Please enter the amount of Calories you want to burn during the exercise: ");
+        walkingSpeedLabel.setText("Speed: ");
+        kcalLabel.setText("Calories to burn: ");
+        lonLabel.setText("Longitude: ");
+        latLabel.setText("Lattitude: ");
+        confirmButton.setText("Confirm.");
+
+
         confirmButton.addActionListener(this::createUser);
         metsBox.addActionListener(this::changeUI);
         for (MetValue mets : metValues) {
@@ -39,26 +51,48 @@ public class UserInputScreen extends JFrame {
         add(mainPanel);
         validate();
     }
+    private void start(){
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setVisible(true);
+        this.setLocationRelativeTo(null);
+        this.pack();
+        this.setTitle("Enter your data");
+    }
 
     private void createUser(ActionEvent actionEvent) {
         MetValue metValue = (MetValue) metsBox.getSelectedItem();
         assert metValue != null;
         try {
-            float walkingSpeed;
-            float weight = Float.parseFloat(weightField.getText());
+            double walkingSpeed;
+            double weight = Double.parseDouble(weightField.getText());
             if (metValue.getSpeedA() == -1 || metValue.getSpeedB() != -1) {
-                walkingSpeed = Float.parseFloat(walkingSpeedField.getText());
+                walkingSpeed = Double.parseDouble(walkingSpeedField.getText());
             } else {
                 walkingSpeed = metValue.getSpeedA();
             }
-            float kcal = Float.parseFloat(kcalField.getText());
-            float mets = metValue.getMetValue();
-            User user = new User(mets, weight, walkingSpeed, kcal);
+            double kcal = Double.parseDouble(kcalField.getText());
+            double mets = metValue.getMetValue();
+            double lon = Double.parseDouble(lonField.getText());
+            double lat = Double.parseDouble(latField.getText());
+            User user = new User(mets, weight, walkingSpeed, kcal, lon, lat);
+            System.out.println(mets);
+            System.out.println(walkingSpeed);
+            System.out.println(weight);
+            System.out.println(lon);
+            System.out.println(lat);
             System.out.println(user.getDistance());
+            this.setVisible(false);
+            System.exit(0);
+            NodeFetcher nodeFetcher = new NodeFetcher(user);
+            nodeFetcher.start();
+
         } catch (NumberFormatException e) {
             weightField.setText("");
             walkingSpeedField.setText("");
             kcalField.setText("");
+            lonField.setText("");
+        } catch (IOException | ParseException | InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -82,11 +116,7 @@ public class UserInputScreen extends JFrame {
 
     public static void main(String[] args) {
         UserInputScreen gui = new UserInputScreen();
-        gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gui.setVisible(true);
-        gui.setLocationRelativeTo(null);
-        gui.pack();
-        gui.setTitle("Enter your data");
+        gui.start();
     }
 
     public void setData(MetValue data) {
