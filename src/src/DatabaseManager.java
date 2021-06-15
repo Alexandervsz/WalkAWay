@@ -18,7 +18,7 @@ public class DatabaseManager {
         }
     }
 
-    public void insertMets(float mets, float speedA, float speedB, String activity) {
+    public void insertMets(double mets, double speedA, double speedB, String activity) {
         try {
             String sql = "INSERT INTO metvalues (metvalue, speeda, speedb,  activity) VALUES (?, ?, ?, ?);";
             PreparedStatement pst = c.prepareStatement(sql);
