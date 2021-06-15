@@ -32,18 +32,18 @@ public class MetsInserter extends JFrame {
 
     private void addMets(ActionEvent actionEvent) {
         try {
-            float mets = Float.parseFloat(metsField.getText());
-            float speedA;
-            float speedB;
+            double mets = Double.parseDouble(metsField.getText());
+            double speedA;
+            double speedB;
             if (speedAField.getText().equals("")) {
                 speedA = -1;
             } else {
-                speedA = Float.parseFloat(speedAField.getText()) * 1.609344f; // convert to metric.
+                speedA = Double.parseDouble(speedAField.getText()) * 1.609344f; // convert to metric.
             }
             if (speedBField.getText().equals("")) {
                 speedB = -1;
             } else {
-                speedB = Float.parseFloat(speedBField.getText()) * 1.609344f; // convert to metric.
+                speedB = Double.parseDouble(speedBField.getText()) * 1.609344f; // convert to metric.
             }
             String activity = activityField.getText();
             DatabaseManager databaseManager = new DatabaseManager();
