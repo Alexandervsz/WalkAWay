@@ -9,17 +9,26 @@ import org.json.simple.parser.ParseException;
 
 public class NodeFetcher {
     private final Set<Node> nodeSet;
+    private final User user;
     private double distanceTraveled;
     private Node currentNode;
     private final double totalDistance;
     private final List<Node> path;
 
-    public NodeFetcher(Node start, double totalDistance) {
+    public NodeFetcher(User user) {
+        this.user = user;
         this.nodeSet = new HashSet<>();
         this.path = new ArrayList<>();
         this.distanceTraveled = 0;
-        this.currentNode = start;
-        this.totalDistance = totalDistance;
+        this.currentNode = new Node("start", user.getLon(), user.getLat());
+        this.totalDistance = user.getDistance();
+    }
+
+    public void start() throws IOException, ParseException, InterruptedException {
+        FileManager fileManager = new FileManager();
+        JSONObject jsonObject = fileManager.getOverpassData(currentNode, totalDistance);
+        parseJson(jsonObject);
+        getRoute();
     }
 
 
@@ -55,8 +64,8 @@ public class NodeFetcher {
                     int count = 0;
                     for (String nodeId : nodes) {
                         Node targetNode = null;
-                        for (Node node: nodeSet){
-                            if (node.getId().equals(nodeId)){
+                        for (Node node : nodeSet) {
+                            if (node.getId().equals(nodeId)) {
                                 targetNode = node;
                             }
                         }
@@ -74,16 +83,13 @@ public class NodeFetcher {
     public void getRoute() {
         path.add(currentNode);
         while (distanceTraveled < totalDistance) {
-            Set<Node> removedNodes = new HashSet<>(nodeSet);
             //System.out.println("Starting from node: "+ currentNode.getId());
             for (Node node : nodeSet) {
                 node.getDistanceTo(currentNode);
                 node.getBearingTo(currentNode);
-                if (node.getDistanceToCurrentNode() > 40){
-                    removedNodes.remove(node);
-                }
+
             }
-            List<Node> sortedList = new ArrayList<>(removedNodes);
+            List<Node> sortedList = new ArrayList<>(nodeSet);
             Collections.sort(sortedList);
             Node closestNode = sortedList.get(0);
             //System.out.println("closest node is: "+ closestNode.getId());
@@ -98,36 +104,33 @@ public class NodeFetcher {
             List<Node> nodeList = new ArrayList<>(nodesInWay);
             Collections.sort(nodeList);
             //System.out.println("walking path: "+ nodeList);
-            for (Node node: nodeList){
-                if (distanceTraveled > totalDistance){
+            for (Node node : nodeList) {
+                if (distanceTraveled > totalDistance) {
                     break;
                 }
                 node.getBearingTo(closestNode);
-                if (node.getBearingToCurrentNode() < 1){
+                if (node.getBearingToCurrentNode() < 1) {
                     nodeSet.remove(node);
                     node.getDistanceTo(currentNode);
                     distanceTraveled += node.getDistanceToCurrentNode();
                     path.add(node);
                     closestNode = node;
                     currentNode = node;
-                }else{
+                } else {
                     nodeSet.remove(node);
                 }
             }
         }
         System.out.println(distanceTraveled);
+        System.out.println("Estimated calories of route: " + user.getEstimatedKcal(distanceTraveled));
         File file = new File("walking_route.gpx");
         FileManager fileManager = new FileManager();
         fileManager.generateGpx(file, "walking_route", path);
     }
 
     public static void main(String[] args) throws IOException, ParseException, InterruptedException {
-        Node start = new Node("start", 5.056657, 52.651975);
-        double totalDistance = 1000;
-        FileManager fileManager = new FileManager();
-        NodeFetcher nodeFetcher = new NodeFetcher(start, totalDistance);
-        JSONObject jsonObject = fileManager.getOverpassData(start, totalDistance);
-        nodeFetcher.parseJson(jsonObject);
-        nodeFetcher.getRoute();
+        User user = new User(6.0, 70.0, 6.4, 100, 5.0, 52.0);
+        NodeFetcher nodeFetcher = new NodeFetcher(user);
+        nodeFetcher.start();
     }
 }
