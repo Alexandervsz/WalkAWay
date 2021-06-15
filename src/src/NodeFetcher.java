@@ -1,6 +1,10 @@
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.*;
 import java.util.*;
+import java.util.List;
+import org.apache.commons.io.FileUtils;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -26,11 +30,15 @@ public class NodeFetcher {
 
     public void start() throws IOException, ParseException, InterruptedException {
         FileManager fileManager = new FileManager();
+        GeneratingPathDialog dialog = new GeneratingPathDialog("Fetching overpass data...");
         JSONObject jsonObject = fileManager.getOverpassData(currentNode, totalDistance);
         parseJson(jsonObject);
+        dialog.stop();
+        dialog = new GeneratingPathDialog("Generating route, plase wait...");
         getRoute();
+        dialog.stop();
+        showOutput();
     }
-
 
     public void parseJson(JSONObject jsonObject) throws ParseException {
         JSONArray elements = (JSONArray) jsonObject.get("elements");
@@ -80,7 +88,7 @@ public class NodeFetcher {
         }
     }
 
-    public void getRoute() {
+    public void getRoute() throws IOException {
         path.add(currentNode);
         while (distanceTraveled < totalDistance) {
             //System.out.println("Starting from node: "+ currentNode.getId());
@@ -121,15 +129,40 @@ public class NodeFetcher {
                 }
             }
         }
-        System.out.println(distanceTraveled);
-        System.out.println("Estimated calories of route: " + user.getEstimatedKcal(distanceTraveled));
+        showOutput();
+
+
+    }
+
+    public void showOutput() throws IOException {
+        OutputScreen outputScreen = new OutputScreen(String.valueOf(distanceTraveled), String.valueOf(user.getEstimatedKcal(distanceTraveled)));
         File file = new File("walking_route.gpx");
         FileManager fileManager = new FileManager();
         fileManager.generateGpx(file, "walking_route", path);
+        File htmlTemplateFile = new File("template.html");
+        String htmlString = FileUtils.readFileToString(htmlTemplateFile, "ISO-8859-1");
+        StringBuilder nodes = new StringBuilder();
+        for (int x = 0; x < path.size(); x++){
+            nodes.append("[");
+            nodes.append(path.get(x).getLat());
+            nodes.append(", ");
+            nodes.append(path.get(x).getLon());
+            nodes.append("]");
+            if (x < path.size()-1){
+                nodes.append(", ");
+            }
+        }
+        htmlString = htmlString.replace("$insertnode", nodes.toString());
+        File newHtmlFile = new File("path/new.html");
+        FileUtils.writeStringToFile(newHtmlFile, htmlString, "ISO-8859-1");
+
+        Desktop.getDesktop().browse(newHtmlFile.toURI());
+
     }
 
     public static void main(String[] args) throws IOException, ParseException, InterruptedException {
-        User user = new User(6.0, 70.0, 6.4, 100, 5.0, 52.0);
+        User user = new User(6.0, 70.0, 6.4, 10, 5.072073, 52.645407);
+
         NodeFetcher nodeFetcher = new NodeFetcher(user);
         nodeFetcher.start();
     }
