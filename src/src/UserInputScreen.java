@@ -82,9 +82,9 @@ public class UserInputScreen extends JFrame {
             System.out.println(lat);
             System.out.println(user.getDistance());
             this.setVisible(false);
-            System.exit(0);
             NodeFetcher nodeFetcher = new NodeFetcher(user);
             nodeFetcher.start();
+            System.exit(0);
 
         } catch (NumberFormatException e) {
             weightField.setText("");
