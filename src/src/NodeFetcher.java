@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.*;
 import java.util.*;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
@@ -88,10 +87,9 @@ public class NodeFetcher {
         }
     }
 
-    public void getRoute() throws IOException {
+    public void getRoute() {
         path.add(currentNode);
         while (distanceTraveled < totalDistance) {
-            //System.out.println("Starting from node: "+ currentNode.getId());
             for (Node node : nodeSet) {
                 node.getDistanceTo(currentNode);
                 node.getBearingTo(currentNode);
@@ -100,9 +98,7 @@ public class NodeFetcher {
             List<Node> sortedList = new ArrayList<>(nodeSet);
             Collections.sort(sortedList);
             Node closestNode = sortedList.get(0);
-            //System.out.println("closest node is: "+ closestNode.getId());
             Way currentWay = closestNode.getWay();
-            //System.out.println("Current way is: "+ currentWay.getid());
             nodeSet.remove(closestNode);
             closestNode.getDistanceTo(currentNode);
             distanceTraveled += closestNode.getDistanceToCurrentNode();
@@ -111,7 +107,6 @@ public class NodeFetcher {
             Set<Node> nodesInWay = currentWay.getNodePositions();
             List<Node> nodeList = new ArrayList<>(nodesInWay);
             Collections.sort(nodeList);
-            //System.out.println("walking path: "+ nodeList);
             for (Node node : nodeList) {
                 if (distanceTraveled > totalDistance) {
                     break;
@@ -129,13 +124,10 @@ public class NodeFetcher {
                 }
             }
         }
-        showOutput();
-
-
     }
 
     public void showOutput() throws IOException {
-        OutputScreen outputScreen = new OutputScreen(String.valueOf(distanceTraveled), String.valueOf(user.getEstimatedKcal(distanceTraveled)));
+        new OutputScreen(String.valueOf(distanceTraveled), String.valueOf(user.getEstimatedKcal(distanceTraveled)));
         File file = new File("walking_route.gpx");
         FileManager fileManager = new FileManager();
         fileManager.generateGpx(file, "walking_route", path);
@@ -155,14 +147,12 @@ public class NodeFetcher {
         htmlString = htmlString.replace("$insertnode", nodes.toString());
         File newHtmlFile = new File("path/new.html");
         FileUtils.writeStringToFile(newHtmlFile, htmlString, "ISO-8859-1");
-
         Desktop.getDesktop().browse(newHtmlFile.toURI());
 
     }
 
     public static void main(String[] args) throws IOException, ParseException, InterruptedException {
         User user = new User(6.0, 70.0, 6.4, 10, 5.072073, 52.645407);
-
         NodeFetcher nodeFetcher = new NodeFetcher(user);
         nodeFetcher.start();
     }
