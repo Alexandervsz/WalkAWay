@@ -75,7 +75,8 @@ public class UserInputScreen extends JFrame {
             double lon = Double.parseDouble(lonField.getText());
             double lat = Double.parseDouble(latField.getText());
             User user = new User(mets, weight, walkingSpeed, kcal, lon, lat);
-            this.setVisible(false);
+            dispose();
+            setVisible(false);
             NodeFetcher nodeFetcher = new NodeFetcher(user);
             nodeFetcher.start();
             System.exit(0);
