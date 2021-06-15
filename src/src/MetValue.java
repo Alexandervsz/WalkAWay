@@ -1,27 +1,29 @@
 import java.text.DecimalFormat;
 
 public class MetValue {
-    private final float metValue;
-    private final float speedA;
-    private final float speedB;
+    private final double metValue;
+    private final double speedA;
+    private final double speedB;
     private final String activity;
 
     public MetValue(String metValue, String speedA, String speedB, String activity) {
-        this.metValue = Float.parseFloat(metValue);
-        this.speedA = Float.parseFloat(speedA);
-        this.speedB = Float.parseFloat(speedB);
+        this.metValue = Double.parseDouble(metValue);
+        this.speedA = Double.parseDouble(speedA);
+        this.speedB = Double.parseDouble(speedB);
+        DecimalFormat df = new DecimalFormat("#.#");
+
         this.activity = activity;
     }
 
-    public float getMetValue() {
+    public double getMetValue() {
         return metValue;
     }
 
-    public float getSpeedA() {
+    public double getSpeedA() {
         return speedA;
     }
 
-    public float getSpeedB() {
+    public double getSpeedB() {
         return speedB;
     }
 
