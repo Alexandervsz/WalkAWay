@@ -90,9 +90,9 @@ public class UserInputScreen extends JDialog {
     private void changeUI(ActionEvent actionEvent) {
         MetValue metValue = (MetValue) metsBox.getSelectedItem();
         assert metValue != null;
-        walkingSpeedLabel.setText("Please enter your " + metValue.getActivity() + " speed: ");
-        if (metValue.getSpeedA() != -1) {
-            if (metValue.getSpeedB() != -1) {
+        walkingSpeedLabel.setText("Speed: ");
+        if (metValue.getSpeedA() != 0) {
+            if (metValue.getSpeedB() != 0) {
                 walkingSpeedLabel.setVisible(true);
                 walkingSpeedField.setVisible(true);
             } else {
