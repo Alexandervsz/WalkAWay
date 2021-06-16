@@ -63,7 +63,7 @@ public class UserInputScreen extends JDialog {
         try {
             double walkingSpeed;
             double weight = Double.parseDouble(weightField.getText());
-            if (metValue.getSpeedA() == -1 || metValue.getSpeedB() != -1) {
+            if (metValue.getSpeedA() == 0 || metValue.getSpeedB() != 0) {
                 walkingSpeed = Double.parseDouble(walkingSpeedField.getText());
             } else {
                 walkingSpeed = metValue.getSpeedA();
