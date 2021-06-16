@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 
-public class UserInputScreen extends JFrame {
+public class UserInputScreen extends JDialog {
     private JButton confirmButton;
     private JLabel metsLabel;
     private JLabel weightLabel;
@@ -18,14 +18,14 @@ public class UserInputScreen extends JFrame {
     private JTextField walkingSpeedField;
     private JTextField kcalField;
     private JComboBox<MetValue> metsBox;
-
-    // Ununsed but required for form to work.
-    private JPanel southPanel;
-    private JPanel northPanel;
     private JTextField lonField;
     private JLabel lonLabel;
     private JTextField latField;
     private JLabel latLabel;
+
+    // Ununsed but required for form to work.
+    private JPanel southPanel;
+    private JPanel northPanel;
 
     public UserInputScreen() {
         metsLabel.setText("Activity: ");
@@ -51,8 +51,9 @@ public class UserInputScreen extends JFrame {
         add(mainPanel);
         validate();
     }
-    private void start(){
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    private void start() {
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setVisible(true);
         this.setLocationRelativeTo(null);
         this.pack();
@@ -79,7 +80,6 @@ public class UserInputScreen extends JFrame {
             setVisible(false);
             NodeFetcher nodeFetcher = new NodeFetcher(user);
             nodeFetcher.start();
-            System.exit(0);
 
         } catch (NumberFormatException e) {
             weightField.setText("");
