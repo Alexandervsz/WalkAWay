@@ -3,12 +3,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
-import org.apache.commons.io.FileUtils;
 
+import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import javax.swing.*;
 
 public class NodeFetcher {
     private final Set<Node> nodeSet;
@@ -29,14 +31,30 @@ public class NodeFetcher {
 
     public void start() throws IOException, ParseException, InterruptedException {
         FileManager fileManager = new FileManager();
-        GeneratingPathDialog dialog = new GeneratingPathDialog("Fetching overpass data...");
-        JSONObject jsonObject = fileManager.getOverpassData(currentNode, totalDistance);
-        parseJson(jsonObject);
-        dialog.stop();
-        dialog = new GeneratingPathDialog("Generating route, plase wait...");
-        getRoute();
-        dialog.stop();
-        showOutput();
+        //FetchingDataDialog gpDialog = new FetchingDataDialog("Fetching Overpass data, please wait...");
+        final LoadingDialog dialog = new LoadingDialog("Loading overpass data, please wait..."); // make sure setUndecorated(true) is called, and it's modal
+        SwingWorker<Void, Void> worker = new SwingWorker<>() {
+
+            @Override
+            protected Void doInBackground() throws ParseException, IOException, InterruptedException {
+                JSONObject jsonObject = fileManager.getOverpassData(currentNode, totalDistance);
+                dialog.setProgress(40);
+                parseJson(jsonObject);
+                dialog.setProgress(50);
+                dialog.setText("Generating path, please wait...");
+                getRoute();
+                dialog.setProgress(100);
+                showOutput();
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                dialog.dispose();
+            }
+        };
+        worker.execute();
+        dialog.setVisible(true);
     }
 
     public void parseJson(JSONObject jsonObject) throws ParseException {
@@ -128,19 +146,19 @@ public class NodeFetcher {
 
     public void showOutput() throws IOException {
         new OutputScreen(String.valueOf(distanceTraveled), String.valueOf(user.getEstimatedKcal(distanceTraveled)));
-        File file = new File("walking_route.gpx");
+        File file = new File("path/walking_route.gpx");
         FileManager fileManager = new FileManager();
-        fileManager.generateGpx(file, "walking_route", path);
+        fileManager.generateGpx(file, "path/walking_route", path);
         File htmlTemplateFile = new File("template.html");
         String htmlString = FileUtils.readFileToString(htmlTemplateFile, "ISO-8859-1");
         StringBuilder nodes = new StringBuilder();
-        for (int x = 0; x < path.size(); x++){
+        for (int x = 0; x < path.size(); x++) {
             nodes.append("[");
             nodes.append(path.get(x).getLat());
             nodes.append(", ");
             nodes.append(path.get(x).getLon());
             nodes.append("]");
-            if (x < path.size()-1){
+            if (x < path.size() - 1) {
                 nodes.append(", ");
             }
         }
@@ -148,7 +166,6 @@ public class NodeFetcher {
         File newHtmlFile = new File("path/new.html");
         FileUtils.writeStringToFile(newHtmlFile, htmlString, "ISO-8859-1");
         Desktop.getDesktop().browse(newHtmlFile.toURI());
-
     }
 
     public static void main(String[] args) throws IOException, ParseException, InterruptedException {
