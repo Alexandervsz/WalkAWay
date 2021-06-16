@@ -1,9 +1,9 @@
 import java.util.*;
 
 public class Way {
-    public String id;
-    public String[] type;
-    public Set<Node> nodePositions;
+    private final String id;
+    private final String[] type;
+    private final Set<Node> nodePositions;
     private double distanceToCurrentNode;
 
     public Way(String id,  String[] type) {
