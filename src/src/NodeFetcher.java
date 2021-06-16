@@ -29,7 +29,7 @@ public class NodeFetcher {
         this.totalDistance = user.getDistance();
     }
 
-    public void start() throws IOException, ParseException, InterruptedException {
+    public void start(){
         FileManager fileManager = new FileManager();
         final LoadingDialog dialog = new LoadingDialog(" Loading overpass data...");
         SwingWorker<Void, Void> worker = new SwingWorker<>() {
@@ -167,7 +167,7 @@ public class NodeFetcher {
         Desktop.getDesktop().browse(newHtmlFile.toURI());
     }
 
-    public static void main(String[] args) throws IOException, ParseException, InterruptedException {
+    public static void main(String[] args){
         User user = new User(6.0, 70.0, 6.4, 10, 5.072073, 52.645407);
         NodeFetcher nodeFetcher = new NodeFetcher(user);
         nodeFetcher.start();
