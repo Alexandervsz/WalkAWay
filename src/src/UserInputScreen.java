@@ -23,7 +23,7 @@ public class UserInputScreen extends JDialog {
     private JTextField latField;
     private JLabel latLabel;
 
-    // Ununsed but required for form to work.
+    // Unused but required for form to work.
     private JPanel southPanel;
     private JPanel northPanel;
 
@@ -40,21 +40,18 @@ public class UserInputScreen extends JDialog {
         confirmButton.addActionListener(this::createUser);
         metsBox.addActionListener(this::changeUI);
         for (MetValue mets : metValues) {
-            setData(mets);
+            metsBox.addItem(mets);
         }
         Image icon = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB_PRE); //Removes the ugly icon...
         setIconImage(icon);
         setLayout(new GridLayout());
         add(mainPanel);
         validate();
-    }
-
-    private void start() {
+        this.setTitle("Enter your data");
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setVisible(true);
         this.setLocationRelativeTo(null);
         this.pack();
-        this.setTitle("Enter your data");
     }
 
     private void createUser(ActionEvent actionEvent) {
@@ -87,6 +84,11 @@ public class UserInputScreen extends JDialog {
         }
     }
 
+    /**
+     * Changes the UI based on the user's selected item.
+     * If the user selects an item with a speed range (or without a speed at all) the speed entry field is hidden.
+     * @param actionEvent The user chose an option.
+     */
     private void changeUI(ActionEvent actionEvent) {
         MetValue metValue = (MetValue) metsBox.getSelectedItem();
         assert metValue != null;
@@ -106,11 +108,6 @@ public class UserInputScreen extends JDialog {
     }
 
     public static void main(String[] args) {
-        UserInputScreen gui = new UserInputScreen();
-        gui.start();
-    }
-
-    public void setData(MetValue data) {
-        metsBox.addItem(data);
+        new UserInputScreen();
     }
 }
