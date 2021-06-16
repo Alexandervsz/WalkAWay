@@ -21,19 +21,19 @@ public class FileManager {
     public JSONObject getOverpassData(Node currentNode, double totalDistance) throws IOException, InterruptedException, ParseException {
         String bbox = generateBbox(currentNode, totalDistance);
         DatabaseManager databaseManager = new DatabaseManager();
-        List<NodeType> nodeTypes = databaseManager.getNodeTypes();
+        List<WayType> wayTypes = databaseManager.getWayTypes();
         List<String> options = new ArrayList<>();
         options.add("way");
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("[out:json];(");
-        for (NodeType nodeType : nodeTypes) {
+        for (WayType wayType : wayTypes) {
             for (String option : options) {
                 stringBuilder.append(option);
                 stringBuilder.append("[");
-                stringBuilder.append(nodeType.getMainType());
-                if (!nodeType.getSubType().equals("-1")) {
+                stringBuilder.append(wayType.getMainType());
+                if (!wayType.getSubType().equals("-1")) {
                     stringBuilder.append("=");
-                    stringBuilder.append(nodeType.getSubType());
+                    stringBuilder.append(wayType.getSubType());
                 }
                 stringBuilder.append("](");
                 stringBuilder.append(bbox);
