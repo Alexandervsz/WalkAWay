@@ -1,17 +1,6 @@
 import java.text.DecimalFormat;
 
-public class MetValue {
-    private final double metValue;
-    private final double speedA;
-    private final double speedB;
-    private final String activity;
-
-    public MetValue(String metValue, String speedA, String speedB, String activity) {
-        this.metValue = Double.parseDouble(metValue);
-        this.speedA = Double.parseDouble(speedA);
-        this.speedB = Double.parseDouble(speedB);
-        this.activity = activity;
-    }
+public record MetValue(double metValue, double speedA, double speedB, String activity) {
 
     public double getMetValue() {
         return metValue;
@@ -32,8 +21,8 @@ public class MetValue {
     @Override
     public String toString() {
         DecimalFormat decimalFormat = new DecimalFormat("#.#");
-        if (speedB == -1) {
-            if (speedA == -1) {
+        if (speedB == 0) {
+            if (speedA == 0) {
                 return activity;
             } else {
                 return activity + " at " + decimalFormat.format(speedA) + "km/h";
