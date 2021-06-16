@@ -13,6 +13,7 @@ public class OutputScreen extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         distanceLabel.setText("Total distance of path: "+distance);
         caloriesLabel.setText("Estimated amount of calories burned when walking this route: "+calories);
+        closeButton.setText("Close");
         closeButton.addActionListener(this::stop);
         setLayout(new GridLayout());
         add(outputPanel);

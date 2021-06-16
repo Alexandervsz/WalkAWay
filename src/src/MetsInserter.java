@@ -38,12 +38,12 @@ public class MetsInserter extends JFrame {
             if (speedAField.getText().equals("")) {
                 speedA = -1;
             } else {
-                speedA = Double.parseDouble(speedAField.getText()) * 1.609344f; // convert to metric.
+                speedA = Double.parseDouble(speedAField.getText()) * 1.609344; // convert to metric.
             }
             if (speedBField.getText().equals("")) {
                 speedB = -1;
             } else {
-                speedB = Double.parseDouble(speedBField.getText()) * 1.609344f; // convert to metric.
+                speedB = Double.parseDouble(speedBField.getText()) * 1.609344; // convert to metric.
             }
             String activity = activityField.getText();
             DatabaseManager databaseManager = new DatabaseManager();

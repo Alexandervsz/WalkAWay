@@ -10,8 +10,6 @@ public class MetValue {
         this.metValue = Double.parseDouble(metValue);
         this.speedA = Double.parseDouble(speedA);
         this.speedB = Double.parseDouble(speedB);
-        DecimalFormat df = new DecimalFormat("#.#");
-
         this.activity = activity;
     }
 
@@ -27,7 +25,9 @@ public class MetValue {
         return speedB;
     }
 
-    public String getActivity() { return activity; }
+    public String getActivity() {
+        return activity;
+    }
 
     @Override
     public String toString() {

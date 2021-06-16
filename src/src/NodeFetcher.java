@@ -111,7 +111,6 @@ public class NodeFetcher {
             for (Node node : nodeSet) {
                 node.getDistanceTo(currentNode);
                 node.getBearingTo(currentNode);
-
             }
             List<Node> sortedList = new ArrayList<>(nodeSet);
             Collections.sort(sortedList);

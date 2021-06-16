@@ -55,17 +55,11 @@ public class FileManager {
     }
 
     public String generateBbox(Node currentNode, double totalDistance) {
-        //Position, decimal degrees
         double lat = currentNode.getLat();
         double lon = currentNode.getLon();
-
-        //Earth’s radius, sphere
         double R = 6378137;
-        //Coordinate offsets in radians
         double dLat = totalDistance / R;
         double dLon = totalDistance / (R * Math.cos(Math.PI * lat / 180));
-
-        //OffsetPosition, decimal degrees
         double latO = lat - dLat * 180 / Math.PI;
         double lonO = lon - dLon * 180 / Math.PI;
         double lat1 = lat + dLat * 180 / Math.PI;
@@ -75,18 +69,14 @@ public class FileManager {
     }
 
     public void generateGpx(File file, String name, List<Node> points) {
-
         String header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?><gpx xmlns=\"http://www.topografix.com/GPX/1/1\" creator=\"MapSource 6.15.5\" version=\"1.1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"  xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\"><trk>\n";
         name = "<name>" + name + "</name><trkseg>\n";
-
         StringBuilder segments = new StringBuilder();
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
         for (Node location : points) {
             segments.append("<trkpt lat=\"").append(location.getLat()).append("\" lon=\"").append(location.getLon()).append("\"><time>").append(df.format(new Date(System.currentTimeMillis()))).append("</time></trkpt>\n");
         }
-
         String footer = "</trkseg></trk></gpx>";
-
         try {
             FileWriter writer = new FileWriter(file, false);
             writer.append(header);
@@ -95,7 +85,6 @@ public class FileManager {
             writer.append(footer);
             writer.flush();
             writer.close();
-
         } catch (IOException e) {
             System.out.println("Error Writting Path" + e);
         }

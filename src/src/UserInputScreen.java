@@ -36,15 +36,12 @@ public class UserInputScreen extends JDialog {
         kcalLabel.setText("Calories to burn: ");
         lonLabel.setText("Longitude: ");
         latLabel.setText("Lattitude: ");
-        confirmButton.setText("Confirm.");
-
-
+        confirmButton.setText("Confirm");
         confirmButton.addActionListener(this::createUser);
         metsBox.addActionListener(this::changeUI);
         for (MetValue mets : metValues) {
             setData(mets);
         }
-
         Image icon = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB_PRE); //Removes the ugly icon...
         setIconImage(icon);
         setLayout(new GridLayout());
@@ -80,7 +77,6 @@ public class UserInputScreen extends JDialog {
             setVisible(false);
             NodeFetcher nodeFetcher = new NodeFetcher(user);
             nodeFetcher.start();
-
         } catch (NumberFormatException e) {
             weightField.setText("");
             walkingSpeedField.setText("");

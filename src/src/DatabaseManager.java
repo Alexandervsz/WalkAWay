@@ -54,7 +54,7 @@ public class DatabaseManager {
         return metValues;
     }
 
-    public List<NodeType> getNodeTypes(){
+    public List<NodeType> getNodeTypes() {
         List<NodeType> nodeTypes = new ArrayList<>();
         try {
             Statement stmt = c.createStatement();
