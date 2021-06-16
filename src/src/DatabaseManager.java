@@ -22,9 +22,9 @@ public class DatabaseManager {
         try {
             String sql = "INSERT INTO metvalues (metvalue, speeda, speedb,  activity) VALUES (?, ?, ?, ?);";
             PreparedStatement pst = c.prepareStatement(sql);
-            pst.setString(1, String.valueOf(mets));
-            pst.setString(2, String.valueOf(speedA));
-            pst.setString(3, String.valueOf(speedB));
+            pst.setDouble(1, mets);
+            pst.setDouble(2, speedA);
+            pst.setDouble(3, speedB);
             pst.setString(4, activity);
             pst.executeUpdate();
             c.commit();
@@ -41,8 +41,8 @@ public class DatabaseManager {
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM metvalues;");
             while (rs.next()) {
-                metValues.add(new MetValue(rs.getString("metvalue"), rs.getString("speeda"),
-                        rs.getString("speedb"), rs.getString("activity")));
+                metValues.add(new MetValue(rs.getDouble("metvalue"), rs.getDouble("speeda"),
+                        rs.getDouble("speedb"), rs.getString("activity")));
             }
             rs.close();
             stmt.close();
