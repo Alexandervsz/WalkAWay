@@ -1,5 +1,8 @@
 import java.text.DecimalFormat;
 
+/**
+ * @see <a href="https://sites.google.com/site/compendiumofphysicalactivities/Activity-Categories">For more information.</a>
+ */
 public record MetValue(double metValue, double speedA, double speedB, String activity) {
 
     public double getMetValue() {
@@ -7,11 +10,11 @@ public record MetValue(double metValue, double speedA, double speedB, String act
     }
 
     public double getSpeedA() {
-        return speedA;
+        return speedA; //In kilomoters per hour
     }
 
     public double getSpeedB() {
-        return speedB;
+        return speedB; //In kilomoters per hour
     }
 
     public String getActivity() {
