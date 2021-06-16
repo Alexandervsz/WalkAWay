@@ -31,18 +31,17 @@ public class NodeFetcher {
 
     public void start() throws IOException, ParseException, InterruptedException {
         FileManager fileManager = new FileManager();
-        //FetchingDataDialog gpDialog = new FetchingDataDialog("Fetching Overpass data, please wait...");
-        final LoadingDialog dialog = new LoadingDialog("Loading overpass data, please wait..."); // make sure setUndecorated(true) is called, and it's modal
+        final LoadingDialog dialog = new LoadingDialog(" Loading overpass data...");
         SwingWorker<Void, Void> worker = new SwingWorker<>() {
 
             @Override
             protected Void doInBackground() throws ParseException, IOException, InterruptedException {
                 JSONObject jsonObject = fileManager.getOverpassData(currentNode, totalDistance);
                 dialog.setProgress(30);
-                dialog.setText("Processing Overpass data, please wait...");
+                dialog.setText(" Processing Overpass data...");
                 parseJson(jsonObject);
                 dialog.setProgress(60);
-                dialog.setText("Generating path, please wait...");
+                dialog.setText(" Generating path...");
                 getRoute();
                 dialog.setProgress(100);
                 showOutput();
