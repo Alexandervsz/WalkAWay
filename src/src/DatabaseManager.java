@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseManager {
-    Connection c;
+    private Connection c;
 
     /**
      * Opens a connection to the postgresql database, raises an error when the connection doesn't exist.
