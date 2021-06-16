@@ -38,9 +38,10 @@ public class NodeFetcher {
             @Override
             protected Void doInBackground() throws ParseException, IOException, InterruptedException {
                 JSONObject jsonObject = fileManager.getOverpassData(currentNode, totalDistance);
-                dialog.setProgress(40);
+                dialog.setProgress(30);
+                dialog.setText("Processing Overpass data, please wait...");
                 parseJson(jsonObject);
-                dialog.setProgress(50);
+                dialog.setProgress(60);
                 dialog.setText("Generating path, please wait...");
                 getRoute();
                 dialog.setProgress(100);
