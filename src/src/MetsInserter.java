@@ -18,6 +18,7 @@ public class MetsInserter extends JFrame {
     private JTextField speedBField;
 
     public MetsInserter() {
+        this.setLocationRelativeTo(null);
         metsLabel.setText("Please enter the mets value of your activity: ");
         speedALabel.setText("Please enter the beginning of the speed range of the activity: ");
         speedBLabel.setText("Please enter the end of the speed range of the activity: ");
@@ -65,5 +66,4 @@ public class MetsInserter extends JFrame {
         metsInserter.pack();
         metsInserter.setTitle("Enter your data");
     }
-
 }
