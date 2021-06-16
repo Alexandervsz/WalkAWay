@@ -10,11 +10,11 @@ public record MetValue(double metValue, double speedA, double speedB, String act
     }
 
     public double getSpeedA() {
-        return speedA; //In kilomoters per hour
+        return speedA; //In kilometers per hour
     }
 
     public double getSpeedB() {
-        return speedB; //In kilomoters per hour
+        return speedB; //In kilometers per hour
     }
 
     public String getActivity() {
