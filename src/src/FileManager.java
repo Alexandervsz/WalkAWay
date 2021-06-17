@@ -30,7 +30,7 @@ public class FileManager {
      * @throws InterruptedException If the html request is interrupted.
      * @throws ParseException       If the JSON is incorrect.
      */
-    public void getOverpassData(Node currentNode, double totalDistance, LoadingDialog dialog) throws IOException, InterruptedException, ParseException {
+    public void getOverpassData(Node currentNode, double totalDistance, LoadingDialog dialog) throws Exception {
         String bbox = generateBbox(currentNode, totalDistance);
         DatabaseManager databaseManager = new DatabaseManager();
         List<WayType> wayTypes = databaseManager.getWayTypes();
@@ -94,7 +94,7 @@ public class FileManager {
      * @param jsonObject The JSON fetched from overpass.
      * @throws ParseException If incorrect JSON is passed.
      */
-    public void parseJson(JSONObject jsonObject) throws ParseException {
+    public void parseJson(JSONObject jsonObject) throws Exception {
         nodeSet = new HashSet<>();
         waySet = new HashSet<>();
         JSONArray elements = (JSONArray) jsonObject.get("elements");
@@ -133,10 +133,12 @@ public class FileManager {
                                 targetNode = node;
                             }
                         }
-                        assert targetNode != null;
+                        if (targetNode == null){
+                            throw new Exception("Node not found");
+                        }
                         targetNode.setWay(newWay);
-                        targetNode.setPathnumber(count);
-                        newWay.addNode(targetNode);
+                        //targetNode.setPathNumber(count);
+                        newWay.addNode(count, targetNode);
                         count++;
                     }
                     waySet.add(newWay);
