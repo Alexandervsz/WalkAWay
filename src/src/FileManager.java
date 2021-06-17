@@ -137,7 +137,6 @@ public class FileManager {
                             throw new Exception("Node not found");
                         }
                         targetNode.setWay(newWay);
-                        //targetNode.setPathNumber(count);
                         newWay.addNode(count, targetNode);
                         count++;
                     }
