@@ -22,11 +22,13 @@ public class FileManager {
 
     /**
      * Fetches all nodes and ways in a bbox, which is based on the begin node and total distance required to walk.
-     * @param currentNode The node for which the ways must be fetched.
+     *
+     * @param currentNode   The node for which the ways must be fetched.
      * @param totalDistance The total required distance of the path.
-     * @throws IOException If the html request is invalid somehow.
+     * @param dialog        A LoadingDialog to show the progress.
+     * @throws IOException          If the html request is invalid somehow.
      * @throws InterruptedException If the html request is interrupted.
-     * @throws ParseException If the JSON is incorrect.
+     * @throws ParseException       If the JSON is incorrect.
      */
     public void getOverpassData(Node currentNode, double totalDistance, LoadingDialog dialog) throws IOException, InterruptedException, ParseException {
         String bbox = generateBbox(currentNode, totalDistance);
@@ -68,7 +70,8 @@ public class FileManager {
     /**
      * Generates a bbox, which is required in an overpass request. It generates a bbox of totaldistance * totaldistance
      * so even in the worst case scenario (straight way from A to B) enough data is available.
-     * @param currentNode The center node to draw the bbox around.
+     *
+     * @param currentNode   The center node to draw the bbox around.
      * @param totalDistance The total required distance of the path.
      * @return A string to be used in further processing.
      */
@@ -85,6 +88,12 @@ public class FileManager {
         return latO + "," + lonO + "," + lat1 + "," + lon1;
     }
 
+    /**
+     * Adds all nodes to the node set, then attaches the nodes to the corresponding ways, and finally saves the ways.
+     *
+     * @param jsonObject The JSON fetched from overpass.
+     * @throws ParseException If incorrect JSON is passed.
+     */
     public void parseJson(JSONObject jsonObject) throws ParseException {
         nodeSet = new HashSet<>();
         waySet = new HashSet<>();
@@ -138,8 +147,9 @@ public class FileManager {
 
     /**
      * Generates a gpx files based on the parameters.
-     * @param file The file object to write to.
-     * @param name The name of the path in the gpx file.
+     *
+     * @param file   The file object to write to.
+     * @param name   The name of the path in the gpx file.
      * @param points The path to base the gpx file on, ordered from start to finish.
      */
     public void generateGpx(File file, String name, List<Node> points) {
