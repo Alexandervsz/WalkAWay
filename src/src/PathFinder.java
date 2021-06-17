@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class PathFinder {
     private final User user;
     private double distanceTraveled;
     private Node beginNode;
+    private Node currentNode;
     private final double totalDistance;
     private final List<Node> path;
 
@@ -33,7 +35,7 @@ public class PathFinder {
         SwingWorker<Void, Void> worker = new SwingWorker<>() {
 
             @Override
-            protected Void doInBackground() throws ParseException, IOException, InterruptedException {
+            protected Void doInBackground() throws Exception {
                 fileManager.getOverpassData(beginNode, totalDistance, dialog);
                 nodeSet = fileManager.getNodeSet();
                 waySet = fileManager.getWaySet();
@@ -56,6 +58,7 @@ public class PathFinder {
 
     public void getRoute() {
         path.add(beginNode);
+        currentNode = beginNode;
         while (distanceTraveled < totalDistance) {
             for (Node node : nodeSet) {
                 node.getDistanceTo(beginNode);
@@ -63,43 +66,62 @@ public class PathFinder {
             }
             List<Node> sortedList = new ArrayList<>(nodeSet);
             Collections.sort(sortedList);
-            Node currentNode = sortedList.get(0);
-
-            nodeSet.remove(currentNode);
-            currentNode.getDistanceTo(beginNode);
-            distanceTraveled += currentNode.getDistanceToCurrentNode();
-            path.add(currentNode);
+            walkToNextNode(sortedList.get(0));
             processWay(currentNode);
         }
     }
 
-    public void processWay(Node currentNode){
+    public void processWay(Node currentNode) {
         Way currentWay = currentNode.getWay();
-        currentWay.calculatePositionsToNode(currentNode);
-        Set<Node> nodesInWay = currentWay.getNodePositions();
-        List<Node> nodeList = new ArrayList<>(nodesInWay);
-        Collections.sort(nodeList);
-        for (Node node : nodeList) {
-            if (distanceTraveled > totalDistance) {
-                return;
+        TreeMap<Integer, Node> nodesInWay = currentWay.getNodePositions();
+        int midpoint = (nodesInWay.lastKey() - nodesInWay.firstKey()) / 2;
+        if (currentWay.getPositionOfNode(currentNode) < midpoint){
+        for (Map.Entry<Integer, Node> entry : nodesInWay.entrySet()) {
+            Node node = entry.getValue();
+
+            if (entry.getKey() > currentWay.getPositionOfNode(currentNode)) {
+                if (distanceTraveled >= totalDistance) {
+                    return;
+                }
+                walkToNextNode(node);
             }
-            node.getBearingTo(currentNode);
-            if (node.getBearingToCurrentNode() < 1) {
-                nodeSet.remove(node);
-                node.getDistanceTo(beginNode);
-                distanceTraveled += node.getDistanceToCurrentNode();
-                path.add(node);
-                currentNode = node;
-                beginNode = node;
-            } else {
+            else{
                 nodeSet.remove(node);
             }
+        }}
+        else {
+            Map<Integer, Node> nodesInWayReversed = nodesInWay.descendingMap();
+            for (Map.Entry<Integer, Node> entry : nodesInWayReversed.entrySet()) {
+                Node node = entry.getValue();
+                if (entry.getKey() < currentWay.getPositionOfNode(currentNode)) {
+                    if (distanceTraveled >= totalDistance) {
+                        return;
+                    }
+                    walkToNextNode(node);
+                }
+                else{
+                    nodeSet.remove(node);
+                }
+            }
+
         }
+    }
+
+    public void walkToNextNode(Node newNode){
+        nodeSet.remove(newNode);
+        newNode.getDistanceTo(currentNode);
+        distanceTraveled += newNode.getDistanceToCurrentNode();
+        path.add(newNode);
+        currentNode = newNode; // If called by path.
+        beginNode = newNode; // If called by begin of loop.
 
     }
 
     public void showOutput() throws IOException {
-        new OutputScreen(String.valueOf(distanceTraveled), String.valueOf(user.getEstimatedKcal(distanceTraveled)));
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        String distance = String.valueOf(decimalFormat.format(distanceTraveled));
+        String calories = String.valueOf(decimalFormat.format(user.getEstimatedKcal(distanceTraveled)));
+        new OutputScreen(distance, calories);
         File file = new File("path/walking_route.gpx");
         FileManager fileManager = new FileManager();
         fileManager.generateGpx(file, "path/walking_route", path);
