@@ -22,11 +22,11 @@ public class DatabaseManager {
     }
 
     /**
-     *@see <a href="https://sites.google.com/site/compendiumofphysicalactivities/Activity-Categories"> for more info</a>
-     * @param mets The mets value of the activity
-     * @param speedA The beginning of the speed range in miles per hour.
-     * @param speedB The end of the speed range in miles per hour.
+     * @param mets     The mets value of the activity
+     * @param speedA   The beginning of the speed range in miles per hour.
+     * @param speedB   The end of the speed range in miles per hour.
      * @param activity The name of the activity, only use activities which can be done while following a path.
+     * @see <a href="https://sites.google.com/site/compendiumofphysicalactivities/Activity-Categories"> for more info</a>
      */
     public void insertMets(double mets, double speedA, double speedB, String activity) {
         try {
@@ -47,6 +47,7 @@ public class DatabaseManager {
 
     /**
      * Fetches all met values currently in the database.
+     *
      * @return A list of MetValue objects.
      */
     public List<MetValue> getBoxOptions() {
@@ -70,6 +71,7 @@ public class DatabaseManager {
 
     /**
      * Fetches all the walkable types of way out of the database.
+     *
      * @return A list of WayType objects.
      */
     public List<WayType> getWayTypes() {
