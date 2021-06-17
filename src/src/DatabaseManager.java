@@ -3,8 +3,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseManager {
-    Connection c;
+    private Connection c;
 
+    /**
+     * Opens a connection to the postgresql database, raises an error when the connection doesn't exist.
+     */
     public DatabaseManager() {
         try {
             Class.forName("org.postgresql.Driver");
@@ -18,13 +21,20 @@ public class DatabaseManager {
         }
     }
 
-    public void insertMets(float mets, float speedA, float speedB, String activity) {
+    /**
+     * @param mets     The mets value of the activity
+     * @param speedA   The beginning of the speed range in miles per hour.
+     * @param speedB   The end of the speed range in miles per hour.
+     * @param activity The name of the activity, only use activities which can be done while following a path.
+     * @see <a href="https://sites.google.com/site/compendiumofphysicalactivities/Activity-Categories"> for more info</a>
+     */
+    public void insertMets(double mets, double speedA, double speedB, String activity) {
         try {
             String sql = "INSERT INTO metvalues (metvalue, speeda, speedb,  activity) VALUES (?, ?, ?, ?);";
             PreparedStatement pst = c.prepareStatement(sql);
-            pst.setString(1, String.valueOf(mets));
-            pst.setString(2, String.valueOf(speedA));
-            pst.setString(3, String.valueOf(speedB));
+            pst.setDouble(1, mets);
+            pst.setDouble(2, speedA);
+            pst.setDouble(3, speedB);
             pst.setString(4, activity);
             pst.executeUpdate();
             c.commit();
@@ -35,14 +45,19 @@ public class DatabaseManager {
         }
     }
 
+    /**
+     * Fetches all met values currently in the database.
+     *
+     * @return A list of MetValue objects.
+     */
     public List<MetValue> getBoxOptions() {
         List<MetValue> metValues = new ArrayList<>();
         try {
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM metvalues;");
             while (rs.next()) {
-                metValues.add(new MetValue(rs.getString("metvalue"), rs.getString("speeda"),
-                        rs.getString("speedb"), rs.getString("activity")));
+                metValues.add(new MetValue(rs.getDouble("metvalue"), rs.getDouble("speeda"),
+                        rs.getDouble("speedb"), rs.getString("activity")));
             }
             rs.close();
             stmt.close();
@@ -54,13 +69,18 @@ public class DatabaseManager {
         return metValues;
     }
 
-    public List<NodeType> getNodeTypes(){
-        List<NodeType> nodeTypes = new ArrayList<>();
+    /**
+     * Fetches all the walkable types of way out of the database.
+     *
+     * @return A list of WayType objects.
+     */
+    public List<WayType> getWayTypes() {
+        List<WayType> wayTypes = new ArrayList<>();
         try {
             Statement stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM nodetype;");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM waytype;");
             while (rs.next()) {
-                nodeTypes.add(new NodeType(rs.getString("main_type"), rs.getString("sub_type")));
+                wayTypes.add(new WayType(rs.getString("main_type"), rs.getString("sub_type")));
             }
             rs.close();
             stmt.close();
@@ -69,6 +89,6 @@ public class DatabaseManager {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        return nodeTypes;
+        return wayTypes;
     }
 }

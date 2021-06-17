@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-public class UserInputScreen extends JFrame {
+public class UserInputScreen extends JDialog {
     private JButton confirmButton;
     private JLabel metsLabel;
     private JLabel weightLabel;
@@ -15,59 +15,81 @@ public class UserInputScreen extends JFrame {
     private JTextField walkingSpeedField;
     private JTextField kcalField;
     private JComboBox<MetValue> metsBox;
+    private JTextField lonField;
+    private JLabel lonLabel;
+    private JTextField latField;
+    private JLabel latLabel;
 
-    // Ununsed but required for form to work.
+    // Unused but required for form to work.
     private JPanel southPanel;
     private JPanel northPanel;
 
     public UserInputScreen() {
-        metsLabel.setText("Please enter the mets value of your activity: ");
-        weightLabel.setText("Please enter your weight: ");
+        metsLabel.setText("Activity: ");
+        weightLabel.setText("Weight: ");
         DatabaseManager databaseManager = new DatabaseManager();
         List<MetValue> metValues = databaseManager.getBoxOptions();
-        walkingSpeedLabel.setText("Please enter your "+metValues.get(0).getActivity()+" speed: ");
-        kcalLabel.setText("Please enter the amount of Calories you want to burn during the exercise: ");
+        walkingSpeedLabel.setText("Speed: ");
+        kcalLabel.setText("Calories to burn: ");
+        lonLabel.setText("Longitude: ");
+        latLabel.setText("Lattitude: ");
+        confirmButton.setText("Confirm");
         confirmButton.addActionListener(this::createUser);
         metsBox.addActionListener(this::changeUI);
         for (MetValue mets : metValues) {
-            setData(mets);
+            metsBox.addItem(mets);
         }
-
         Image icon = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB_PRE); //Removes the ugly icon...
         setIconImage(icon);
         setLayout(new GridLayout());
         add(mainPanel);
         validate();
+        this.setTitle("Enter your data");
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setVisible(true);
+        this.setLocationRelativeTo(null);
+        this.pack();
     }
 
     private void createUser(ActionEvent actionEvent) {
         MetValue metValue = (MetValue) metsBox.getSelectedItem();
         assert metValue != null;
         try {
-            float walkingSpeed;
-            float weight = Float.parseFloat(weightField.getText());
-            if (metValue.getSpeedA() == -1 || metValue.getSpeedB() != -1) {
-                walkingSpeed = Float.parseFloat(walkingSpeedField.getText());
+            double walkingSpeed;
+            double weight = Double.parseDouble(weightField.getText());
+            if (metValue.getSpeedA() == 0 || metValue.getSpeedB() != 0) {
+                walkingSpeed = Double.parseDouble(walkingSpeedField.getText());
             } else {
                 walkingSpeed = metValue.getSpeedA();
             }
-            float kcal = Float.parseFloat(kcalField.getText());
-            float mets = metValue.getMetValue();
-            User user = new User(mets, weight, walkingSpeed, kcal);
-            System.out.println(user.getDistance());
+            double kcal = Double.parseDouble(kcalField.getText());
+            double mets = metValue.getMetValue();
+            double lon = Double.parseDouble(lonField.getText());
+            double lat = Double.parseDouble(latField.getText());
+            User user = new User(mets, weight, walkingSpeed, kcal, lon, lat);
+            dispose();
+            setVisible(false);
+            PathFinder pathFinder = new PathFinder(user);
+            pathFinder.start();
         } catch (NumberFormatException e) {
             weightField.setText("");
             walkingSpeedField.setText("");
             kcalField.setText("");
+            lonField.setText("");
         }
     }
 
+    /**
+     * Changes the UI based on the user's selected item.
+     * If the user selects an item with a speed range (or without a speed at all) the speed entry field is hidden.
+     * @param actionEvent The user chose an option.
+     */
     private void changeUI(ActionEvent actionEvent) {
         MetValue metValue = (MetValue) metsBox.getSelectedItem();
         assert metValue != null;
-        walkingSpeedLabel.setText("Please enter your " + metValue.getActivity() + " speed: ");
-        if (metValue.getSpeedA() != -1) {
-            if (metValue.getSpeedB() != -1) {
+        walkingSpeedLabel.setText("Speed: ");
+        if (metValue.getSpeedA() != 0) {
+            if (metValue.getSpeedB() != 0) {
                 walkingSpeedLabel.setVisible(true);
                 walkingSpeedField.setVisible(true);
             } else {
@@ -81,15 +103,6 @@ public class UserInputScreen extends JFrame {
     }
 
     public static void main(String[] args) {
-        UserInputScreen gui = new UserInputScreen();
-        gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gui.setVisible(true);
-        gui.setLocationRelativeTo(null);
-        gui.pack();
-        gui.setTitle("Enter your data");
-    }
-
-    public void setData(MetValue data) {
-        metsBox.addItem(data);
+        new UserInputScreen();
     }
 }

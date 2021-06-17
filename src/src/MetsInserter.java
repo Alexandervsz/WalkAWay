@@ -5,50 +5,63 @@ import java.awt.image.BufferedImage;
 
 public class MetsInserter extends JFrame {
     private JPanel mainPanel;
-    private JPanel topPanel;
-    private JPanel bottomPanel;
     private JButton confirmButton;
-    private JTextField metsField;
-    private JTextField speedAField;
-    private JTextField activityField;
     private JLabel metsLabel;
+    private JTextField metsField;
     private JLabel speedALabel;
-    private JLabel activityLabel;
+    private JTextField speedAField;
     private JLabel speedBLabel;
     private JTextField speedBField;
+    private JLabel activityLabel;
+    private JTextField activityField;
+    // Unused but required for form to work.
+    private JPanel topPanel;
+    private JPanel bottomPanel;
 
+    /**
+     * Initializes the layout of the UI.
+     */
     public MetsInserter() {
+        this.setLocationRelativeTo(null);
         metsLabel.setText("Please enter the mets value of your activity: ");
-        speedALabel.setText("Please enter the beginning of the speed range of the activity: ");
-        speedBLabel.setText("Please enter the end of the speed range of the activity: ");
+        speedALabel.setText("Please enter the beginning of the speed range of the activity(mph): ");
+        speedBLabel.setText("Please enter the end of the speed range of the activity(mph): ");
         activityLabel.setText("Please enter a description of the activity: ");
+        confirmButton.setText("Confirm");
         confirmButton.addActionListener(this::addMets);
         Image icon = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB_PRE); //Removes the ugly icon...
         setIconImage(icon);
-        setLayout(new GridLayout());
         add(mainPanel);
-        validate();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Enter your data");
+        pack();
+        setVisible(true);
     }
 
+    /**
+     * Verifies the input given by the user.
+     * @implNote speedA and speedB are in miles per hour, they are converted to kilometers per hour.
+     * @param actionEvent The button is pressed.
+     */
     private void addMets(ActionEvent actionEvent) {
         try {
-            float mets = Float.parseFloat(metsField.getText());
-            float speedA;
-            float speedB;
+            double mets = Double.parseDouble(metsField.getText());
+            double speedA;
+            double speedB;
             if (speedAField.getText().equals("")) {
                 speedA = -1;
             } else {
-                speedA = Float.parseFloat(speedAField.getText()) * 1.609344f; // convert to metric.
+                speedA = Double.parseDouble(speedAField.getText()) * 1.609344; // convert to metric.
             }
             if (speedBField.getText().equals("")) {
                 speedB = -1;
             } else {
-                speedB = Float.parseFloat(speedBField.getText()) * 1.609344f; // convert to metric.
+                speedB = Double.parseDouble(speedBField.getText()) * 1.609344; // convert to metric.
             }
             String activity = activityField.getText();
             DatabaseManager databaseManager = new DatabaseManager();
             databaseManager.insertMets(mets, speedA, speedB, activity);
-            System.exit(0);
+            dispose();
 
         } catch (NumberFormatException e) {
             metsField.setText("");
@@ -59,11 +72,6 @@ public class MetsInserter extends JFrame {
     }
 
     public static void main(String[] args) {
-        MetsInserter metsInserter = new MetsInserter();
-        metsInserter.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        metsInserter.setVisible(true);
-        metsInserter.pack();
-        metsInserter.setTitle("Enter your data");
+        new MetsInserter();
     }
-
 }

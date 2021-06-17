@@ -2,8 +2,8 @@ import java.util.Objects;
 
 public class Node implements Comparable<Node> {
     private final String id;
-    private double lon;
-    private double lat;
+    private final double lon;
+    private final double lat;
     private double distanceToCurrentNode;
     private Way way;
     private double bearingToCurrentNode;
@@ -11,10 +11,6 @@ public class Node implements Comparable<Node> {
 
     public String getId() {
         return id;
-    }
-
-    public Node(String id) {
-        this.id = id;
     }
 
     public Node(String id, double lon, double lat) {

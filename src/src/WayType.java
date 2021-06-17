@@ -1,4 +1,4 @@
-public record NodeType(String mainType, String subType) {
+public record WayType(String mainType, String subType) {
 
     public String getMainType() {
         return mainType;

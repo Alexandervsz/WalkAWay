@@ -1,37 +1,31 @@
 import java.text.DecimalFormat;
 
-public class MetValue {
-    private final float metValue;
-    private final float speedA;
-    private final float speedB;
-    private final String activity;
+/**
+ * @see <a href="https://sites.google.com/site/compendiumofphysicalactivities/Activity-Categories">For more information.</a>
+ */
+public record MetValue(double metValue, double speedA, double speedB, String activity) {
 
-    public MetValue(String metValue, String speedA, String speedB, String activity) {
-        this.metValue = Float.parseFloat(metValue);
-        this.speedA = Float.parseFloat(speedA);
-        this.speedB = Float.parseFloat(speedB);
-        this.activity = activity;
-    }
-
-    public float getMetValue() {
+    public double getMetValue() {
         return metValue;
     }
 
-    public float getSpeedA() {
-        return speedA;
+    public double getSpeedA() {
+        return speedA; //In kilometers per hour
     }
 
-    public float getSpeedB() {
-        return speedB;
+    public double getSpeedB() {
+        return speedB; //In kilometers per hour
     }
 
-    public String getActivity() { return activity; }
+    public String getActivity() {
+        return activity;
+    }
 
     @Override
     public String toString() {
         DecimalFormat decimalFormat = new DecimalFormat("#.#");
-        if (speedB == -1) {
-            if (speedA == -1) {
+        if (speedB == 0) {
+            if (speedA == 0) {
                 return activity;
             } else {
                 return activity + " at " + decimalFormat.format(speedA) + "km/h";
