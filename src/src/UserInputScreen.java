@@ -1,10 +1,7 @@
-import org.json.simple.parser.ParseException;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.List;
 
 public class UserInputScreen extends JDialog {
@@ -72,15 +69,13 @@ public class UserInputScreen extends JDialog {
             User user = new User(mets, weight, walkingSpeed, kcal, lon, lat);
             dispose();
             setVisible(false);
-            NodeFetcher nodeFetcher = new NodeFetcher(user);
-            nodeFetcher.start();
+            PathFinder pathFinder = new PathFinder(user);
+            pathFinder.start();
         } catch (NumberFormatException e) {
             weightField.setText("");
             walkingSpeedField.setText("");
             kcalField.setText("");
             lonField.setText("");
-        } catch (IOException | ParseException | InterruptedException e) {
-            e.printStackTrace();
         }
     }
 
