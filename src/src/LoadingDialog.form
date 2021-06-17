@@ -10,7 +10,9 @@
     <children>
       <component id="2bfa8" class="javax.swing.JLabel" binding="loadingLabel">
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="200" height="20"/>
+          </grid>
         </constraints>
         <properties>
           <text value=""/>
