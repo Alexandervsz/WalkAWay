@@ -6,7 +6,6 @@ import java.util.*;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
 
@@ -105,6 +104,7 @@ public class PathFinder {
             }
 
         }
+        waySet.remove(currentWay);
     }
 
     public void walkToNextNode(Node newNode){
