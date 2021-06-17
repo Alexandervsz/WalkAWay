@@ -1,3 +1,4 @@
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -13,22 +14,21 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class FileManager {
+    Set<Node> nodeSet;
+    Set<Way> waySet;
 
     /**
      * Fetches all nodes and ways in a bbox, which is based on the begin node and total distance required to walk.
      * @param currentNode The node for which the ways must be fetched.
      * @param totalDistance The total required distance of the path.
-     * @return A JSONObject with all the paths around the begin node.
      * @throws IOException If the html request is invalid somehow.
      * @throws InterruptedException If the html request is interrupted.
      * @throws ParseException If the JSON is incorrect.
      */
-    public JSONObject getOverpassData(Node currentNode, double totalDistance) throws IOException, InterruptedException, ParseException {
+    public void getOverpassData(Node currentNode, double totalDistance, LoadingDialog dialog) throws IOException, InterruptedException, ParseException {
         String bbox = generateBbox(currentNode, totalDistance);
         DatabaseManager databaseManager = new DatabaseManager();
         List<WayType> wayTypes = databaseManager.getWayTypes();
@@ -59,8 +59,10 @@ public class FileManager {
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         JSONParser parser = new JSONParser();
-        Object obj = parser.parse(response.body());
-        return (JSONObject) obj;
+        JSONObject obj = (JSONObject) parser.parse(response.body());
+        dialog.setProgress(30);
+        dialog.setText(" Processing Overpass data...");
+        parseJson(obj);
     }
 
     /**
@@ -81,6 +83,57 @@ public class FileManager {
         double lat1 = lat + dLat * 180 / Math.PI;
         double lon1 = lon + dLon * 180 / Math.PI;
         return latO + "," + lonO + "," + lat1 + "," + lon1;
+    }
+
+    public void parseJson(JSONObject jsonObject) throws ParseException {
+        nodeSet = new HashSet<>();
+        waySet = new HashSet<>();
+        JSONArray elements = (JSONArray) jsonObject.get("elements");
+        for (Object object : elements) {
+            JSONParser parser = new JSONParser();
+            JSONObject osmObject = (JSONObject) parser.parse(object.toString());
+            switch (osmObject.get("type").toString()) {
+                case "node" -> {
+                    String id = osmObject.get("id").toString();
+                    double lon = Double.parseDouble(osmObject.get("lon").toString());
+                    double lat = Double.parseDouble(osmObject.get("lat").toString());
+                    nodeSet.add(new Node(id, lon, lat));
+                }
+                case "way" -> {
+                    String wayId = osmObject.get("id").toString();
+                    String tags = osmObject.get("tags").toString();
+                    String[] tagList = tags.split(",");
+                    String type = tagList[tagList.length - 1];
+                    type = type.replace("{", "");
+                    type = type.replace("}", "");
+                    type = type.replace("\"", "");
+                    String[] typesList = type.split(":");
+                    String nodesString = osmObject.get("nodes").toString();
+                    String[] nodes = nodesString.split(",");
+                    for (int x = 0; x < nodes.length; x++) {
+                        nodes[x] = nodes[x].replace("[", "");
+                        nodes[x] = nodes[x].replace("]", "");
+
+                    }
+                    Way newWay = new Way(wayId, typesList);
+                    int count = 0;
+                    for (String nodeId : nodes) {
+                        Node targetNode = null;
+                        for (Node node : nodeSet) {
+                            if (node.getId().equals(nodeId)) {
+                                targetNode = node;
+                            }
+                        }
+                        assert targetNode != null;
+                        targetNode.setWay(newWay);
+                        targetNode.setPathnumber(count);
+                        newWay.addNode(targetNode);
+                        count++;
+                    }
+                    waySet.add(newWay);
+                }
+            }
+        }
     }
 
     /**
@@ -109,5 +162,13 @@ public class FileManager {
         } catch (IOException e) {
             System.out.println("Error Writting Path" + e);
         }
+    }
+
+    public Set<Node> getNodeSet() {
+        return nodeSet;
+    }
+
+    public Set<Way> getWaySet() {
+        return waySet;
     }
 }
