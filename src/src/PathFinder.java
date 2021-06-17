@@ -64,32 +64,38 @@ public class PathFinder {
             List<Node> sortedList = new ArrayList<>(nodeSet);
             Collections.sort(sortedList);
             Node currentNode = sortedList.get(0);
-            Way currentWay = currentNode.getWay();
+
             nodeSet.remove(currentNode);
             currentNode.getDistanceTo(beginNode);
             distanceTraveled += currentNode.getDistanceToCurrentNode();
             path.add(currentNode);
-            currentWay.calculatePositionsToNode(currentNode);
-            Set<Node> nodesInWay = currentWay.getNodePositions();
-            List<Node> nodeList = new ArrayList<>(nodesInWay);
-            Collections.sort(nodeList);
-            for (Node node : nodeList) {
-                if (distanceTraveled > totalDistance) {
-                    break;
-                }
-                node.getBearingTo(currentNode);
-                if (node.getBearingToCurrentNode() < 1) {
-                    nodeSet.remove(node);
-                    node.getDistanceTo(beginNode);
-                    distanceTraveled += node.getDistanceToCurrentNode();
-                    path.add(node);
-                    currentNode = node;
-                    beginNode = node;
-                } else {
-                    nodeSet.remove(node);
-                }
+            processWay(currentNode);
+        }
+    }
+
+    public void processWay(Node currentNode){
+        Way currentWay = currentNode.getWay();
+        currentWay.calculatePositionsToNode(currentNode);
+        Set<Node> nodesInWay = currentWay.getNodePositions();
+        List<Node> nodeList = new ArrayList<>(nodesInWay);
+        Collections.sort(nodeList);
+        for (Node node : nodeList) {
+            if (distanceTraveled > totalDistance) {
+                return;
+            }
+            node.getBearingTo(currentNode);
+            if (node.getBearingToCurrentNode() < 1) {
+                nodeSet.remove(node);
+                node.getDistanceTo(beginNode);
+                distanceTraveled += node.getDistanceToCurrentNode();
+                path.add(node);
+                currentNode = node;
+                beginNode = node;
+            } else {
+                nodeSet.remove(node);
             }
         }
+
     }
 
     public void showOutput() throws IOException {
