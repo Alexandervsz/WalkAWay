@@ -4,6 +4,7 @@ public class Way {
     private final String id;
     private final String[] type;
     private final TreeMap<Integer, Node> nodePositions;
+    private Way previousWay;
     private double distanceToCurrentNode;
 
     public Way(String id,  String[] type) {
@@ -13,6 +14,21 @@ public class Way {
     }
     public void addNode(int position, Node node){
         nodePositions.put(position, node);
+    }
+
+    public Node getClosestNode(Node target){
+        double closest = Double.MAX_VALUE;
+        Node closestNode = null;
+        for(Map.Entry<Integer,Node> entry : nodePositions.entrySet()) {
+            entry.getValue().getDistanceTo(target);
+            if (entry.getValue().getDistanceToCurrentNode() < closest && !entry.getValue().equals(target)){
+                closest = entry.getValue().getDistanceToCurrentNode();
+                closestNode = entry.getValue();
+
+            }
+
+        }
+        return closestNode;
     }
 
     public int getPositionOfNode(Node node){
@@ -56,6 +72,15 @@ public class Way {
 
     public String getid() {
         return this.id;
+    }
+
+    public Way getPreviousWay() {
+        return previousWay;
+    }
+
+    public void setPreviousWay(Way previousWay) {
+        if (previousWay == null){
+        this.previousWay = previousWay;}
     }
 
     @Override
