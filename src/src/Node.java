@@ -27,7 +27,7 @@ public class Node implements Comparable<Node> {
         this.way = way;
     }
 
-    public void getDistanceTo(Node node) {
+    public double getDistanceTo(Node node) {
         double R = 6371e3;
         double phi1 = node.getLat() * Math.PI / 180;
         double phi2 = this.lat * Math.PI / 180;
@@ -37,6 +37,7 @@ public class Node implements Comparable<Node> {
                 Math.sin(deltalambda / 2) * Math.sin(deltalambda / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         distanceToCurrentNode = R * c;
+        return R * c;
     }
 
 
