@@ -14,8 +14,10 @@ public class PathFinder {
     private Set<Way> waySet;
     private final User user;
     private double distanceTraveled;
+    private Node previousNode;
     private Node beginNode;
     private Node currentNode;
+    private Way beginWay;
     private final double totalDistance;
     private final List<Node> path;
 
@@ -23,8 +25,11 @@ public class PathFinder {
         this.user = user;
         this.nodeSet = new HashSet<>();
         this.path = new ArrayList<>();
+        this.beginWay = null;
         this.distanceTraveled = 0;
         this.beginNode = new Node("start", user.getLon(), user.getLat());
+        this.previousNode = beginNode;
+        path.add(beginNode);
         this.totalDistance = user.getDistance();
     }
 
@@ -56,64 +61,61 @@ public class PathFinder {
     }
 
     public void getRoute() {
-        path.add(beginNode);
-        currentNode = beginNode;
+        currentNode = previousNode;
         while (distanceTraveled < totalDistance) {
             for (Node node : nodeSet) {
-                node.getDistanceTo(beginNode);
-                node.getBearingTo(beginNode);
+                node.getDistanceTo(previousNode);
+                node.getBearingTo(previousNode);
             }
-            List<Node> sortedList = new ArrayList<>(nodeSet);
-            Collections.sort(sortedList);
-            walkToNextNode(sortedList.get(0));
-            processWay(currentNode);
+            Way closestWay = getClosestWay(currentNode);
+            if (closestWay == null){
+                System.out.println("path not found");
+                return;
+            }
+            currentNode = closestWay.getClosestNode(currentNode);
+            walkToNextNode(currentNode);
+            processWay(closestWay);
         }
     }
 
-    public void processWay(Node currentNode) {
-        Way currentWay = currentNode.getWay();
-        TreeMap<Integer, Node> nodesInWay = currentWay.getNodePositions();
-        int midpoint = (nodesInWay.lastKey() - nodesInWay.firstKey()) / 2;
-        if (currentWay.getPositionOfNode(currentNode) < midpoint){
-        for (Map.Entry<Integer, Node> entry : nodesInWay.entrySet()) {
-            Node node = entry.getValue();
-
-            if (entry.getKey() > currentWay.getPositionOfNode(currentNode)) {
-                if (distanceTraveled >= totalDistance) {
-                    return;
-                }
-                walkToNextNode(node);
-            }
-            else{
-                nodeSet.remove(node);
-            }
-        }}
-        else {
-            Map<Integer, Node> nodesInWayReversed = nodesInWay.descendingMap();
-            for (Map.Entry<Integer, Node> entry : nodesInWayReversed.entrySet()) {
-                Node node = entry.getValue();
-                if (entry.getKey() < currentWay.getPositionOfNode(currentNode)) {
-                    if (distanceTraveled >= totalDistance) {
-                        return;
-                    }
-                    walkToNextNode(node);
-                }
-                else{
-                    nodeSet.remove(node);
-                }
+    public Way getClosestWay(Node target){
+        double closest = Double.MAX_VALUE;
+        Way closestWay = null;
+        for (Way way: waySet){
+            Node closestWayNode = way.getClosestNode(target);
+            if (closestWayNode.getDistanceToCurrentNode() < closest){
+                closest = closestWayNode.getDistanceToCurrentNode();
+                closestWay = way;
             }
 
         }
+        return closestWay;
+    }
+
+    public void processWay(Way currentWay) {
+        TreeMap<Integer, Node> nodesInWay = currentWay.getNodePositions();
+        int midpoint = (nodesInWay.lastKey() - nodesInWay.firstKey()) / 2;
+            for (int x = currentWay.getPositionOfNode(currentNode); x < nodesInWay.lastKey(); x++){
+                Node node = nodesInWay.get(x);
+                if (distanceTraveled >= totalDistance) {
+                        return;
+                    }
+                walkToNextNode(node);
+
+            }
+
+
+
         waySet.remove(currentWay);
     }
 
-    public void walkToNextNode(Node newNode){
+    public void walkToNextNode(Node newNode) {
         nodeSet.remove(newNode);
         newNode.getDistanceTo(currentNode);
         distanceTraveled += newNode.getDistanceToCurrentNode();
         path.add(newNode);
         currentNode = newNode; // If called by path.
-        beginNode = newNode; // If called by begin of loop.
+        previousNode = newNode; // If called by begin of loop.
 
     }
 
@@ -145,7 +147,7 @@ public class PathFinder {
     }
 
     public static void main(String[] args) {
-        User user = new User(6.0, 70.0, 6.4, 10, 5.072073, 52.645407);
+        User user = new User(6.0, 70.0, 6.4, 40, 5.072073, 52.645407);
         PathFinder pathFinder = new PathFinder(user);
         pathFinder.start();
     }
