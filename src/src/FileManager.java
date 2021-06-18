@@ -70,6 +70,7 @@ public class FileManager {
     /**
      * Generates a bbox, which is required in an overpass request. It generates a bbox of totaldistance * totaldistance
      * so even in the worst case scenario (straight way from A to B) enough data is available.
+     * The error margin of this formula is around 5m.
      *
      * @param currentNode   The center node to draw the bbox around.
      * @param totalDistance The total required distance of the path.
@@ -154,7 +155,7 @@ public class FileManager {
      * @param points The path to base the gpx file on, ordered from start to finish.
      */
     public void generateGpx(File file, String name, List<Node> points) {
-        String header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?><gpx xmlns=\"https://www.topografix.com/GPX/1/1\" creator=\"MapSource 6.15.5\" version=\"1.1\" xmlns:xsi=\"https://www.w3.org/2001/XMLSchema-instance\"  xsi:schemaLocation=\"https://www.topografix.com/GPX/1/1 https://www.topografix.com/GPX/1/1/gpx.xsd\"><trk>\n";
+        String header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?><gpx xmlns=\"http://www.topografix.com/GPX/1/1\" creator=\"MapSource 6.15.5\" version=\"1.1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"  xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\"><trk>\n";
         name = "<name>" + name + "</name><trkseg>\n";
         StringBuilder segments = new StringBuilder();
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
@@ -182,4 +183,6 @@ public class FileManager {
     public Set<Way> getWaySet() {
         return waySet;
     }
+
+
 }
