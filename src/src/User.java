@@ -19,8 +19,8 @@ public class User {
      */
     public User(double mets, double weight, double walkingSpeed, double kcal, double lon, double lat) {
         time = 0;
-        if (mets != 0 && weight != 0){
-            time = kcal * 200 / (mets * 3.5 * weight); //in hours
+        if (mets != 0 && weight != 0) {
+            time = kcal * 200 / (mets * 3.5 * weight); //in minutes.
         }
 
         this.kcalPerMinute = mets * 3.5 * weight / 200.0;
@@ -44,7 +44,7 @@ public class User {
      * @return The estimated amount of calories burnt.
      */
     public double getEstimatedKcal(Double distance) {
-        if (distance == 0){
+        if (distance == 0) {
             return 0;
         }
         return distance / 1000 / walkingSpeed * 60 * kcalPerMinute;
