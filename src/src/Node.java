@@ -7,7 +7,6 @@ public class Node implements Comparable<Node> {
     private final double lon;
     private final double lat;
     private double distanceToCurrentNode;
-    private Way way;
     private double bearingToCurrentNode;
 
     public String getId() {
@@ -19,14 +18,6 @@ public class Node implements Comparable<Node> {
         this.lon = lon;
         this.lat = lat;
         this.bearingToCurrentNode = 0;
-    }
-
-    public Way getWay() {
-        return way;
-    }
-
-    public void setWay(Way way) {
-        this.way = way;
     }
 
     public double getDistanceTo(Node node) {
