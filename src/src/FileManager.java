@@ -77,16 +77,17 @@ public class FileManager {
      * @return A string to be used in further processing.
      */
     public String generateBbox(Node currentNode, double totalDistance) {
-        double lat = currentNode.getLat();
-        double lon = currentNode.getLon();
-        double R = 6378137;
+        //totalDistance = totalDistance * 0.7075; // To correct for the fact that bbox generates too big.
+        double lat = Math.toRadians(currentNode.getLat());
+        double lon = Math.toRadians(currentNode.getLon());
+        double R = 6_356_752.314245D;
         double dLat = totalDistance / R;
         double dLon = totalDistance / (R * Math.cos(Math.PI * lat / 180));
-        double latO = lat - dLat * 180 / Math.PI;
-        double lonO = lon - dLon * 180 / Math.PI;
+        double lat0 = lat - dLat * 180 / Math.PI;
+        double lon0 = lon - dLon * 180 / Math.PI;
         double lat1 = lat + dLat * 180 / Math.PI;
         double lon1 = lon + dLon * 180 / Math.PI;
-        return latO + "," + lonO + "," + lat1 + "," + lon1;
+        return lat0 + "," + lon0 + "," + lat1 + "," + lon1;
     }
 
     /**
