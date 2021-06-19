@@ -96,6 +96,7 @@ public class Node implements Comparable<Node> {
     }
 
     @Override
+    //returns -1 if distance of target is greater than distance of current, 1 otherwise (0 if equal).
     public int compareTo(Node o) {
         return Double.compare(distanceToCurrentNode, o.distanceToCurrentNode);
     }
