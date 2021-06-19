@@ -1,5 +1,7 @@
 import java.util.Objects;
 
+import static java.lang.Math.*;
+
 public class Node implements Comparable<Node> {
     private final String id;
     private final double lon;
@@ -28,18 +30,17 @@ public class Node implements Comparable<Node> {
     }
 
     public double getDistanceTo(Node node) {
-        double R = 6371e3;
-        double phi1 = node.getLat() * Math.PI / 180;
-        double phi2 = this.lat * Math.PI / 180;
-        double deltaphi = (this.lat - node.getLat()) * Math.PI / 180;
-        double deltalambda = (this.lon - node.getLon()) * Math.PI / 180;
+        double R = 6_356_752.314245D;
+        double phi1 = lat * Math.PI / 180;
+        double phi2 = node.getLat() * Math.PI / 180;
+        double deltaphi = (node.getLat() - lat) * Math.PI / 180;
+        double deltalambda = (node.getLon() - lon) * Math.PI / 180;
         double a = Math.sin(deltaphi / 2) * Math.sin(deltaphi / 2) + Math.cos(phi1) * Math.cos(phi2) *
                 Math.sin(deltalambda / 2) * Math.sin(deltalambda / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        distanceToCurrentNode = R * c;
+        distanceToCurrentNode = R * c; // In meters.
         return R * c;
     }
-
 
     public void getBearingTo(Node node) {
         double y = Math.sin(node.getLon() - lon) * Math.cos(node.getLat());
