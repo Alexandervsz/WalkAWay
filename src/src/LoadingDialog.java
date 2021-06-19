@@ -15,6 +15,7 @@ public class LoadingDialog extends JDialog {
         progressBar.setValue(0);
         progressBar.setStringPainted(true);
         add(progressBar);
+        setAlwaysOnTop(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         loadingLabel.setText(text);
         add(contentPane);
