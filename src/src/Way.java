@@ -2,52 +2,63 @@ import java.util.*;
 
 public class Way {
     private final String id;
-    private final String[] type;
+    //private final String[] type;
     private final TreeMap<Integer, Node> nodePositions;
     private final Set<Node> nodeSet;
     private Way previousWay;
-    private double distanceToCurrentNode;
+    private int direction;
+    private int entryPoint;
 
-    public Way(String id,  String[] type) {
+    public Way(String id) {
         this.id = id;
-        this.type = type;
+        //this.type = type;
         nodePositions = new TreeMap<>();
         nodeSet = new HashSet<>();
     }
-    public void addNode(int position, Node node){
+
+    public void addNode(int position, Node node) {
         nodePositions.put(position, node);
         nodeSet.add(node);
     }
 
-    public Node getClosestNode(Node target){
-        for (Node node: nodeSet){
+    public Node getClosestNode(Node target) {
+        for (Node node : nodeSet) {
             node.getDistanceTo(target);
         }
         return Collections.min(nodeSet);
     }
 
-    public Node getLastNode(){
+    public int getDirection() {
+        return direction;
+    }
+
+    public Node getLastNode() {
         return nodePositions.lastEntry().getValue();
     }
 
-    public int getPositionOfNode(Node node){
-        for(Map.Entry<Integer,Node> entry : nodePositions.entrySet()) {
-            if (entry.getValue().equals(node)){
+    public Node getFirstNode() {
+        return nodePositions.firstEntry().getValue();
+    }
+
+    public int getPositionOfNode(Node node) {
+        for (Map.Entry<Integer, Node> entry : nodePositions.entrySet()) {
+            if (entry.getValue().equals(node)) {
                 return entry.getKey();
             }
         }
         return -1;
     }
 
-    public void calculatePositionsToNode(Node target){
-        /*for (Node node: nodePositions){
-            node.getDistanceTo(target);
-        }*/
-
-    }
-
     public TreeMap<Integer, Node> getNodePositions() {
         return nodePositions;
+    }
+
+    public NavigableMap<Integer, Node> getNodePositionsReversed() {
+        return nodePositions.descendingMap();
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
     }
 
     @Override
@@ -58,19 +69,24 @@ public class Way {
         return Objects.equals(id, way.id);
     }
 
-    public String[] getType() {
+    /*public String[] getType() {
         return type;
-    }
+    }*/
 
     @Override
     public int hashCode() {
         int result = Objects.hash(id);
-        result = 31 * result + Arrays.hashCode(type);
+        result = 31 * result;
         return result;
     }
 
-    public String getid() {
-        return this.id;
+    public SortedMap<Integer, Node> getNodePositionsFromPoint(int point) {
+        return nodePositions.tailMap(point);
+    }
+
+    public SortedMap<Integer, Node> getNodePositionsFromPointReversed(int point) {
+        NavigableMap<Integer, Node> reverse = nodePositions.descendingMap();
+        return reverse.tailMap(point);
     }
 
     public Way getPreviousWay() {
@@ -78,15 +94,23 @@ public class Way {
     }
 
     public void setPreviousWay(Way previousWay) {
-        if (previousWay == null){
-        this.previousWay = previousWay;}
+        if (previousWay != null) {
+            this.previousWay = previousWay;
+        }
+    }
+
+    public int getEntryPoint() {
+        return entryPoint;
+    }
+
+    public void setEntryPoint(int entryPoint) {
+        this.entryPoint = entryPoint;
     }
 
     @Override
     public String toString() {
         return "Way{" +
                 "id='" + id + '\'' +
-                ", type=" + Arrays.toString(type) +
                 '}';
     }
 }
