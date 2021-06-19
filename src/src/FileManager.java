@@ -30,7 +30,7 @@ public class FileManager {
      * @throws InterruptedException If the html request is interrupted.
      * @throws ParseException       If the JSON is incorrect.
      */
-    public void getOverpassData(Node currentNode, double totalDistance, LoadingDialog dialog) throws Exception {
+    public void getOverpassData(Node currentNode, double totalDistance, LoadingDialog dialog) throws IOException, InterruptedException, ParseException {
         String bbox = generateBbox(currentNode, totalDistance);
         DatabaseManager databaseManager = new DatabaseManager();
         List<WayType> wayTypes = databaseManager.getWayTypes();
@@ -70,16 +70,17 @@ public class FileManager {
     /**
      * Generates a bbox, which is required in an overpass request. It generates a bbox of totaldistance * totaldistance
      * so even in the worst case scenario (straight way from A to B) enough data is available.
-     * The error margin of this formula is around 5m.
+     * The bbox is way bigger than needed, this is baecause it;s an approximation upon an approximation,
+     * so keep distances < 100km.
      *
      * @param currentNode   The center node to draw the bbox around.
      * @param totalDistance The total required distance of the path.
      * @return A string to be used in further processing.
      */
     public String generateBbox(Node currentNode, double totalDistance) {
-        //totalDistance = totalDistance * 0.7075; // To correct for the fact that bbox generates too big.
-        double lat = Math.toRadians(currentNode.getLat());
-        double lon = Math.toRadians(currentNode.getLon());
+        totalDistance = totalDistance * 0.7075; // To correct for the fact that bbox generates too big.
+        double lat = currentNode.getLat();
+        double lon = currentNode.getLon();
         double R = 6_356_752.314245D;
         double dLat = totalDistance / R;
         double dLon = totalDistance / (R * Math.cos(Math.PI * lat / 180));
@@ -87,6 +88,7 @@ public class FileManager {
         double lon0 = lon - dLon * 180 / Math.PI;
         double lat1 = lat + dLat * 180 / Math.PI;
         double lon1 = lon + dLon * 180 / Math.PI;
+
         return lat0 + "," + lon0 + "," + lat1 + "," + lon1;
     }
 
@@ -96,7 +98,7 @@ public class FileManager {
      * @param jsonObject The JSON fetched from overpass.
      * @throws ParseException If incorrect JSON is passed.
      */
-    public void parseJson(JSONObject jsonObject) throws Exception {
+    public void parseJson(JSONObject jsonObject) throws ParseException, IOException {
         nodeSet = new HashSet<>();
         waySet = new HashSet<>();
         JSONArray elements = (JSONArray) jsonObject.get("elements");
@@ -113,20 +115,19 @@ public class FileManager {
                 case "way" -> {
                     String wayId = osmObject.get("id").toString();
                     String tags = osmObject.get("tags").toString();
-                    String[] tagList = tags.split(",");
-                    String type = tagList[tagList.length - 1];
-                    type = type.replace("{", "");
-                    type = type.replace("}", "");
-                    type = type.replace("\"", "");
-                    String[] typesList = type.split(":");
+                    //String[] tagList = tags.split(",");
+                    //String type = tagList[tagList.length - 1];
+                    //type = type.replace("{", "");
+                    //type = type.replace("}", "");
+                    //type = type.replace("\"", "");
+                    //String[] typesList = type.split(":");
                     String nodesString = osmObject.get("nodes").toString();
                     String[] nodes = nodesString.split(",");
                     for (int x = 0; x < nodes.length; x++) {
                         nodes[x] = nodes[x].replace("[", "");
                         nodes[x] = nodes[x].replace("]", "");
-
                     }
-                    Way newWay = new Way(wayId, typesList);
+                    Way newWay = new Way(wayId);
                     int count = 0;
                     for (String nodeId : nodes) {
                         Node targetNode = null;
@@ -136,9 +137,8 @@ public class FileManager {
                             }
                         }
                         if (targetNode == null){
-                            throw new Exception("Node not found");
+                            throw new IOException("Node not found!");
                         }
-                        targetNode.setWay(newWay);
                         newWay.addNode(count, targetNode);
                         count++;
                     }
