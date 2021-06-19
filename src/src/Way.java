@@ -3,26 +3,50 @@ import java.util.*;
 public class Way {
     private final String id;
     private final String[] type;
-    private final Set<Node> nodePositions;
+    private final TreeMap<Integer, Node> nodePositions;
+    private final Set<Node> nodeSet;
+    private Way previousWay;
     private double distanceToCurrentNode;
 
     public Way(String id,  String[] type) {
         this.id = id;
         this.type = type;
-        nodePositions = new HashSet<>();
+        nodePositions = new TreeMap<>();
+        nodeSet = new HashSet<>();
     }
-    public void addNode( Node node){
-        nodePositions.add(node);
+    public void addNode(int position, Node node){
+        nodePositions.put(position, node);
+        nodeSet.add(node);
+    }
+
+    public Node getClosestNode(Node target){
+        for (Node node: nodeSet){
+            node.getDistanceTo(target);
+        }
+        return Collections.min(nodeSet);
+    }
+
+    public Node getLastNode(){
+        return nodePositions.lastEntry().getValue();
+    }
+
+    public int getPositionOfNode(Node node){
+        for(Map.Entry<Integer,Node> entry : nodePositions.entrySet()) {
+            if (entry.getValue().equals(node)){
+                return entry.getKey();
+            }
+        }
+        return -1;
     }
 
     public void calculatePositionsToNode(Node target){
-        for (Node node: nodePositions){
+        /*for (Node node: nodePositions){
             node.getDistanceTo(target);
-        }
+        }*/
 
     }
 
-    public Set<Node> getNodePositions() {
+    public TreeMap<Integer, Node> getNodePositions() {
         return nodePositions;
     }
 
@@ -47,6 +71,15 @@ public class Way {
 
     public String getid() {
         return this.id;
+    }
+
+    public Way getPreviousWay() {
+        return previousWay;
+    }
+
+    public void setPreviousWay(Way previousWay) {
+        if (previousWay == null){
+        this.previousWay = previousWay;}
     }
 
     @Override

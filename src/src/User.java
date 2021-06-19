@@ -1,4 +1,6 @@
+
 public class User {
+    private double time;
     private final double distance;
     private final double lon;
     private final double lat;
@@ -16,8 +18,12 @@ public class User {
      * @param lat          The user's latitude.
      */
     public User(double mets, double weight, double walkingSpeed, double kcal, double lon, double lat) {
-        double time = kcal * 200 / (mets * 3.5f * weight);
-        this.kcalPerMinute = mets * 3.5 * weight / 200;
+        time = 0;
+        if (mets != 0 && weight != 0) {
+            time = kcal * 200 / (mets * 3.5 * weight); //in minutes.
+        }
+
+        this.kcalPerMinute = mets * 3.5 * weight / 200.0;
         this.walkingSpeed = walkingSpeed;
         this.distance = (time / 60 * walkingSpeed) * 1000;
         this.lon = lon;
@@ -38,6 +44,9 @@ public class User {
      * @return The estimated amount of calories burnt.
      */
     public double getEstimatedKcal(Double distance) {
+        if (distance == 0) {
+            return 0;
+        }
         return distance / 1000 / walkingSpeed * 60 * kcalPerMinute;
     }
 
@@ -47,6 +56,14 @@ public class User {
 
     public double getLat() {
         return lat;
+    }
+
+    public double getTime() {
+        return time;
+    }
+
+    public double getKcalPerMinute() {
+        return kcalPerMinute;
     }
 }
 

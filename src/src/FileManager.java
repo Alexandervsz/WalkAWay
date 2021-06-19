@@ -30,7 +30,7 @@ public class FileManager {
      * @throws InterruptedException If the html request is interrupted.
      * @throws ParseException       If the JSON is incorrect.
      */
-    public void getOverpassData(Node currentNode, double totalDistance, LoadingDialog dialog) throws IOException, InterruptedException, ParseException {
+    public void getOverpassData(Node currentNode, double totalDistance, LoadingDialog dialog) throws Exception {
         String bbox = generateBbox(currentNode, totalDistance);
         DatabaseManager databaseManager = new DatabaseManager();
         List<WayType> wayTypes = databaseManager.getWayTypes();
@@ -70,22 +70,24 @@ public class FileManager {
     /**
      * Generates a bbox, which is required in an overpass request. It generates a bbox of totaldistance * totaldistance
      * so even in the worst case scenario (straight way from A to B) enough data is available.
+     * The error margin of this formula is around 5m.
      *
      * @param currentNode   The center node to draw the bbox around.
      * @param totalDistance The total required distance of the path.
      * @return A string to be used in further processing.
      */
     public String generateBbox(Node currentNode, double totalDistance) {
-        double lat = currentNode.getLat();
-        double lon = currentNode.getLon();
-        double R = 6378137;
+        //totalDistance = totalDistance * 0.7075; // To correct for the fact that bbox generates too big.
+        double lat = Math.toRadians(currentNode.getLat());
+        double lon = Math.toRadians(currentNode.getLon());
+        double R = 6_356_752.314245D;
         double dLat = totalDistance / R;
         double dLon = totalDistance / (R * Math.cos(Math.PI * lat / 180));
-        double latO = lat - dLat * 180 / Math.PI;
-        double lonO = lon - dLon * 180 / Math.PI;
+        double lat0 = lat - dLat * 180 / Math.PI;
+        double lon0 = lon - dLon * 180 / Math.PI;
         double lat1 = lat + dLat * 180 / Math.PI;
         double lon1 = lon + dLon * 180 / Math.PI;
-        return latO + "," + lonO + "," + lat1 + "," + lon1;
+        return lat0 + "," + lon0 + "," + lat1 + "," + lon1;
     }
 
     /**
@@ -94,7 +96,7 @@ public class FileManager {
      * @param jsonObject The JSON fetched from overpass.
      * @throws ParseException If incorrect JSON is passed.
      */
-    public void parseJson(JSONObject jsonObject) throws ParseException {
+    public void parseJson(JSONObject jsonObject) throws Exception {
         nodeSet = new HashSet<>();
         waySet = new HashSet<>();
         JSONArray elements = (JSONArray) jsonObject.get("elements");
@@ -133,10 +135,11 @@ public class FileManager {
                                 targetNode = node;
                             }
                         }
-                        assert targetNode != null;
+                        if (targetNode == null){
+                            throw new Exception("Node not found");
+                        }
                         targetNode.setWay(newWay);
-                        targetNode.setPathnumber(count);
-                        newWay.addNode(targetNode);
+                        newWay.addNode(count, targetNode);
                         count++;
                     }
                     waySet.add(newWay);
@@ -153,7 +156,7 @@ public class FileManager {
      * @param points The path to base the gpx file on, ordered from start to finish.
      */
     public void generateGpx(File file, String name, List<Node> points) {
-        String header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?><gpx xmlns=\"https://www.topografix.com/GPX/1/1\" creator=\"MapSource 6.15.5\" version=\"1.1\" xmlns:xsi=\"https://www.w3.org/2001/XMLSchema-instance\"  xsi:schemaLocation=\"https://www.topografix.com/GPX/1/1 https://www.topografix.com/GPX/1/1/gpx.xsd\"><trk>\n";
+        String header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?><gpx xmlns=\"http://www.topografix.com/GPX/1/1\" creator=\"MapSource 6.15.5\" version=\"1.1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"  xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\"><trk>\n";
         name = "<name>" + name + "</name><trkseg>\n";
         StringBuilder segments = new StringBuilder();
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
@@ -181,4 +184,6 @@ public class FileManager {
     public Set<Way> getWaySet() {
         return waySet;
     }
+
+
 }
