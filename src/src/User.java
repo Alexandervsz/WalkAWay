@@ -6,6 +6,7 @@ public class User {
     private final double lat;
     private final double kcalPerMinute;
     private final double walkingSpeed;
+    private final boolean isRandom;
 
     /**
      * Create a new user object
@@ -17,12 +18,12 @@ public class User {
      * @param lon          The user's longitude.
      * @param lat          The user's latitude.
      */
-    public User(double mets, double weight, double walkingSpeed, double kcal, double lon, double lat) {
+    public User(double mets, double weight, double walkingSpeed, double kcal, double lon, double lat, boolean isRandom) {
         time = 0;
         if (mets != 0 && weight != 0) {
             time = kcal * 200 / (mets * 3.5 * weight); //in minutes.
         }
-
+        this.isRandom = isRandom;
         this.kcalPerMinute = mets * 3.5 * weight / 200.0;
         this.walkingSpeed = walkingSpeed;
         this.distance = (time / 60 * walkingSpeed) * 1000;
@@ -48,6 +49,10 @@ public class User {
             return 0;
         }
         return distance / 1000 / walkingSpeed * 60 * kcalPerMinute;
+    }
+
+    public boolean isRandom() {
+        return isRandom;
     }
 
     public double getLon() {
