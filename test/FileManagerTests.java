@@ -51,7 +51,7 @@ public class FileManagerTests {
     @Test
     public void testJson() throws Exception {
         FileManager fileManager = new FileManager();
-        FileReader fileReader = new FileReader("Test/SampleJson.json");
+        FileReader fileReader = new FileReader("SampleJson.json");
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject) jsonParser.parse(fileReader);
         fileManager.parseJson(jsonObject);
@@ -75,7 +75,7 @@ public class FileManagerTests {
         // Since current time is used during generating of path, only empty file can be verified.
         FileManager fileManager = new FileManager();
         List<Node> emptyPoints = new ArrayList<>();
-        File fileEmpty = new File("Test/empty.gpx");
+        File fileEmpty = new File("empty.gpx");
         String filename = "test";
         fileManager.generateGpx(fileEmpty, filename, emptyPoints);
         String actual = Files.readString(fileEmpty.toPath());
