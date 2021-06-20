@@ -1,6 +1,5 @@
 
 public class User {
-    //private double time;
     private final double distance;
     private final double lon;
     private final double lat;
