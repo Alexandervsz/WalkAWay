@@ -1,6 +1,6 @@
 
 public class User {
-    private double time;
+    //private double time;
     private final double distance;
     private final double lon;
     private final double lat;
@@ -20,7 +20,7 @@ public class User {
      * @param isRandom     Whether the user wants a random path or not.
      */
     public User(double mets, double weight, double walkingSpeed, double kcal, double lon, double lat, boolean isRandom) {
-        time = 0;
+        double time = 0;
         if (mets != 0 && weight != 0) {
             time = kcal * 200 / (mets * 3.5 * weight); //in minutes.
         }
@@ -64,8 +64,11 @@ public class User {
         return lat;
     }
 
-    public double getTime() {
-        return time;
+    public double getTime(Double distance) {
+        if (distance == 0){
+            return 0;
+        }
+        return distance / 1000 / walkingSpeed * 60;
     }
 
     public double getKcalPerMinute() {
