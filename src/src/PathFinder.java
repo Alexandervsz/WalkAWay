@@ -39,7 +39,7 @@ public class PathFinder {
 
             @Override
             protected Void doInBackground() throws IOException, ParseException, InterruptedException {
-                fileManager.getOverpassData(beginNode, requiredDistance, dialog);
+                fileManager.getOverpassData(beginNode, requiredDistance, dialog, user.isRandom());
                 waySet = fileManager.getWaySet();
                 dialog.setProgress(60);
                 dialog.setText(" Generating path...");
@@ -108,7 +108,8 @@ public class PathFinder {
                 closestWay = way;
             }
         }
-        if (closest > 60) {
+        if (closest > 61) {
+            System.out.println("empty");
             return new Way("empty");
         } else {
             return closestWay;
@@ -149,9 +150,11 @@ public class PathFinder {
 
     public void showOutput() throws IOException {
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        DecimalFormat timeFormat = new DecimalFormat("#.#");
         String distance = String.valueOf(decimalFormat.format(totalDistance));
-        String calories = String.valueOf(decimalFormat.format(user.getEstimatedKcal(totalDistance)));
-        new OutputScreen(distance, calories);
+        String calories = String.valueOf((int) user.getEstimatedKcal(totalDistance));
+        String time = String.valueOf(timeFormat.format(user.getTime()));
+        new OutputScreen(distance, calories, time);
         File file = new File("path/walking_route.gpx");
         FileManager fileManager = new FileManager();
         fileManager.generateGpx(file, "path/walking_route", path);
@@ -175,7 +178,7 @@ public class PathFinder {
     }
 
     public static void main(String[] args) {
-        User user = new User(6.0, 70.0, 6.4, 50, 5.072073, 52.645407);
+        User user = new User(6.0, 70.0, 6.4, 200, 5.061843, 52.650095, true);
         PathFinder pathFinder = new PathFinder(user);
         pathFinder.start();
     }
