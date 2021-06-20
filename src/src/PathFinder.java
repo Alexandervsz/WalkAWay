@@ -81,7 +81,7 @@ public class PathFinder {
                     revertPath(waynodes, currentWay);
                 }
                 currentWay = currentWay.getPreviousWay();
-                if (currentWay.equals(new Way("start"))) {
+                if (currentWay.equals(new Way("start"))) { // todo: Verify that this is working correctly.
                     new PathNotFound();
                     System.exit(0);
                 }
@@ -221,7 +221,7 @@ public class PathFinder {
     }
 
     public static void main(String[] args) {
-        User user = new User(6.0, 70.0, 6.4, 200, 5.071998, 52.639074, false);
+        User user = new User(6.0, 70.0, 6.4, 400, 5.071998, 52.639074, false);
         PathFinder pathFinder = new PathFinder(user);
         pathFinder.start();
     }
