@@ -17,6 +17,7 @@ public class User {
      * @param kcal         The amount of calories the walk needs to burn.
      * @param lon          The user's longitude.
      * @param lat          The user's latitude.
+     * @param isRandom     Whether the user wants a random path or not.
      */
     public User(double mets, double weight, double walkingSpeed, double kcal, double lon, double lat, boolean isRandom) {
         time = 0;
