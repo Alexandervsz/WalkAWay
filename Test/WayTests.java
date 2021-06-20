@@ -1,7 +1,6 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.SortedMap;
 import java.util.TreeMap;
 
 public class WayTests {

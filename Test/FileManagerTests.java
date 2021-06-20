@@ -51,7 +51,7 @@ public class FileManagerTests {
     @Test
     public void testJson() throws Exception {
         FileManager fileManager = new FileManager();
-        FileReader fileReader = new FileReader("SampleJson.json");
+        FileReader fileReader = new FileReader("Test/SampleJson.json");
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject) jsonParser.parse(fileReader);
         fileManager.parseJson(jsonObject);
