@@ -23,7 +23,11 @@ public class UserInputScreen extends JDialog {
     // Unused but required for form to work.
     private JPanel southPanel;
     private JPanel northPanel;
+    private JCheckBox randomizeCheckBox;
 
+    /**
+     * Initialises the UI.
+     */
     public UserInputScreen() {
         metsLabel.setText("Activity: ");
         weightLabel.setText("Weight: ");
@@ -51,6 +55,12 @@ public class UserInputScreen extends JDialog {
         this.pack();
     }
 
+    /**
+     * Creates a new User object, and passes this to the pathfinding algorithm, if the input is invalid it resets
+     * the input fields.
+     *
+     * @param actionEvent The user pressed the button.
+     */
     private void createUser(ActionEvent actionEvent) {
         MetValue metValue = (MetValue) metsBox.getSelectedItem();
         assert metValue != null;
@@ -66,7 +76,8 @@ public class UserInputScreen extends JDialog {
             double mets = metValue.getMetValue();
             double lon = Double.parseDouble(lonField.getText());
             double lat = Double.parseDouble(latField.getText());
-            User user = new User(mets, weight, walkingSpeed, kcal, lon, lat);
+            boolean isRandom = randomizeCheckBox.isSelected();
+            User user = new User(mets, weight, walkingSpeed, kcal, lon, lat, isRandom);
             dispose();
             setVisible(false);
             PathFinder pathFinder = new PathFinder(user);
@@ -82,6 +93,7 @@ public class UserInputScreen extends JDialog {
     /**
      * Changes the UI based on the user's selected item.
      * If the user selects an item with a speed range (or without a speed at all) the speed entry field is hidden.
+     *
      * @param actionEvent The user chose an option.
      */
     private void changeUI(ActionEvent actionEvent) {
@@ -102,6 +114,10 @@ public class UserInputScreen extends JDialog {
         }
     }
 
+    /**
+     * The main method which starts up the entire application.
+     * @param args arguments. (not implemented)
+     */
     public static void main(String[] args) {
         new UserInputScreen();
     }

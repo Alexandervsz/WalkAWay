@@ -3,20 +3,20 @@ import org.junit.jupiter.api.Test;
 
 
 public class UserTests {
-    User test1 = new User(3.0, 70, 5.1, 200, 5.0626701, 52.6492016);
-    User test2 = new User(3.5, 80, 4.9, 65, 0, 0);
-    User test3 = new User(8.3, 60, 8, 500, 0, 0);
-    User test4 = new User(1, 1, 1, 1.75, 0, 0);
-    User test5 = new User(0, 0, 0, 0, 0, 0);
+    User test1 = new User(3.0, 70, 5.1, 200, 5.0626701, 52.6492016, false);
+    User test2 = new User(3.5, 80, 4.9, 65, 0, 0, false);
+    User test3 = new User(8.3, 60, 8, 500, 0, 0, false);
+    User test4 = new User(1, 1, 1, 1.75, 0, 0, false);
+    User test5 = new User(0, 0, 0, 0, 0, 0, false);
 
     @Test
     public void testTime() {
         Assertions.assertAll(
-                () -> Assertions.assertEquals(54.421768707, test1.getTime(), 0.0000000009),
-                () -> Assertions.assertEquals(13.265306122, test2.getTime(), 0.0000000009),
-                () -> Assertions.assertEquals(57.372346528, test3.getTime(), 0.000000001),
-                () -> Assertions.assertEquals(100, test4.getTime()),
-                () -> Assertions.assertEquals(0, test5.getTime())
+                () -> Assertions.assertEquals(54.421768707, test1.getTime(test1.getDistance()), 0.0000000009),
+                () -> Assertions.assertEquals(13.265306122, test2.getTime(test2.getDistance()), 0.0000000009),
+                () -> Assertions.assertEquals(57.372346528, test3.getTime(test3.getDistance()), 0.000000001),
+                () -> Assertions.assertEquals(100, test4.getTime(test4.getDistance())),
+                () -> Assertions.assertEquals(0, test5.getTime(test5.getDistance()))
         );
     }
 

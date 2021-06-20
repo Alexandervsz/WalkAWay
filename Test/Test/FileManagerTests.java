@@ -28,14 +28,14 @@ public class FileManagerTests {
         boolean test6 = verifyBbox(50000) > 100000;
         boolean test7 = verifyBbox(100000) > 200000;
         Assertions.assertAll(
-                () -> Assertions.assertEquals("0.0,0.0,0.0,0.0", fileManager.generateBbox(new Node("0", 0, 0), 0)),
-                () -> Assertions.assertEquals(2, verifyBbox(1), 0.85*1),
-                () -> Assertions.assertEquals(20, verifyBbox(10),0.85*10),
-                () -> Assertions.assertEquals(200, verifyBbox(100),0.85*100),
-                () -> Assertions.assertEquals(2000, verifyBbox(1000), 0.85*1000),
-                () -> Assertions.assertEquals(20000, verifyBbox(10000), 0.85*10000),
-                () -> Assertions.assertEquals(100000, verifyBbox(50000), 0.85*50000),
-                () -> Assertions.assertEquals(200000, verifyBbox(100000), 0.85*100000),
+                () -> Assertions.assertEquals("0.0,0.0,0.0,0.0", fileManager.generateBbox(new Node("0", 0, 0), 0, false)),
+                () -> Assertions.assertEquals(2, verifyBbox(1), 0.7),
+                () -> Assertions.assertEquals(20, verifyBbox(10),7),
+                () -> Assertions.assertEquals(200, verifyBbox(100),70),
+                () -> Assertions.assertEquals(2000, verifyBbox(1000), 700),
+                () -> Assertions.assertEquals(20000, verifyBbox(10000), 7000),
+                () -> Assertions.assertEquals(100000, verifyBbox(50000), 40000),
+                () -> Assertions.assertEquals(200000, verifyBbox(100000), 70000),
                 () -> Assertions.assertTrue(test1, String.valueOf(verifyBbox(1))),
                 () -> Assertions.assertTrue(test2, String.valueOf(verifyBbox(10))),
                 () -> Assertions.assertTrue(test3, String.valueOf(verifyBbox(100))),
@@ -85,7 +85,7 @@ public class FileManagerTests {
     public double verifyBbox(double totaldistance) {
         Node testNode = new Node("test", 5, 52);
         FileManager fileManager = new FileManager();
-        String Bbox1 = fileManager.generateBbox(testNode, totaldistance);
+        String Bbox1 = fileManager.generateBbox(testNode, totaldistance, false);
         String[] points = Bbox1.split(",");
         Node test1point1 = new Node("test1", Double.parseDouble(points[0]), Double.parseDouble(points[1]));
         Node test1point2 = new Node("test1", Double.parseDouble(points[2]), Double.parseDouble(points[3]));

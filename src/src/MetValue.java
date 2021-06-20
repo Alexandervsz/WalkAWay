@@ -17,10 +17,6 @@ public record MetValue(double metValue, double speedA, double speedB, String act
         return speedB; //In kilometers per hour
     }
 
-    public String getActivity() {
-        return activity;
-    }
-
     @Override
     public String toString() {
         DecimalFormat decimalFormat = new DecimalFormat("#.#");
