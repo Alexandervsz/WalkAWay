@@ -1,64 +1,23 @@
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
-import org.json.simple.parser.ParseException;
-
-import javax.swing.*;
-
 public class PathFinder {
-    private Set<Way> waySet;
-    private final User user;
+    private final Set<Way> waySet;
     private Way previousWay;
-    private final Node beginNode;
     private Node currentNode;
     private final double requiredDistance;
     private double totalDistance;
     private final List<Node> path;
 
-    public PathFinder(User user) {
-        this.user = user;
+    public PathFinder(Node beginNode, Set<Way> waySet, double distanceToWalk) {
+        this.waySet = waySet;
         this.path = new ArrayList<>();
         this.totalDistance = 0;
-        this.beginNode = new Node("start", user.getLon(), user.getLat());
         Way beginWay = new Way("start");
         this.currentNode = beginNode;
         this.previousWay = beginWay;
         path.add(beginNode);
-        this.requiredDistance = user.getDistance();
-    }
-
-    /**
-     * This starts the pathfinding algorithm. Also updates the progress bar, therefore a second thread is required.
-     */
-    public void start() {
-        FileManager fileManager = new FileManager();
-        final LoadingDialog dialog = new LoadingDialog(" Loading overpass data...");
-        SwingWorker<Void, Void> worker = new SwingWorker<>() {
-
-            @Override
-            protected Void doInBackground() throws IOException, ParseException, InterruptedException {
-                fileManager.getOverpassData(beginNode, requiredDistance, dialog, user.isRandom());
-                waySet = fileManager.getWaySet();
-                dialog.setProgress(60);
-                dialog.setText(" Generating path...");
-                getRoute();
-                dialog.setProgress(100);
-                showOutput();
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                dialog.dispose();
-            }
-        };
-        worker.execute();
-        dialog.setVisible(true);
+        this.requiredDistance = distanceToWalk;
     }
 
     /**
@@ -68,7 +27,7 @@ public class PathFinder {
      * and starts over again if needed. Also, when it meets a dead end, it follows the routes back to either start
      * (no path found) or until a viable path is found.
      */
-    public void getRoute() {
+    public List<Node> getRoute() {
         while (totalDistance < requiredDistance) {
             Way currentWay = getClosestWay(currentNode);
             currentWay.setPreviousWay(previousWay);
@@ -94,6 +53,7 @@ public class PathFinder {
             path.add(closestNode);
             processWay(closestNode, currentWay);
         }
+        return path;
     }
 
     /**
@@ -186,43 +146,9 @@ public class PathFinder {
 
     }
 
-    /**
-     * Generates a GPX file, shows a screen with information about the generated path, and the generated path itself.
-     *
-     * @throws IOException When the html template cannot be interpreted correctly.
-     */
-    public void showOutput() throws IOException {
-        DecimalFormat decimalFormat = new DecimalFormat("#.##");
-        DecimalFormat timeFormat = new DecimalFormat("#.#");
-        String distance = String.valueOf(decimalFormat.format(totalDistance));
-        String calories = String.valueOf((int) user.getEstimatedKcal(totalDistance));
-        String time = String.valueOf(timeFormat.format(user.getTime(totalDistance)));
-        new OutputScreen(distance, calories, time);
-        File file = new File("path/walking_route.gpx");
-        FileManager fileManager = new FileManager();
-        fileManager.generateGpx(file, "path/walking_route", path);
-        File htmlTemplateFile = new File("template.html");
-        String htmlString = FileUtils.readFileToString(htmlTemplateFile, "ISO-8859-1");
-        StringBuilder nodes = new StringBuilder();
-        for (int x = 0; x < path.size(); x++) {
-            nodes.append("[");
-            nodes.append(path.get(x).getLat());
-            nodes.append(", ");
-            nodes.append(path.get(x).getLon());
-            nodes.append("]");
-            if (x < path.size() - 1) {
-                nodes.append(", ");
-            }
-        }
-        htmlString = htmlString.replace("$insertnode", nodes.toString());
-        File newHtmlFile = new File("path/new.html");
-        FileUtils.writeStringToFile(newHtmlFile, htmlString, "ISO-8859-1");
-        Desktop.getDesktop().browse(newHtmlFile.toURI());
+    public double getTotalDistance() {
+        return totalDistance;
     }
 
-    public static void main(String[] args) {
-        User user = new User(6.0, 70.0, 6.4, 20, 5.071998, 52.639074, false);
-        PathFinder pathFinder = new PathFinder(user);
-        pathFinder.start();
-    }
+
 }
