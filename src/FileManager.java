@@ -30,6 +30,7 @@ public class FileManager {
      * @param beginNode     The node for which the ways must be fetched.
      * @param totalDistance The total required distance of the path.
      * @param dialog        A LoadingDialog to show the progress.
+     * @param isRandom      Whether or not to randomise the bbox (which randomises the path)
      * @throws IOException          If the html request is invalid somehow.
      * @throws InterruptedException If the html request is interrupted.
      * @throws ParseException       If the JSON is incorrect.
@@ -75,10 +76,11 @@ public class FileManager {
      * Generates a bbox, which is required in an overpass request. It generates a bbox of totaldistance * totaldistance
      * so even in the worst case scenario (straight way from A to B) enough data is available.
      * The bbox is way bigger than needed, this is because it's an approximation upon an approximation,
-     * so keep distances < 100km.
+     * so keep distances less than 100km.
      *
      * @param currentNode   The center node to draw the bbox around.
      * @param totalDistance The total required distance of the path.
+     * @param isRandom      Whether to randomise the size of the bbox (to get different paths).
      * @return A string to be used in further processing.
      */
     public String generateBbox(Node currentNode, double totalDistance, boolean isRandom) {
@@ -106,6 +108,7 @@ public class FileManager {
      *
      * @param jsonObject The JSON fetched from overpass.
      * @throws ParseException If incorrect JSON is passed.
+     * @throws IOException    If there's something wrong with the data.
      */
     public void parseJson(JSONObject jsonObject) throws ParseException, IOException {
         nodeSet = new HashSet<>();
