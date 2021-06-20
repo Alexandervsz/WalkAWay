@@ -3,7 +3,7 @@ import java.text.DecimalFormat;
 /**
  * Data class for met values.
  *
- * @see <a href="https://sites.google.com/site/compendiumofphysicalactivities/Activity-Categories">For more information.</a>
+ * @see <a href="https://sites.google.com/site/compendiumofphysicalactivities/Activity-Categories">compendium of physical activities</a>
  */
 public record MetValue(double metValue, double speedA, double speedB, String activity) {
 
