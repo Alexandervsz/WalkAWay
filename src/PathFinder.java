@@ -13,11 +13,10 @@ public class PathFinder {
         this.waySet = waySet;
         this.path = new ArrayList<>();
         this.totalDistance = 0;
-        Way beginWay = new Way("start");
-        this.currentNode = beginNode;
-        this.previousWay = beginWay;
-        path.add(beginNode);
         this.requiredDistance = distanceToWalk;
+        this.currentNode = beginNode;
+        this.previousWay = new Way("start");
+        path.add(beginNode);
     }
 
     /**
@@ -122,7 +121,6 @@ public class PathFinder {
             previousWay = currentWay;
             walkPath(currentWay.getNodePositionsFromPointReversed(entry), entryNode);
         }
-
     }
 
     /**
@@ -143,7 +141,6 @@ public class PathFinder {
             currentPathNode = entry.getValue();
         }
         currentNode = currentPathNode;
-
     }
 
     public double getTotalDistance() {
