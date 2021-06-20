@@ -130,7 +130,7 @@ public class PathFinder {
                 closestWay = way;
             }
         }
-        if (closest > 61) {
+        if (closest > 200) {
             System.out.println("empty");
             return new Way("empty");
         } else {
@@ -196,7 +196,7 @@ public class PathFinder {
         DecimalFormat timeFormat = new DecimalFormat("#.#");
         String distance = String.valueOf(decimalFormat.format(totalDistance));
         String calories = String.valueOf((int) user.getEstimatedKcal(totalDistance));
-        String time = String.valueOf(timeFormat.format(user.getTime()));
+        String time = String.valueOf(timeFormat.format(user.getTime(totalDistance)));
         new OutputScreen(distance, calories, time);
         File file = new File("path/walking_route.gpx");
         FileManager fileManager = new FileManager();
