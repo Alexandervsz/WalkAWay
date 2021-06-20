@@ -1,17 +1,11 @@
 import java.util.Objects;
 
-import static java.lang.Math.*;
-
 public class Node implements Comparable<Node> {
     private final String id;
     private final double lon;
     private final double lat;
     private double distanceToCurrentNode;
     private double bearingToCurrentNode;
-
-    public String getId() {
-        return id;
-    }
 
     public Node(String id, double lon, double lat) {
         this.id = id;
@@ -20,12 +14,19 @@ public class Node implements Comparable<Node> {
         this.bearingToCurrentNode = 0;
     }
 
-    public double getDistanceTo(Node node) {
+    /**
+     * Calculates the distance between this node, and target node, using the Haversine formula.
+     * Has to set distanceToCurrentNode, to help with sorting by distance.
+     *
+     * @param target The target node
+     * @return The distance in meters.
+     */
+    public double getDistanceTo(Node target) {
         double R = 6_356_752.314245D;
         double phi1 = lat * Math.PI / 180;
-        double phi2 = node.getLat() * Math.PI / 180;
-        double deltaphi = (node.getLat() - lat) * Math.PI / 180;
-        double deltalambda = (node.getLon() - lon) * Math.PI / 180;
+        double phi2 = target.getLat() * Math.PI / 180;
+        double deltaphi = (target.getLat() - lat) * Math.PI / 180;
+        double deltalambda = (target.getLon() - lon) * Math.PI / 180;
         double a = Math.sin(deltaphi / 2) * Math.sin(deltaphi / 2) + Math.cos(phi1) * Math.cos(phi2) *
                 Math.sin(deltalambda / 2) * Math.sin(deltalambda / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
@@ -47,6 +48,11 @@ public class Node implements Comparable<Node> {
 
     }
 
+    /**
+     * For use in pathfinding.
+     *
+     * @return The distance to the current node (in this object).
+     */
     public double getDistanceToCurrentNode() {
         return distanceToCurrentNode;
     }
@@ -61,6 +67,10 @@ public class Node implements Comparable<Node> {
 
     public double getLat() {
         return lat;
+    }
+
+    public String getId() {
+        return id;
     }
 
     @Override
