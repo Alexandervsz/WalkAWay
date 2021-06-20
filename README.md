@@ -1,2 +1,2 @@
-# IPASS
-IPASS project for school.
+# WalkAWay
+Exercise planner project for school.
