@@ -80,8 +80,7 @@ public class UserInputScreen extends JDialog {
             User user = new User(mets, weight, walkingSpeed, kcal, lon, lat, isRandom);
             dispose();
             setVisible(false);
-            PathFindingActivity pathFindingActivity = new PathFindingActivity(user);
-            pathFindingActivity.start();
+            new PathFindingActivity(user).start();
         } catch (NumberFormatException e) {
             weightField.setText("");
             walkingSpeedField.setText("");
