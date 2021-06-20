@@ -23,6 +23,7 @@ public class UserInputScreen extends JDialog {
     // Unused but required for form to work.
     private JPanel southPanel;
     private JPanel northPanel;
+    private JCheckBox randomizeCheckBox;
 
     public UserInputScreen() {
         metsLabel.setText("Activity: ");
@@ -66,7 +67,8 @@ public class UserInputScreen extends JDialog {
             double mets = metValue.getMetValue();
             double lon = Double.parseDouble(lonField.getText());
             double lat = Double.parseDouble(latField.getText());
-            User user = new User(mets, weight, walkingSpeed, kcal, lon, lat);
+            boolean isRandom = randomizeCheckBox.isSelected();
+            User user = new User(mets, weight, walkingSpeed, kcal, lon, lat, isRandom);
             dispose();
             setVisible(false);
             PathFinder pathFinder = new PathFinder(user);
