@@ -1,5 +1,6 @@
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
@@ -61,9 +62,11 @@ public class FileManagerTests {
                 () -> Assertions.assertEquals(337, fileManager.getWaySet().size())
         );
         try {
-            fileManager.parseJson(new JSONObject());
-            fail("Method did not throw an exception on invalid Json");
-        } catch (Exception ignored) {
+            FileReader fileReader2 = new FileReader("SampleJsonNodeRemoved.json");
+            JSONObject jsonObject2 = (JSONObject) jsonParser.parse(fileReader2);
+            fileManager.parseJson(jsonObject2);
+            fail("Method did not throw an exception on missing node.");
+        } catch (IOException ignored) {
         }
     }
 
