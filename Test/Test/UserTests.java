@@ -12,11 +12,11 @@ public class UserTests {
     @Test
     public void testTime() {
         Assertions.assertAll(
-                () -> Assertions.assertEquals(54.421768707, test1.getTime(), 0.0000000009),
-                () -> Assertions.assertEquals(13.265306122, test2.getTime(), 0.0000000009),
-                () -> Assertions.assertEquals(57.372346528, test3.getTime(), 0.000000001),
-                () -> Assertions.assertEquals(100, test4.getTime()),
-                () -> Assertions.assertEquals(0, test5.getTime())
+                () -> Assertions.assertEquals(54.421768707, test1.getTime(test1.getDistance()), 0.0000000009),
+                () -> Assertions.assertEquals(13.265306122, test2.getTime(test2.getDistance()), 0.0000000009),
+                () -> Assertions.assertEquals(57.372346528, test3.getTime(test3.getDistance()), 0.000000001),
+                () -> Assertions.assertEquals(100, test4.getTime(test4.getDistance())),
+                () -> Assertions.assertEquals(0, test5.getTime(test5.getDistance()))
         );
     }
 
