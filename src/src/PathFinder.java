@@ -221,7 +221,7 @@ public class PathFinder {
     }
 
     public static void main(String[] args) {
-        User user = new User(6.0, 70.0, 6.4, 200, 5.061843, 52.650095, false);
+        User user = new User(6.0, 70.0, 6.4, 200, 5.071998, 52.639074, false);
         PathFinder pathFinder = new PathFinder(user);
         pathFinder.start();
     }
