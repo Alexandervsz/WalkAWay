@@ -70,7 +70,7 @@ public class FileManager {
     /**
      * Generates a bbox, which is required in an overpass request. It generates a bbox of totaldistance * totaldistance
      * so even in the worst case scenario (straight way from A to B) enough data is available.
-     * The bbox is way bigger than needed, this is baecause it;s an approximation upon an approximation,
+     * The bbox is way bigger than needed, this is because it's an approximation upon an approximation,
      * so keep distances < 100km.
      *
      * @param currentNode   The center node to draw the bbox around.
@@ -119,13 +119,6 @@ public class FileManager {
                 }
                 case "way" -> {
                     String wayId = osmObject.get("id").toString();
-                    String tags = osmObject.get("tags").toString();
-                    //String[] tagList = tags.split(",");
-                    //String type = tagList[tagList.length - 1];
-                    //type = type.replace("{", "");
-                    //type = type.replace("}", "");
-                    //type = type.replace("\"", "");
-                    //String[] typesList = type.split(":");
                     String nodesString = osmObject.get("nodes").toString();
                     String[] nodes = nodesString.split(",");
                     for (int x = 0; x < nodes.length; x++) {
@@ -142,7 +135,7 @@ public class FileManager {
                             }
                         }
                         if (targetNode == null) {
-                            throw new IOException("Node not found!");
+                            throw new IOException("Node not found! (this means there's something wrong with the json file.)");
                         }
                         newWay.addNode(count, targetNode);
                         count++;
