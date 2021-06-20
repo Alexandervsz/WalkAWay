@@ -1,4 +1,6 @@
-
+/**
+ * A data class for the user, stores the data entered by the user and calculates the distance required of the path.
+ */
 public class User {
     private final double distance;
     private final double lon;
@@ -51,6 +53,19 @@ public class User {
         return distance / 1000 / walkingSpeed * 60 * kcalPerMinute;
     }
 
+    /**
+     * Returns the time the user takes to walk the given distance.
+     * @param distance The distance the user has to walk.
+     * @return The time it takes for the user to walk this distance.
+     */
+    public double getTime(Double distance) {
+        if (distance == 0){
+            return 0;
+        }
+        return distance / 1000 / walkingSpeed * 60;
+    }
+
+
     public boolean isRandom() {
         return isRandom;
     }
@@ -63,12 +78,6 @@ public class User {
         return lat;
     }
 
-    public double getTime(Double distance) {
-        if (distance == 0){
-            return 0;
-        }
-        return distance / 1000 / walkingSpeed * 60;
-    }
 
     public double getKcalPerMinute() {
         return kcalPerMinute;

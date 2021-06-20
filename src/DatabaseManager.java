@@ -2,6 +2,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class talks to the database and returns the data if required.
+ */
 public class DatabaseManager {
     private Connection c;
 
@@ -22,6 +25,8 @@ public class DatabaseManager {
     }
 
     /**
+     * Inserts a met value into the database.
+     *
      * @param mets     The mets value of the activity
      * @param speedA   The beginning of the speed range in miles per hour.
      * @param speedB   The end of the speed range in miles per hour.
@@ -46,7 +51,7 @@ public class DatabaseManager {
     }
 
     /**
-     * Fetches all met values currently in the database.
+     * Fetches all met values currently from the metvalues table.
      *
      * @return A list of MetValue objects.
      */
@@ -70,7 +75,7 @@ public class DatabaseManager {
     }
 
     /**
-     * Fetches all the walkable types of way out of the database.
+     * Fetches all the walkable types of way from the waytype table.
      *
      * @return A list of WayType objects.
      */

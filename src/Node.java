@@ -1,12 +1,21 @@
 import java.util.Objects;
 
+/**
+ * A node is a location point tied to an id, multiple nodes make up a way.
+ */
 public class Node implements Comparable<Node> {
     private final String id;
-    private final double lon;
-    private final double lat;
-    private double distanceToCurrentNode;
+    private final double lon; //decimal degrees.
+    private final double lat; //decimal degrees.
+    private double distanceToCurrentNode; //meters.
     private double bearingToCurrentNode;
 
+    /**
+     * Creates a node.
+     * @param id The id of the node
+     * @param lon The longitude of the node in decimal degrees.
+     * @param lat The latitude of the node in decimal degrees.
+     */
     public Node(String id, double lon, double lat) {
         this.id = id;
         this.lon = lon;
@@ -61,10 +70,16 @@ public class Node implements Comparable<Node> {
         return bearingToCurrentNode;
     }
 
+    /**
+     * @return The longitude in decimal degrees.
+     */
     public double getLon() {
         return lon;
     }
 
+    /**
+     * @return The lattitude in decimal degrees.
+     */
     public double getLat() {
         return lat;
     }
@@ -97,7 +112,6 @@ public class Node implements Comparable<Node> {
     }
 
     @Override
-    //returns -1 if distance of target is greater than distance of current, 1 otherwise (0 if equal).
     public int compareTo(Node o) {
         return Double.compare(distanceToCurrentNode, o.distanceToCurrentNode);
     }

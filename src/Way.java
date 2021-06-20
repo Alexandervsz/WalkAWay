@@ -1,5 +1,8 @@
 import java.util.*;
 
+/**
+ * A way contains two or more nodes, linked together by a number. (the position)
+ */
 public class Way {
     private final String id;
     private final TreeMap<Integer, Node> nodePositions;
@@ -8,6 +11,10 @@ public class Way {
     private int direction;
     private int entryPoint;
 
+    /**
+     * Creates a new way object
+     * @param id The id number of the way.
+     */
     public Way(String id) {
         this.id = id;
         nodePositions = new TreeMap<>();
@@ -96,16 +103,62 @@ public class Way {
         return reverse.tailMap(point);
     }
 
+    /**
+     * Returns the contents of the way (the nodes and their positions)
+     * @return A map with the nodes and their positions.
+     */
     public TreeMap<Integer, Node> getNodePositions() {
         return nodePositions;
     }
 
+    /**
+     * Returns the contents of the way, reversed.
+     * @return A map with the nodes and this positions.
+     */
     public NavigableMap<Integer, Node> getNodePositionsReversed() {
         return nodePositions.descendingMap();
     }
 
+    /**
+     * Sets the direction the pathfinding algorithm traveled the path.
+     * @param direction 1 for forwards, -1 for backwards.
+     */
     public void setDirection(int direction) {
         this.direction = direction;
+    }
+
+    /**
+     * Gets the way by which the algorithm got there.
+     * @return The way the algorithm processed before this one.
+     */
+    public Way getPreviousWay() {
+        return previousWay;
+    }
+
+    /**
+     * Function for the pathfinding algorithm to set the previous way.
+     * @param previousWay The way the algorithm was processing before this one.
+     */
+    public void setPreviousWay(Way previousWay) {
+        if (previousWay != null) {
+            this.previousWay = previousWay;
+        }
+    }
+
+    /**
+     * Returns the point at which the algorithm entered the way.
+     * @return the number of the node, by which the algorithm entered.
+     */
+    public int getEntryPoint() {
+        return entryPoint;
+    }
+
+    /**
+     * Is called when the algorithm starts processing a way.
+     * @param entryPoint The point the algorithm was processing.
+     */
+    public void setEntryPoint(int entryPoint) {
+        this.entryPoint = entryPoint;
     }
 
     @Override
@@ -121,24 +174,6 @@ public class Way {
         int result = Objects.hash(id);
         result = 31 * result;
         return result;
-    }
-
-    public Way getPreviousWay() {
-        return previousWay;
-    }
-
-    public void setPreviousWay(Way previousWay) {
-        if (previousWay != null) {
-            this.previousWay = previousWay;
-        }
-    }
-
-    public int getEntryPoint() {
-        return entryPoint;
-    }
-
-    public void setEntryPoint(int entryPoint) {
-        this.entryPoint = entryPoint;
     }
 
     @Override

@@ -16,22 +16,26 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * This class talks to the overpass API, and processes the data so its can be used by the pathfinding algorithm.
+ */
 public class FileManager {
     Set<Node> nodeSet;
     Set<Way> waySet;
 
     /**
-     * Fetches all nodes and ways in a bbox, which is based on the begin node and total distance required to walk.
+     * Sends a query to gather all walkable ways, in a bbox with a radius of total distance from the begin node.
+     * After this is done, the data is passed to the parser. It also updates the progressbar while doing this.
      *
-     * @param currentNode   The node for which the ways must be fetched.
+     * @param beginNode     The node for which the ways must be fetched.
      * @param totalDistance The total required distance of the path.
      * @param dialog        A LoadingDialog to show the progress.
      * @throws IOException          If the html request is invalid somehow.
      * @throws InterruptedException If the html request is interrupted.
      * @throws ParseException       If the JSON is incorrect.
      */
-    public void getOverpassData(Node currentNode, double totalDistance, LoadingDialog dialog, boolean isRandom) throws IOException, InterruptedException, ParseException {
-        String bbox = generateBbox(currentNode, totalDistance, isRandom);
+    public void getOverpassData(Node beginNode, double totalDistance, LoadingDialog dialog, boolean isRandom) throws IOException, InterruptedException, ParseException {
+        String bbox = generateBbox(beginNode, totalDistance, isRandom);
         DatabaseManager databaseManager = new DatabaseManager();
         List<WayType> wayTypes = databaseManager.getWayTypes();
         List<String> options = new ArrayList<>();
@@ -175,10 +179,20 @@ public class FileManager {
         }
     }
 
+    /**
+     * Returns the nodeset. Returns null if getOverPassData has not been called. this function is only used in testing.
+     *
+     * @return The nodes gathered from overpass.
+     */
     public Set<Node> getNodeSet() {
         return nodeSet;
     }
 
+    /**
+     * Returns the set of ways, fetched from overpass. Returns null if getOverPassData has not been called.
+     *
+     * @return The ways gathered from overpass.
+     */
     public Set<Way> getWaySet() {
         return waySet;
     }

@@ -1,9 +1,15 @@
 import javax.swing.*;
 
+/**
+ * This is created when a path cannot be found.
+ */
 public class PathNotFound extends JFrame {
     private JPanel panel1;
     private JLabel pnfLabel;
 
+    /**
+     * Constructor of the screen.
+     */
     public PathNotFound() {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -11,9 +17,5 @@ public class PathNotFound extends JFrame {
         add(panel1);
         pack();
         setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        new PathNotFound();
     }
 }

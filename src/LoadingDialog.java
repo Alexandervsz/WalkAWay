@@ -1,6 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * loading dialogs are created when the application starts the pathfinder, to show the progress of the application.
+ */
 public class LoadingDialog extends JDialog {
     private JPanel contentPane;
     private JLabel loadingLabel;

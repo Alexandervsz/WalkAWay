@@ -1,6 +1,9 @@
 import java.util.*;
 import java.util.List;
 
+/**
+ * This class generates a path of a given length, or null if a path canot be found.
+ */
 public class PathFinder {
     private final Set<Way> waySet;
     private Way previousWay;
@@ -9,6 +12,12 @@ public class PathFinder {
     private double totalDistance;
     private final List<Node> path;
 
+    /**
+     * Creates a new pathfinder object.
+     * @param beginNode The node where the pathfinder should begin.
+     * @param waySet The overpass data
+     * @param distanceToWalk The required distance of the generated path.
+     */
     public PathFinder(Node beginNode, Set<Way> waySet, double distanceToWalk) {
         this.waySet = waySet;
         this.path = new ArrayList<>();
@@ -40,8 +49,7 @@ public class PathFinder {
                 }
                 currentWay = currentWay.getPreviousWay();
                 if (currentWay.equals(new Way("start"))) { // todo: Verify that this is working correctly.
-                    new PathNotFound();
-                    System.exit(0);
+                    return null;
                 }
                 currentWay = getClosestWay(currentWay.getLastNode());
             }
@@ -143,6 +151,9 @@ public class PathFinder {
         currentNode = currentPathNode;
     }
 
+    /**
+     * @return the total length of the path, in meters.
+     */
     public double getTotalDistance() {
         return totalDistance;
     }

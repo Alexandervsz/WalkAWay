@@ -4,6 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
+/**
+ * The main screen, the user enters the input, and when the button is pressed the input is validated. Afterwards the
+ * pathfinder is launched.
+ */
 public class UserInputScreen extends JDialog {
     private JButton confirmButton;
     private JLabel metsLabel;

@@ -3,6 +3,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 
+/**
+ * This class is used to make it easier to insert metvalues into the database. Not meant for end users.
+ */
 public class MetsInserter extends JFrame {
     private JPanel mainPanel;
     private JButton confirmButton;

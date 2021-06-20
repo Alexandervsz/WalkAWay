@@ -2,6 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
+/**
+ * The output screen which shows the data of the path when the algorithm is done.
+ */
 public class OutputScreen extends JFrame {
     private JLabel distanceLabel;
     private JLabel caloriesLabel;
@@ -32,6 +35,10 @@ public class OutputScreen extends JFrame {
 
     }
 
+    /**
+     * Called when the user clicks on the close button.
+     * @param actionEvent The user clicked the button.
+     */
     private void stop(ActionEvent actionEvent) {
         dispose();
         setVisible(false);

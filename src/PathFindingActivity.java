@@ -9,10 +9,18 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * This class fetches the data for the pathfinding algorithm and passes it to the pathfinding algorithm, and shows
+ * the progress. When it's done it shows some data and the generated path.
+ */
 public class PathFindingActivity {
     User user;
     Node beginNode;
 
+    /**
+     * Creates a new pathfinding activity.
+     * @param user A user to generate the path for.
+     */
     public PathFindingActivity(User user) {
         this.user = user;
         this.beginNode = new Node("Start", user.getLon(), user.getLat());
@@ -54,7 +62,7 @@ public class PathFindingActivity {
      *
      * @throws IOException When the html template cannot be interpreted correctly.
      */
-    public void showOutput(List<Node> path, double totalDistance) throws IOException {
+    private void showOutput(List<Node> path, double totalDistance) throws IOException {
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         DecimalFormat timeFormat = new DecimalFormat("#.#");
         String distance = String.valueOf(decimalFormat.format(totalDistance));
