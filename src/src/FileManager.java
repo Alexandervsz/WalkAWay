@@ -30,8 +30,8 @@ public class FileManager {
      * @throws InterruptedException If the html request is interrupted.
      * @throws ParseException       If the JSON is incorrect.
      */
-    public void getOverpassData(Node currentNode, double totalDistance, LoadingDialog dialog) throws IOException, InterruptedException, ParseException {
-        String bbox = generateBbox(currentNode, totalDistance);
+    public void getOverpassData(Node currentNode, double totalDistance, LoadingDialog dialog, boolean isRandom) throws IOException, InterruptedException, ParseException {
+        String bbox = generateBbox(currentNode, totalDistance, isRandom);
         DatabaseManager databaseManager = new DatabaseManager();
         List<WayType> wayTypes = databaseManager.getWayTypes();
         List<String> options = new ArrayList<>();
@@ -77,8 +77,13 @@ public class FileManager {
      * @param totalDistance The total required distance of the path.
      * @return A string to be used in further processing.
      */
-    public String generateBbox(Node currentNode, double totalDistance) {
-        totalDistance = totalDistance * 0.7075; // To correct for the fact that bbox generates too big.
+    public String generateBbox(Node currentNode, double totalDistance, boolean isRandom) {
+        if (isRandom) {
+            double generatedDouble = 0.5 + new Random().nextDouble() * (1 - 0.5);
+            totalDistance = totalDistance * generatedDouble;
+        } else {
+            totalDistance = totalDistance * 0.705; // To correct for the fact that bbox generates too big.
+        }
         double lat = currentNode.getLat();
         double lon = currentNode.getLon();
         double R = 6_356_752.314245D;
@@ -136,7 +141,7 @@ public class FileManager {
                                 targetNode = node;
                             }
                         }
-                        if (targetNode == null){
+                        if (targetNode == null) {
                             throw new IOException("Node not found!");
                         }
                         newWay.addNode(count, targetNode);
