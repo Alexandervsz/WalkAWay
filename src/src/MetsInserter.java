@@ -40,8 +40,9 @@ public class MetsInserter extends JFrame {
 
     /**
      * Verifies the input given by the user.
-     * @implNote speedA and speedB are in miles per hour, they are converted to kilometers per hour.
+     *
      * @param actionEvent The button is pressed.
+     * @implNote speedA and speedB are in miles per hour, they are converted to kilometers per hour.
      */
     private void addMets(ActionEvent actionEvent) {
         try {

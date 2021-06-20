@@ -6,6 +6,11 @@ public class LoadingDialog extends JDialog {
     private JLabel loadingLabel;
     private final JProgressBar progressBar;
 
+    /**
+     * Initialises the loading dialog with the given text.
+     *
+     * @param text The text to be displayed.
+     */
     public LoadingDialog(String text) {
         setLocationRelativeTo(null);
         setUndecorated(true);
@@ -23,11 +28,22 @@ public class LoadingDialog extends JDialog {
         pack();
         setVisible(true);
     }
-    public void setText(String text){
+
+    /**
+     * Changes the text of the dialog.
+     *
+     * @param text the new text to be displayed.
+     */
+    public void setText(String text) {
         loadingLabel.setText(text);
     }
 
-    public void setProgress(int progress){
+    /**
+     * Set the progresbar to the given progress
+     *
+     * @param progress an int between 0 and 100.
+     */
+    public void setProgress(int progress) {
         progressBar.setValue(progress);
     }
 
