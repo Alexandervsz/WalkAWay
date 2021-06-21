@@ -55,8 +55,7 @@ public class PathFinder {
             }
             waySet.remove(currentWay);
             Node closestNode = currentWay.getClosestNode(currentNode);
-            closestNode.getDistanceTo(currentNode);
-            totalDistance += closestNode.getDistanceToCurrentNode();
+            totalDistance += closestNode.getDistanceTo(currentNode);
             path.add(closestNode);
             processWay(closestNode, currentWay);
         }
@@ -74,9 +73,9 @@ public class PathFinder {
             if (entry.getKey() == currentWay.getEntryPoint()) {
                 break;
             }
-            entry.getValue().getDistanceTo(currentNode);
+
             path.remove(entry.getValue());
-            totalDistance = totalDistance - entry.getValue().getDistanceToCurrentNode();
+            totalDistance = totalDistance - entry.getValue().getDistanceTo(currentNode);
             currentNode = entry.getValue();
         }
     }
