@@ -96,7 +96,7 @@ public class PathFinder {
                 closestWay = way;
             }
         }
-        if (closest > 200) {
+        if (closest > 100) {
             return new Way("empty");
         } else {
             return closestWay;
