@@ -6,7 +6,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -98,7 +97,7 @@ public class PathFindingActivity {
     }
 
     public static void main(String[] args) {
-        User user = new User(3.5, 70.0, 5.0, 0, 5.071998, 52.639074, false);
+        User user = new User(3.5, 70.0, 5.0, 100, 5.071998, 52.639074, false);
         new PathFindingActivity(user).start();
     }
 }
