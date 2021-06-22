@@ -75,8 +75,7 @@ public class FileManager {
     /**
      * Generates a bbox, which is required in an overpass request. It generates a bbox of totaldistance * totaldistance
      * so even in the worst case scenario (straight way from A to B) enough data is available.
-     * The bbox is way bigger than needed, this is because it's an approximation upon an approximation,
-     * so keep distances less than 100km.
+     * This function has an error rate of around 30%, but always overestimates.
      *
      * @param currentNode   The center node to draw the bbox around.
      * @param totalDistance The total required distance of the path.
@@ -90,11 +89,13 @@ public class FileManager {
         } else {
             totalDistance = totalDistance * 0.705; // To correct for the fact that bbox generates too big.
         }
+        totalDistance += totalDistance * 0.06; // To compensate for inaccuracy.
+
         double lat = currentNode.getLat();
         double lon = currentNode.getLon();
-        double R = 6_356_752.314245D;
+        double R = 6371000.0;
         double dLat = totalDistance / R;
-        double dLon = totalDistance / (R * Math.cos(Math.PI * lat / 180));
+        double dLon = totalDistance / (R * Math.cos(Math.PI * dLat / 180));
         double lat0 = lat - dLat * 180 / Math.PI;
         double lon0 = lon - dLon * 180 / Math.PI;
         double lat1 = lat + dLat * 180 / Math.PI;
