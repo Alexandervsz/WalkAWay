@@ -48,8 +48,8 @@ public class PathFinder {
                     revertPath(waynodes, currentWay);
                 }
                 currentWay = currentWay.getPreviousWay();
-                if (currentWay.equals(new Way("start"))) { // todo: Verify that this is working correctly.
-                    return null;
+                if (currentWay == null) {
+                    return new ArrayList<>();
                 }
                 currentWay = getClosestWay(currentWay.getLastNode());
             }
@@ -97,7 +97,6 @@ public class PathFinder {
             }
         }
         if (closest > 200) {
-            System.out.println("empty");
             return new Way("empty");
         } else {
             return closestWay;
@@ -145,6 +144,8 @@ public class PathFinder {
             }
             totalDistance += entry.getValue().getDistanceTo(currentPathNode);
             path.add(entry.getValue());
+
+
             currentPathNode = entry.getValue();
         }
         currentNode = currentPathNode;
@@ -157,5 +158,7 @@ public class PathFinder {
         return totalDistance;
     }
 
-
+    public List<Node> getPath() {
+        return path;
+    }
 }
