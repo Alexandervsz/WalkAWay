@@ -21,7 +21,7 @@ public class FileManagerTests {
         // Since the Bbox MUST be at least equal to totaldistance in both ways, the fact that the bbox is not 100%
         // accurate (since its an approximation upon an approximation) doesn't really matter, as long as it's bigger
         // than the required size.
-        boolean test1 = verifyBbox(1) > 2; // if the user wants to walk less than 1m the pathfinding algorithm has bigger problems than an inaccurate bbox.
+        boolean test1 = verifyBbox(1) > 2;
         boolean test2 = verifyBbox(10) > 20;
         boolean test3 = verifyBbox(100) > 200;
         boolean test4 = verifyBbox(1000) > 2000;
@@ -30,13 +30,13 @@ public class FileManagerTests {
         boolean test7 = verifyBbox(100000) > 200000;
         Assertions.assertAll(
                 () -> Assertions.assertEquals("0.0,0.0,0.0,0.0", fileManager.generateBbox(new Node("0", 0, 0), 0, false)),
-                () -> Assertions.assertEquals(2, verifyBbox(1), 0.7),
-                () -> Assertions.assertEquals(20, verifyBbox(10),7),
-                () -> Assertions.assertEquals(200, verifyBbox(100),70),
-                () -> Assertions.assertEquals(2000, verifyBbox(1000), 700),
-                () -> Assertions.assertEquals(20000, verifyBbox(10000), 7000),
-                () -> Assertions.assertEquals(100000, verifyBbox(50000), 40000),
-                () -> Assertions.assertEquals(200000, verifyBbox(100000), 70000),
+                () -> Assertions.assertEquals(2, verifyBbox(1), 2 * 0.06), // uses haversine formula twice so double te error rate.
+                () -> Assertions.assertEquals(20, verifyBbox(10),20 * 0.06),
+                () -> Assertions.assertEquals(200, verifyBbox(100),200 * 0.06),
+                () -> Assertions.assertEquals(2000, verifyBbox(1000), 2000 * 0.06),
+                () -> Assertions.assertEquals(20000, verifyBbox(10000), 20000 * 0.06),
+                () -> Assertions.assertEquals(100000, verifyBbox(50000), 100000 * 0.06),
+                () -> Assertions.assertEquals(200000, verifyBbox(100000), 200000 * 0.06),
                 () -> Assertions.assertTrue(test1, String.valueOf(verifyBbox(1))),
                 () -> Assertions.assertTrue(test2, String.valueOf(verifyBbox(10))),
                 () -> Assertions.assertTrue(test3, String.valueOf(verifyBbox(100))),
@@ -51,7 +51,7 @@ public class FileManagerTests {
     @Test
     public void testJson() throws Exception {
         FileManager fileManager = new FileManager();
-        FileReader fileReader = new FileReader("SampleJson.json");
+        FileReader fileReader = new FileReader("test/SampleJson.json");
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject) jsonParser.parse(fileReader);
         fileManager.parseJson(jsonObject);
@@ -62,7 +62,7 @@ public class FileManagerTests {
                 () -> Assertions.assertEquals(337, fileManager.getWaySet().size())
         );
         try {
-            FileReader fileReader2 = new FileReader("SampleJsonNodeRemoved.json");
+            FileReader fileReader2 = new FileReader("test/SampleJsonNodeRemoved.json");
             JSONObject jsonObject2 = (JSONObject) jsonParser.parse(fileReader2);
             fileManager.parseJson(jsonObject2);
             fail("Method did not throw an exception on missing node.");
