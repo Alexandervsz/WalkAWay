@@ -83,13 +83,11 @@ public class FileManager {
      * @return A string to be used in further processing.
      */
     public String generateBbox(Node currentNode, double totalDistance, boolean isRandom) {
-        totalDistance += totalDistance * 0.06; // To compensate for inaccuracy.
+        totalDistance = totalDistance * 0.8;
         if (isRandom) {
-            double generatedDouble = 1 + new Random().nextDouble() * (1.5 - 1);
+            double generatedDouble = 0.8 + new Random().nextDouble() * (0.8 - 1.3);
             totalDistance = totalDistance * generatedDouble;
         }
-
-
         double lat = currentNode.getLat();
         double lon = currentNode.getLon();
         double R = 6371000.0;
@@ -99,7 +97,6 @@ public class FileManager {
         double lon0 = lon - dLon * 180 / Math.PI;
         double lat1 = lat + dLat * 180 / Math.PI;
         double lon1 = lon + dLon * 180 / Math.PI;
-
         return lat0 + "," + lon0 + "," + lat1 + "," + lon1;
     }
 
