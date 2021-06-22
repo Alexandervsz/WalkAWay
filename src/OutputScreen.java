@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
 
 /**
  * The output screen which shows the data of the path when the algorithm is done.
@@ -20,6 +21,8 @@ public class OutputScreen extends JFrame {
      * @param time     The estimated time it takes to walk the path.
      */
     public OutputScreen(String distance, String calories, String time) {
+        Image icon = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB_PRE); //Removes the ugly icon...
+        setIconImage(icon);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         distanceLabel.setText("Total distance of path: " + distance + "m.");
