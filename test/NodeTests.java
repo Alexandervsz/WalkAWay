@@ -15,9 +15,9 @@ public class NodeTests {
 
         Assertions.assertAll(
                 () -> Assertions.assertEquals(0, test1.getDistanceTo(test1)),
-                () -> Assertions.assertEquals(6.6, test1.getDistanceTo(test2), 0.15), // should be 0.1, but pixel measurements are not 100% accurate.
-                () -> Assertions.assertEquals(111111, test2.getDistanceTo(test3), 170), // inaccurate with large numbers.
-                () -> Assertions.assertEquals(14.5, test4.getDistanceTo(test5), 0.2)
+                () -> Assertions.assertEquals(6.6, test1.getDistanceTo(test2), 6.6 * 0.03), // Haversine formula has an accuracy of 3%.
+                () -> Assertions.assertEquals(111111, test2.getDistanceTo(test3), 111111 * 0.03),
+                () -> Assertions.assertEquals(14.5, test4.getDistanceTo(test5), 14.5 * 0.03)
 
         );
     }
@@ -41,7 +41,7 @@ public class NodeTests {
     }
 
     @Test
-    public void testCompare(){
+    public void testCompare() {
         test1.getDistanceTo(test2);
         test2.getDistanceTo(test1);
         test3.getDistanceTo(test1);
