@@ -12,7 +12,8 @@ public class Node implements Comparable<Node> {
 
     /**
      * Creates a node.
-     * @param id The id of the node
+     *
+     * @param id  The id of the node
      * @param lon The longitude of the node in decimal degrees.
      * @param lat The latitude of the node in decimal degrees.
      */
@@ -26,12 +27,13 @@ public class Node implements Comparable<Node> {
     /**
      * Calculates the distance between this node, and target node, using the Haversine formula.
      * Has to set distanceToCurrentNode, to help with sorting by distance.
+     * Based on the formulas by: <a href="https://www.movable-type.co.uk/scripts/latlong.html">Movable Types</a>
      *
      * @param target The target node
      * @return The distance in meters.
      */
     public double getDistanceTo(Node target) {
-        double R = 6_356_752.314245D;
+        double R = 6371000.0;
         double phi1 = lat * Math.PI / 180;
         double phi2 = target.getLat() * Math.PI / 180;
         double deltaphi = (target.getLat() - lat) * Math.PI / 180;
@@ -43,6 +45,9 @@ public class Node implements Comparable<Node> {
         return R * c;
     }
 
+    /**
+     * Based on the formulas by: <a href="https://www.movable-type.co.uk/scripts/latlong.html">Movable Types</a>
+     */
     public void getBearingTo(Node node) {
         double y = Math.sin(node.getLon() - lon) * Math.cos(node.getLat());
         double x = Math.cos(lat) * Math.sin(node.getLat()) -
