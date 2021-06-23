@@ -1,3 +1,8 @@
+package data;
+
+import data.MetValue;
+import data.WayType;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +58,7 @@ public class DatabaseManager {
     /**
      * Fetches all met values currently from the metvalues table.
      *
-     * @return A list of MetValue objects.
+     * @return A list of data.MetValue objects.
      */
     public List<MetValue> getBoxOptions() {
         List<MetValue> metValues = new ArrayList<>();
@@ -77,7 +82,7 @@ public class DatabaseManager {
     /**
      * Fetches all the walkable types of way from the waytype table.
      *
-     * @return A list of WayType objects.
+     * @return A list of data.WayType objects.
      */
     public List<WayType> getWayTypes() {
         List<WayType> wayTypes = new ArrayList<>();

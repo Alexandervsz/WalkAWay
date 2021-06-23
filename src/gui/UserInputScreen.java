@@ -1,3 +1,9 @@
+package gui;
+
+import data.DatabaseManager;
+import data.MetValue;
+import data.User;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -60,7 +66,7 @@ public class UserInputScreen extends JDialog {
     }
 
     /**
-     * Creates a new User object, and passes this to the pathfinding algorithm, if the input is invalid it resets
+     * Creates a new data.User object, and passes this to the pathfinding algorithm, if the input is invalid it resets
      * the input fields.
      *
      * @param actionEvent The user pressed the button.
@@ -119,6 +125,7 @@ public class UserInputScreen extends JDialog {
 
     /**
      * The main method which starts up the entire application.
+     *
      * @param args arguments. (not implemented)
      */
     public static void main(String[] args) {

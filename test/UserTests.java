@@ -1,8 +1,9 @@
+import data.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test class for the User class.
+ * Test class for the data.User class.
  */
 public class UserTests {
     User test1 = new User(3.0, 70, 5.1, 200, 5.0626701, 52.6492016, false);

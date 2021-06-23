@@ -1,3 +1,5 @@
+package algorithm;
+
 import java.util.*;
 
 /**
@@ -177,7 +179,7 @@ public class Way {
 
     @Override
     public String toString() {
-        return "Way{" +
+        return "algorithm.Way{" +
                 "id='" + id + '\'' +
                 '}';
     }

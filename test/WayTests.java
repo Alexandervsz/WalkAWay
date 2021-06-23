@@ -1,10 +1,12 @@
+import algorithm.Node;
+import algorithm.Way;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.TreeMap;
 
 /**
- * Test class for the Way class.
+ * Test class for the algorithm.Way class.
  */
 public class WayTests {
     Node test1 = new Node("test1", 5.068873, 52.636179);

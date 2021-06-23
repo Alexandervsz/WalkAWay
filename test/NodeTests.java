@@ -1,8 +1,9 @@
+import algorithm.Node;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
 /**
- * Test class for Node class.
+ * Test class for algorithm.Node class.
  */
 public class NodeTests {
     Node test1 = new Node("test", 5.0650352, 52.650352);

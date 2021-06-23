@@ -1,3 +1,10 @@
+package data;
+
+import algorithm.Node;
+import algorithm.Way;
+import data.DatabaseManager;
+import data.WayType;
+import gui.LoadingDialog;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -20,8 +27,8 @@ import java.util.*;
  * This class talks to the overpass API, and processes the data so its can be used by the pathfinding algorithm.
  */
 public class FileManager {
-    Set<Node> nodeSet;
-    Set<Way> waySet;
+    private Set<Node> nodeSet;
+    private Set<Way> waySet;
 
     /**
      * Sends a query to gather all walkable ways, in a bbox with a radius of total distance from the begin node.
@@ -135,7 +142,7 @@ public class FileManager {
                             }
                         }
                         if (targetNode == null) {
-                            throw new IOException("Node not found! (this means there's something wrong with the json file.)");
+                            throw new IOException("algorithm.Node not found! (this means there's something wrong with the json file.)");
                         }
                         newWay.addNode(count, targetNode);
                         count++;

@@ -1,3 +1,5 @@
+package data;
+
 /**
  * Data class for types of way, used in building queries for overpass.
  */

@@ -1,3 +1,10 @@
+package gui;
+
+import algorithm.Node;
+import algorithm.PathFinder;
+import algorithm.Way;
+import data.FileManager;
+import data.User;
 import org.apache.commons.io.FileUtils;
 import org.json.simple.parser.ParseException;
 
@@ -74,11 +81,11 @@ public class PathFindingActivity {
         String distance = String.valueOf(decimalFormat.format(totalDistance));
         String calories = String.valueOf((int) user.getEstimatedKcal(totalDistance));
         String time = String.valueOf(timeFormat.format(user.getTime(totalDistance)));
-        File file = new File("path/walking_route.gpx");
+        File file = new File("res/walking_route.gpx");
         FileManager fileManager = new FileManager();
-        fileManager.generateGpx(file, "path/walking_route", path);
+        fileManager.generateGpx(file, "res/walking_route", path);
 
-        File htmlTemplateFile = new File("template.html");
+        File htmlTemplateFile = new File("res/template.html");
         String htmlString = FileUtils.readFileToString(htmlTemplateFile, "ISO-8859-1");
         StringBuilder nodes = new StringBuilder();
         for (int x = 0; x < path.size(); x++) {
@@ -92,10 +99,15 @@ public class PathFindingActivity {
             }
         }
         htmlString = htmlString.replace("$insertnode", nodes.toString());
-        File newHtmlFile = new File("path/new.html");
+        File newHtmlFile = new File("res/new.html");
         FileUtils.writeStringToFile(newHtmlFile, htmlString, "ISO-8859-1");
 
         new OutputScreen(distance, calories, time);
         Desktop.getDesktop().browse(newHtmlFile.toURI());
+    }
+
+    public static void main(String[] args) {
+        User user = new User(3.5, 70.0, 5.0, 69, 5.071998, 52.639074, false);
+        new PathFindingActivity(user).start();
     }
 }

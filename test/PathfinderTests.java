@@ -1,3 +1,6 @@
+import algorithm.Node;
+import algorithm.PathFinder;
+import algorithm.Way;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -7,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Test class for the PathFinder class.
+ * Test class for the algorithm.PathFinder class.
  */
 public class PathfinderTests {
     Node start = new Node("start", 5.070738, 52.637090);

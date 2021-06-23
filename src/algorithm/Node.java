@@ -1,3 +1,5 @@
+package algorithm;
+
 import java.util.Objects;
 
 /**
@@ -86,7 +88,7 @@ public class Node implements Comparable<Node> {
 
     @Override
     public String toString() {
-        return "Node{" +
+        return "algorithm.Node{" +
                 "id='" + id + '\'' +
                 ", lon=" + lon +
                 ", lat=" + lat +

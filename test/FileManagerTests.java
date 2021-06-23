@@ -1,3 +1,5 @@
+import algorithm.Node;
+import data.FileManager;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.Test;
@@ -14,7 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * Test class which tests FileManager.
+ * Test class which tests data.FileManager.
  */
 public class FileManagerTests {
     /**
@@ -102,7 +104,7 @@ public class FileManagerTests {
     @Test
     public void testJson() throws Exception {
         FileManager fileManager = new FileManager();
-        FileReader fileReader = new FileReader("test/SampleJson.json");
+        FileReader fileReader = new FileReader("res/SampleJson.json");
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject) jsonParser.parse(fileReader);
         fileManager.parseJson(jsonObject);
@@ -113,7 +115,7 @@ public class FileManagerTests {
                 () -> Assertions.assertEquals(337, fileManager.getWaySet().size())
         );
         try {
-            FileReader fileReader2 = new FileReader("test/SampleJsonNodeRemoved.json");
+            FileReader fileReader2 = new FileReader("res/SampleJsonNodeRemoved.json");
             JSONObject jsonObject2 = (JSONObject) jsonParser.parse(fileReader2);
             fileManager.parseJson(jsonObject2);
             fail("Method did not throw an exception on missing node.");
@@ -132,7 +134,7 @@ public class FileManagerTests {
         // Since current time is used during generating of path, only empty file can be verified.
         FileManager fileManager = new FileManager();
         List<Node> emptyPoints = new ArrayList<>();
-        File fileEmpty = new File("empty.gpx");
+        File fileEmpty = new File("res/empty.gpx");
         String filename = "test";
         fileManager.generateGpx(fileEmpty, filename, emptyPoints);
         String actual = Files.readString(fileEmpty.toPath());

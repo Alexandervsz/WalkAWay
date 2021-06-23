@@ -1,3 +1,5 @@
+package data;
+
 /**
  * A data class for the user, stores the data entered by the user and calculates the distance required of the path.
  */
