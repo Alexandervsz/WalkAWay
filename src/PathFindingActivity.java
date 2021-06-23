@@ -63,9 +63,10 @@ public class PathFindingActivity {
     }
 
     /**
-     * Generates a GPX file, shows a screen with information about the generated path, and the generated path itself.
+     * Generates a GPX file, shows a screen with information about the generated path and creates a new HTML file
+     * based on the template. Then displays this HTML file which in turn displays the generated route.
      *
-     * @throws IOException When the html template cannot be interpreted correctly.
+     * @throws IOException When there's an error with the html file.
      */
     private void showOutput(List<Node> path, double totalDistance) throws IOException {
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
@@ -73,10 +74,10 @@ public class PathFindingActivity {
         String distance = String.valueOf(decimalFormat.format(totalDistance));
         String calories = String.valueOf((int) user.getEstimatedKcal(totalDistance));
         String time = String.valueOf(timeFormat.format(user.getTime(totalDistance)));
-        new OutputScreen(distance, calories, time);
         File file = new File("path/walking_route.gpx");
         FileManager fileManager = new FileManager();
         fileManager.generateGpx(file, "path/walking_route", path);
+
         File htmlTemplateFile = new File("template.html");
         String htmlString = FileUtils.readFileToString(htmlTemplateFile, "ISO-8859-1");
         StringBuilder nodes = new StringBuilder();
@@ -93,11 +94,13 @@ public class PathFindingActivity {
         htmlString = htmlString.replace("$insertnode", nodes.toString());
         File newHtmlFile = new File("path/new.html");
         FileUtils.writeStringToFile(newHtmlFile, htmlString, "ISO-8859-1");
+
+        new OutputScreen(distance, calories, time);
         Desktop.getDesktop().browse(newHtmlFile.toURI());
     }
 
     public static void main(String[] args) {
-        User user = new User(3.5, 70.0, 5.0, 100, 5.071998, 52.639074, false);
+        User user = new User(3.5, 70.0, 5.0, 50, 5.071998, 52.639074, false);
         new PathFindingActivity(user).start();
     }
 }
