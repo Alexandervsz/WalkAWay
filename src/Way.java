@@ -40,8 +40,7 @@ public class Way {
      */
     public Node getClosestNode(Node target) {
         for (Node node : nodeSet) {
-            node.getDistanceTo(target);
-        }
+            node.getDistanceTo(target);}
         return Collections.min(nodeSet);
     }
 
