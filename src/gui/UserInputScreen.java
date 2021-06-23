@@ -59,7 +59,7 @@ public class UserInputScreen extends JDialog {
         setLayout(new GridLayout());
         add(mainPanel);
         validate();
-        this.setTitle("Enter your data");
+        this.setTitle("WalkAWay");
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setVisible(true);
         this.setLocationRelativeTo(null);

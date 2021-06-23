@@ -27,6 +27,7 @@ public class OutputScreen extends JFrame {
         setIconImage(icon);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("WalkAWay");
         distanceLabel.setText("Total distance of path: " + distance + "m.");
         caloriesLabel.setText("Estimated amount of calories burnt when walking this route: " + calories);
         timeLabel.setText("Estimated duration of activity: " + time + " minutes.");

@@ -40,7 +40,7 @@ public class MetInserter extends JFrame {
         setIconImage(icon);
         add(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("Enter your data");
+        setTitle("WalkAWay");
         pack();
         setVisible(true);
     }
