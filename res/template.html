@@ -16,14 +16,14 @@
 </head>
 <body>
 <div id="mapid"></div>
-<script>var mymap = L.map('mapid').setView([0, 0], 10);
+<script>const mymap = L.map('mapid').setView([0, 0], 10);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: 'Map data &copy; <a href="https://www.osm.org">OpenStreetMap</a>'
 }).addTo(mymap);
-var latlngs = [
+const latlngs = [
     $insertnode
 ];
-var polyline = L.polyline(latlngs, {color: 'red'}).addTo(mymap);
+const polyline = L.polyline(latlngs, {color: 'red'}).addTo(mymap);
 mymap.fitBounds(polyline.getBounds());
 </script>
 
