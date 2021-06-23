@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class UserInputScreen extends JDialog {
     private JButton confirmButton;
-    private JLabel metsLabel;
+    private JLabel metLabel;
     private JLabel weightLabel;
     private JLabel walkingSpeedLabel;
     private JLabel kcalLabel;
@@ -24,7 +24,7 @@ public class UserInputScreen extends JDialog {
     private JTextField weightField;
     private JTextField walkingSpeedField;
     private JTextField kcalField;
-    private JComboBox<MetValue> metsBox;
+    private JComboBox<MetValue> metBox;
     private JTextField lonField;
     private JLabel lonLabel;
     private JTextField latField;
@@ -39,19 +39,20 @@ public class UserInputScreen extends JDialog {
      * Initialises the UI.
      */
     public UserInputScreen() {
-        metsLabel.setText("Activity: ");
+        metLabel.setText("Activity: ");
         weightLabel.setText("Weight: ");
         DatabaseManager databaseManager = new DatabaseManager();
         List<MetValue> metValues = databaseManager.getBoxOptions();
         walkingSpeedLabel.setText("Speed: ");
         kcalLabel.setText("Calories to burn: ");
         lonLabel.setText("Longitude: ");
-        latLabel.setText("Lattitude: ");
+        latLabel.setText("Latitude: ");
         confirmButton.setText("Confirm");
+        randomizeCheckBox.setText("Randomize");
         confirmButton.addActionListener(this::createUser);
-        metsBox.addActionListener(this::changeUI);
-        for (MetValue mets : metValues) {
-            metsBox.addItem(mets);
+        metBox.addActionListener(this::changeUI);
+        for (MetValue met : metValues) {
+            metBox.addItem(met);
         }
         Image icon = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB_PRE); //Removes the ugly icon...
         setIconImage(icon);
@@ -72,7 +73,7 @@ public class UserInputScreen extends JDialog {
      * @param actionEvent The user pressed the button.
      */
     private void createUser(ActionEvent actionEvent) {
-        MetValue metValue = (MetValue) metsBox.getSelectedItem();
+        MetValue metValue = (MetValue) metBox.getSelectedItem();
         assert metValue != null;
         try {
             double walkingSpeed;
@@ -83,11 +84,11 @@ public class UserInputScreen extends JDialog {
                 walkingSpeed = metValue.getSpeedA();
             }
             double kcal = Double.parseDouble(kcalField.getText());
-            double mets = metValue.getMetValue();
+            double met = metValue.getMetValue();
             double lon = Double.parseDouble(lonField.getText());
             double lat = Double.parseDouble(latField.getText());
             boolean isRandom = randomizeCheckBox.isSelected();
-            User user = new User(mets, weight, walkingSpeed, kcal, lon, lat, isRandom);
+            User user = new User(met, weight, walkingSpeed, kcal, lon, lat, isRandom);
             dispose();
             setVisible(false);
             new PathFindingActivity(user).start();
@@ -106,7 +107,7 @@ public class UserInputScreen extends JDialog {
      * @param actionEvent The user chose an option.
      */
     private void changeUI(ActionEvent actionEvent) {
-        MetValue metValue = (MetValue) metsBox.getSelectedItem();
+        MetValue metValue = (MetValue) metBox.getSelectedItem();
         assert metValue != null;
         walkingSpeedLabel.setText("Speed: ");
         if (metValue.getSpeedA() != 0) {
