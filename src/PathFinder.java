@@ -14,8 +14,9 @@ public class PathFinder {
 
     /**
      * Creates a new pathfinder object.
-     * @param beginNode The node where the pathfinder should begin.
-     * @param waySet The overpass data
+     *
+     * @param beginNode      The node where the pathfinder should begin.
+     * @param waySet         The overpass data
      * @param distanceToWalk The required distance of the generated path.
      */
     public PathFinder(Node beginNode, Set<Way> waySet, double distanceToWalk) {
@@ -131,6 +132,7 @@ public class PathFinder {
 
     /**
      * Processes the required nodes. Adds their distance to the total, and the nodes themselves to the path.
+     * Ignores the first node in the path since it has already been processed earlier.
      *
      * @param wayPath   The processed treemap.
      * @param entryNode The node where the algorithm entered the path.
