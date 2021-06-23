@@ -22,10 +22,10 @@ Then the application saves the route as a GPX file, and finally shows the route 
 
 ![route](Route.png)
 
-#Getting Started
+# Getting Started
 To get started planning some routes you will first need to take care of some things.
 
-##Requirements
+## Requirements
 - <a href="https://www.oracle.com/java/technologies/javase-jdk16-downloads.html"> Java SDK 16</a>
 - A Java IDE of choice
 - <a href="https://www.postgresql.org/download">PostgreSQL</a>
@@ -34,7 +34,7 @@ To get started planning some routes you will first need to take care of some thi
 - <a href="https://cliftonlabs.github.io/json-simple/"> A copy of the json simple Jar file</a>
 - A web browser of choice
 
-##Setup
+## Setup
 To begin, clone/download this repository and open it in your IDE of choice (IntelliJ IDEA used in the screenshots). Then add the three jar files to the dependencies of the main module, called WalkAWay.
 Then open your pgadmin screen (or terminal) and create a new database named walkaway. Once this is done right click your new database, and select query tool.
 Once this is open run the two scripts inside the db folder of this repository, and execute them. 
