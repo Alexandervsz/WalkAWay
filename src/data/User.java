@@ -94,7 +94,7 @@ public class User {
 
     /**
      * Returns the user's kcal per minute.
-     * @return the kcal per minute.
+     * @return The kcal per minute.
      */
     public double getKcalPerMinute() {
         return kcalPerMinute;
