@@ -31,14 +31,15 @@ To get started planning some routes you will first need to take care of some thi
 - <a href="https://www.postgresql.org/download">PostgreSQL</a>
 - <a href="https://jdbc.postgresql.org/download.html">The Java PostgreSQL driver
 - <a href="https://commons.apache.org/proper/commons-io/download_io.cgi"> The Apache commons.io library</a> (only the main library in the zip file, at the time of writing the filename is: commons-io-2.10.0.jar) 
-- <a href="https://cliftonlabs.github.io/json-simple/"> A copy of the json simple Jar file</a>
+- <a href"https://code.google.com/archive/p/json-simple/downloads"> A copy of the json simple Jar file</a>
 - A web browser of choice
 
 ## Setup
 To begin, clone/download this repository and open it in your IDE of choice (IntelliJ IDEA used in the screenshots). Then add the three jar files to the dependencies of the main module, called WalkAWay.
 ![dependency](AddDependency.png)
+![jar](jar.png)
 Then open your pgadmin screen (or terminal) and create a new database named walkaway. Once this is done, right-click your new database, and select query tool.
-Copy the two scripts inside the db folder of this repository, and execute them. 
-Then all that's left is opening DatabaseManager.java (src/data) and changing the password to your own PostgreSQL password.
-To confirm everything is working the tests can be executed in the test folder. (For this you will need to add the JUnit4 and JUnit5.7.0 libraries, but your IDE should be able to install them automatically.)
+Copy the script inside the db folder of this repository, and execute it. 
+Then, all that's left is opening DatabaseManager.java (src/data) and changing the password to your own PostgreSQL password (line 21).
+To confirm everything is working the tests can be executed in the test folder. (For this you will need to add the JUnit4 and JUnit5.7.0 libraries, but your IDE should be able to install them automatically. Make sure to install 4 first if using IDEA.)
 To start the application simply run UserInputScreen, found under src/gui/UserInputScreen.
