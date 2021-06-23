@@ -178,7 +178,7 @@ public class FileManager {
             writer.flush();
             writer.close();
         } catch (IOException e) {
-            System.out.println("Error Writting Path" + e);
+            System.out.println("Error Writing Path" + e);
         }
     }
 
