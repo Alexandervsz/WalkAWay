@@ -41,7 +41,7 @@ public class FileManagerTests {
     }
 
     /**
-     * Tests if the bounding box is correct at the earstern most point of earth
+     * Tests if the bounding box is correct at the eastern most point of earth
      */
     @Test
     public void testBboxEast() {
@@ -51,7 +51,7 @@ public class FileManagerTests {
     }
 
     /**
-     * Tests whether the bouding box is correct in the Netherlands.
+     * Tests whether the bounding box is correct in the Netherlands.
      */
     @Test
     public void testBboxNl() {
@@ -147,13 +147,13 @@ public class FileManagerTests {
     /**
      * Generates a Bbox, and then returns the distance between the edge points.
      *
-     * @param totaldistance The total distance to be walked.
+     * @param totalDistance The total distance to be walked.
      * @param testNode      The starting point to base the Bbox on.
      * @return The distance between the extremities of the bounding box.
      */
-    public double verifyBbox(double totaldistance, Node testNode) {
+    public double verifyBbox(double totalDistance, Node testNode) {
         FileManager fileManager = new FileManager();
-        String Bbox1 = fileManager.generateBbox(testNode, totaldistance, false);
+        String Bbox1 = fileManager.generateBbox(testNode, totalDistance, false);
         String[] points = Bbox1.split(",");
         Node test1point1 = new Node("test1", Double.parseDouble(points[0]), Double.parseDouble(points[1]));
         Node test1point2 = new Node("test1", Double.parseDouble(points[2]), Double.parseDouble(points[3]));
