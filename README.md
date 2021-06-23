@@ -31,7 +31,7 @@ To get started planning some routes you will first need to take care of some thi
 - <a href="https://www.postgresql.org/download">PostgreSQL</a>
 - <a href="https://jdbc.postgresql.org/download.html">The Java PostgreSQL driver
 - <a href="https://commons.apache.org/proper/commons-io/download_io.cgi"> The Apache commons.io library</a> (only the main library in the zip file, at the time of writing the filename is: commons-io-2.10.0.jar) 
-- <a href"https://code.google.com/archive/p/json-simple/downloads"> A copy of the json simple Jar file</a>
+- <a href="https://code.google.com/archive/p/json-simple/downloads"> A copy of the json simple Jar file</a>
 - A web browser of choice
 
 ## Setup
