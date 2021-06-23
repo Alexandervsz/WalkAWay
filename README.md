@@ -7,7 +7,7 @@ The application also saves a gpx file of the generated path, so the user can tak
 # How does it work?
 On launch the user will be presented with a dialog:
 
-![input](InputScreen.png)
+![input](img/InputScreen.png)
 
 In the drop down box the user can choose several activities which are safe to perform on the sidewalk.
 Afterwards the user has to enter their weight in kilogrammes, and the amount of calories they want to burn whilst performing the exercise.
@@ -15,12 +15,12 @@ Afterwards, the user has to enter their coordinates in decimal degrees. These ca
 Finally, the user has the option to randomize the route a little bit, by clicking the randomize checkbox.
 Once the user has finished entering their data, a loading screen will pop up.
 
-![loading](LoadingDialog.png)
+![loading](img/LoadingDialog.png)
 
 The application gets all the walkable paths from the <a href="https://www.openstreetmap.org/">OpenStreetMaps</a> servers, and then starts "walking" until it finds a path.
 Then the application saves the route as a GPX file, and finally shows the route with a dialog containing information about the route.
 
-![route](Route.png)
+![route](img/Route.png)
 
 # Getting Started
 To get started planning some routes you will first need to take care of some things.
@@ -36,8 +36,8 @@ To get started planning some routes you will first need to take care of some thi
 
 ## Setup
 To begin, clone/download this repository and open it in your IDE of choice (IntelliJ IDEA used in the screenshots). Then add the three jar files to the dependencies of the main module, called WalkAWay.
-![dependency](AddDependency.png)
-![jar](jar.png)
+![dependency](img/AddDependency.png)
+![jar](img/jar.png)
 Then open your pgadmin screen (or terminal) and create a new database named walkaway. Once this is done, right-click your new database, and select query tool.
 Copy the script inside the db folder of this repository, and execute it. 
 Then, all that's left is opening DatabaseManager.java (src/data) and changing the password to your own PostgreSQL password (line 21).
