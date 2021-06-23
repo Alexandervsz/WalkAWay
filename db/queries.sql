@@ -1,4 +1,15 @@
-insert into public.metvalues (pkey, metvalue, speeda, activity, speedb)
+create table if not exists metvalues
+(
+    pkey serial not null
+    constraint metvalues_pkey
+    primary key,
+    metvalue numeric,
+    speeda numeric,
+    activity varchar,
+    speedb numeric
+);
+
+insert into metvalues (pkey, metvalue, speeda, activity, speedb)
 values  (6, 3, 4.02336, 'Walking', 0),
         (7, 3.5, 4.5061632, 'Walking', 5.1499008),
         (8, 4.3, 5.632704, 'Walking', 0),
@@ -23,3 +34,23 @@ values  (6, 3, 4.02336, 'Walking', 0),
         (27, 9.8, 17.702784, 'Rollerblading', 0),
         (28, 12.3, 20.921472, 'Rollerblading', 21.8870784),
         (29, 14, 24.14016, 'Rollerblading', 0);
+
+create table waytype
+(
+    id serial not null
+        constraint nodetype_pkey
+            primary key,
+    main_type varchar not null,
+    sub_type varchar
+);
+
+insert into waytype (id, main_type, sub_type)
+values  (1, 'highway', 'residential'),
+        (2, 'highway', 'footway'),
+        (3, 'highway', 'cycleway'),
+        (4, 'highway', 'path'),
+        (7, 'highway', 'service'),
+        (9, 'highway', 'unclassified'),
+        (10, 'highway', 'living_street'),
+        (11, 'highway', 'track'),
+        (12, 'highway', 'pedestrian');
