@@ -105,9 +105,4 @@ public class PathFindingActivity {
         new OutputScreen(distance, calories, time);
         Desktop.getDesktop().browse(newHtmlFile.toURI());
     }
-
-    public static void main(String[] args) {
-        User user = new User(3.5, 70.0, 5.0, 69, 5.071998, 52.639074, false);
-        new PathFindingActivity(user).start();
-    }
 }
