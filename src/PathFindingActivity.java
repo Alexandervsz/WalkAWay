@@ -19,6 +19,7 @@ public class PathFindingActivity {
 
     /**
      * Creates a new pathfinding activity.
+     *
      * @param user A user to generate the path for.
      */
     public PathFindingActivity(User user) {
@@ -43,12 +44,11 @@ public class PathFindingActivity {
                 dialog.setText(" Generating path...");
                 PathFinder pathFinder = new PathFinder(beginNode, waySet, user.getDistance());
                 List<Node> path = pathFinder.getRoute();
-                if (path.isEmpty()){
+                if (path.isEmpty()) {
                     new PathNotFound();
-                }
-                else{
-                dialog.setProgress(100);
-                showOutput(path, pathFinder.getTotalDistance());
+                } else {
+                    dialog.setProgress(100);
+                    showOutput(path, pathFinder.getTotalDistance());
                 }
                 return null;
             }
@@ -97,10 +97,5 @@ public class PathFindingActivity {
 
         new OutputScreen(distance, calories, time);
         Desktop.getDesktop().browse(newHtmlFile.toURI());
-    }
-
-    public static void main(String[] args) {
-        User user = new User(3.5, 70.0, 5.0, 50, 5.071998, 52.639074, false);
-        new PathFindingActivity(user).start();
     }
 }
