@@ -44,7 +44,7 @@ public class LoadingDialog extends JDialog {
     }
 
     /**
-     * Set the progresbar to the given progress
+     * Sets the progress bar to the given progress
      *
      * @param progress an int between 0 and 100.
      */
