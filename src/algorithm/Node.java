@@ -27,7 +27,7 @@ public class Node implements Comparable<Node> {
     /**
      * Calculates the distance between this node, and target node, using the Haversine formula.
      * Has to set distanceToCurrentNode, to help with sorting by distance.
-     * Based on the formulas by: <a href="https://www.movable-type.co.uk/scripts/latlong.html">Movable Types</a>
+     * Based on the formulas by: <a href="https://www.movable-type.co.uk/scripts/latlong.html">Movable Type</a>
      *
      * @param target The target node
      * @return The distance in meters.

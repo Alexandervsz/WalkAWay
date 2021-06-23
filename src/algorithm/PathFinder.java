@@ -163,6 +163,7 @@ public class PathFinder {
 
     /**
      * Used in testing
+     *
      * @return The generated path.
      */
     public List<Node> getPath() {

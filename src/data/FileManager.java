@@ -2,8 +2,6 @@ package data;
 
 import algorithm.Node;
 import algorithm.Way;
-import data.DatabaseManager;
-import data.WayType;
 import gui.LoadingDialog;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -78,7 +76,7 @@ public class FileManager {
     /**
      * Generates a bbox, which is required in an overpass request. It generates a bbox of total distance * total distance
      * so even in the worst case scenario (straight way from A to B) enough data is available.
-     * This function has an error rate of around 30%, but always overestimates.
+     * This function has an error rate of around 15%, but always overestimates.
      *
      * @param currentNode   The center node to draw the bbox around.
      * @param totalDistance The total required distance of the path.
@@ -86,7 +84,7 @@ public class FileManager {
      * @return A string to be used in further processing.
      */
     public String generateBbox(Node currentNode, double totalDistance, boolean isRandom) {
-        totalDistance = totalDistance * 0.8;
+        totalDistance = totalDistance * 0.8; // to compensate for the inaccuracy of the formula.
         if (isRandom) {
             double generatedDouble = 0.8 + new Random().nextDouble() * (0.8 - 1.3);
             totalDistance = totalDistance * generatedDouble;
@@ -142,7 +140,7 @@ public class FileManager {
                             }
                         }
                         if (targetNode == null) {
-                            throw new IOException("algorithm.Node not found! (this means there's something wrong with the json file.)");
+                            throw new IOException("Node not found! (this means there's something wrong with the json file.)");
                         }
                         newWay.addNode(count, targetNode);
                         count++;
@@ -161,24 +159,24 @@ public class FileManager {
      * @param points The path to base the gpx file on, ordered from start to finish.
      */
     public void generateGpx(File file, String name, List<Node> points) {
-        String header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?><gpx xmlns=\"http://www.topografix.com/GPX/1/1\" creator=\"MapSource 6.15.5\" version=\"1.1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"  xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\"><trk>\n";
+        String header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?><gpx xmlns=\"http://www.topografix.com/GPX/1/1\" creator=\"WalkAWay\" version=\"1.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"  xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\"><trk>\n";
         name = "<name>" + name + "</name><trkseg>\n";
-        StringBuilder segments = new StringBuilder();
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+        StringBuilder stringBuilder = new StringBuilder();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
         for (Node location : points) {
-            segments.append("<trkpt lat=\"").append(location.getLat()).append("\" lon=\"").append(location.getLon()).append("\"><time>").append(df.format(new Date(System.currentTimeMillis()))).append("</time></trkpt>\n");
+            stringBuilder.append("<trkpt lat=\"").append(location.getLat()).append("\" lon=\"").append(location.getLon()).append("\"><time>").append(dateFormat.format(new Date(System.currentTimeMillis()))).append("</time></trkpt>\n");
         }
         String footer = "</trkseg></trk></gpx>";
         try {
-            FileWriter writer = new FileWriter(file, false);
-            writer.append(header);
-            writer.append(name);
-            writer.append(segments.toString());
-            writer.append(footer);
-            writer.flush();
-            writer.close();
+            FileWriter fileWriter = new FileWriter(file, false);
+            fileWriter.append(header);
+            fileWriter.append(name);
+            fileWriter.append(stringBuilder.toString());
+            fileWriter.append(footer);
+            fileWriter.flush();
+            fileWriter.close();
         } catch (IOException e) {
-            System.out.println("Error Writing Path" + e);
+            System.out.println("Error Writing GPX file!" + e);
         }
     }
 

@@ -81,7 +81,6 @@ public class User {
         return lat;
     }
 
-
     public double getKcalPerMinute() {
         return kcalPerMinute;
     }

@@ -15,6 +15,7 @@ public class Way {
 
     /**
      * Creates a new way object
+     *
      * @param id The id number of the way.
      */
     public Way(String id) {
@@ -42,7 +43,8 @@ public class Way {
      */
     public Node getClosestNode(Node target) {
         for (Node node : nodeSet) {
-            node.getDistanceTo(target);}
+            node.getDistanceTo(target);
+        }
         return Collections.min(nodeSet);
     }
 
@@ -106,6 +108,7 @@ public class Way {
 
     /**
      * Returns the contents of the way (the nodes and their positions)
+     *
      * @return A map with the nodes and their positions.
      */
     public TreeMap<Integer, Node> getNodePositions() {
@@ -114,6 +117,7 @@ public class Way {
 
     /**
      * Returns the contents of the way, reversed.
+     *
      * @return A map with the nodes and this positions.
      */
     public NavigableMap<Integer, Node> getNodePositionsReversed() {
@@ -122,6 +126,7 @@ public class Way {
 
     /**
      * Sets the direction the pathfinding algorithm traveled the path.
+     *
      * @param direction 1 for forwards, -1 for backwards.
      */
     public void setDirection(int direction) {
@@ -130,6 +135,7 @@ public class Way {
 
     /**
      * Gets the way by which the algorithm got there.
+     *
      * @return The way the algorithm processed before this one.
      */
     public Way getPreviousWay() {
@@ -138,6 +144,7 @@ public class Way {
 
     /**
      * Function for the pathfinding algorithm to set the previous way.
+     *
      * @param previousWay The way the algorithm was processing before this one.
      */
     public void setPreviousWay(Way previousWay) {
@@ -148,6 +155,7 @@ public class Way {
 
     /**
      * Returns the point at which the algorithm entered the way.
+     *
      * @return the number of the node, by which the algorithm entered.
      */
     public int getEntryPoint() {
@@ -156,6 +164,7 @@ public class Way {
 
     /**
      * Is called when the algorithm starts processing a way.
+     *
      * @param entryPoint The point the algorithm was processing.
      */
     public void setEntryPoint(int entryPoint) {

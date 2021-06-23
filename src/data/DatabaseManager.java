@@ -1,8 +1,5 @@
 package data;
 
-import data.MetValue;
-import data.WayType;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +17,7 @@ public class DatabaseManager {
         try {
             Class.forName("org.postgresql.Driver");
             c = DriverManager
-                    .getConnection("jdbc:postgresql://localhost:5432/ipass",
+                    .getConnection("jdbc:postgresql://localhost:5432/walkaway",
                             "postgres", "postgres");
             c.setAutoCommit(false);
         } catch (Exception e) {
@@ -32,7 +29,7 @@ public class DatabaseManager {
     /**
      * Inserts a met value into the database.
      *
-     * @param met     The met value of the activity
+     * @param met      The met value of the activity
      * @param speedA   The beginning of the speed range in miles per hour.
      * @param speedB   The end of the speed range in miles per hour.
      * @param activity The name of the activity, only use activities which can be done while following a path.
