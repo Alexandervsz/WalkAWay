@@ -34,6 +34,7 @@ public class UserInputScreen extends JDialog {
     private JPanel southPanel;
     private JPanel northPanel;
     private JCheckBox randomizeCheckBox;
+    private JLabel hiddenlabel;
 
     /**
      * Initialises the UI.
@@ -87,17 +88,40 @@ public class UserInputScreen extends JDialog {
             double met = metValue.getMetValue();
             double lon = Double.parseDouble(lonField.getText());
             double lat = Double.parseDouble(latField.getText());
+            if (kcal < 0){
+                clearScreen("Invalid amount of calories entered!");
+                return;
+            }
+            if (weight < 0){
+                clearScreen("Invalid weight entered!");
+                return;
+            }
+            if (!(lat < 90.0 && lat > -90.0)){
+                clearScreen("Invalid latitude entered!");
+                return;
+            }
+            if (!(lon < 180.0 && lon > -180.0)){
+                clearScreen("Invalid longitude entered!");
+                return;
+            }
             boolean isRandom = randomizeCheckBox.isSelected();
             User user = new User(met, weight, walkingSpeed, kcal, lon, lat, isRandom);
             dispose();
             setVisible(false);
             new PathFindingActivity(user).start();
         } catch (NumberFormatException e) {
-            weightField.setText("");
-            walkingSpeedField.setText("");
-            kcalField.setText("");
-            lonField.setText("");
+            clearScreen("Invalid number entered!");
         }
+    }
+
+    public void clearScreen(String text){
+        weightField.setText("");
+        walkingSpeedField.setText("");
+        kcalField.setText("");
+        lonField.setText("");
+        latField.setText("");
+        hiddenlabel.setText(text);
+
     }
 
     /**
