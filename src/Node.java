@@ -8,7 +8,6 @@ public class Node implements Comparable<Node> {
     private final double lon; //decimal degrees.
     private final double lat; //decimal degrees.
     private double distanceToCurrentNode; //meters.
-    private double bearingToCurrentNode;
 
     /**
      * Creates a node.
@@ -21,7 +20,6 @@ public class Node implements Comparable<Node> {
         this.id = id;
         this.lon = lon;
         this.lat = lat;
-        this.bearingToCurrentNode = 0;
     }
 
     /**
@@ -46,33 +44,12 @@ public class Node implements Comparable<Node> {
     }
 
     /**
-     * Based on the formulas by: <a href="https://www.movable-type.co.uk/scripts/latlong.html">Movable Types</a>
-     */
-    public void getBearingTo(Node node) {
-        double y = Math.sin(node.getLon() - lon) * Math.cos(node.getLat());
-        double x = Math.cos(lat) * Math.sin(node.getLat()) -
-                Math.sin(lat) * Math.cos(node.getLat()) * Math.cos(node.getLon() - lon);
-        double theta = Math.toDegrees(Math.atan2(y, x));
-        /*if (theta < 0) {
-            theta += 360.0;
-        }*/
-        //bearingToCurrentNode = theta;
-        //theta = (theta * 180 / Math.PI + 360) % 360;
-        bearingToCurrentNode = (theta * 180 / Math.PI + 360) % 360;
-
-    }
-
-    /**
      * For use in pathfinding.
      *
      * @return The distance to the current node (in this object).
      */
     public double getDistanceToCurrentNode() {
         return distanceToCurrentNode;
-    }
-
-    public double getBearingToCurrentNode() {
-        return bearingToCurrentNode;
     }
 
     /**
