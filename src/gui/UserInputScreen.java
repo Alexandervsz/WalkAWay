@@ -114,6 +114,10 @@ public class UserInputScreen extends JDialog {
         }
     }
 
+    /**
+     * Clears the screen when invalid input is entered
+     * @param text An error message to be displayed.
+     */
     public void clearScreen(String text){
         weightField.setText("");
         walkingSpeedField.setText("");
