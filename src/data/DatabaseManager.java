@@ -32,17 +32,17 @@ public class DatabaseManager {
     /**
      * Inserts a met value into the database.
      *
-     * @param mets     The mets value of the activity
+     * @param met     The met value of the activity
      * @param speedA   The beginning of the speed range in miles per hour.
      * @param speedB   The end of the speed range in miles per hour.
      * @param activity The name of the activity, only use activities which can be done while following a path.
      * @see <a href="https://sites.google.com/site/compendiumofphysicalactivities/Activity-Categories"> for more info</a>
      */
-    public void insertMets(double mets, double speedA, double speedB, String activity) {
+    public void insertMet(double met, double speedA, double speedB, String activity) {
         try {
             String sql = "INSERT INTO metvalues (metvalue, speeda, speedb,  activity) VALUES (?, ?, ?, ?);";
             PreparedStatement pst = c.prepareStatement(sql);
-            pst.setDouble(1, mets);
+            pst.setDouble(1, met);
             pst.setDouble(2, speedA);
             pst.setDouble(3, speedB);
             pst.setString(4, activity);

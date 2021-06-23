@@ -76,7 +76,7 @@ public class FileManager {
     }
 
     /**
-     * Generates a bbox, which is required in an overpass request. It generates a bbox of totaldistance * totaldistance
+     * Generates a bbox, which is required in an overpass request. It generates a bbox of total distance * total distance
      * so even in the worst case scenario (straight way from A to B) enough data is available.
      * This function has an error rate of around 30%, but always overestimates.
      *
