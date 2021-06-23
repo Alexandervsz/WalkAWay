@@ -14,7 +14,7 @@ public class User {
     /**
      * Create a new user object
      *
-     * @param mets         Mets value of the user's chosen activity.
+     * @param met          Met value of the user's chosen activity.
      * @param weight       The user's weight in kilograms.
      * @param walkingSpeed The user's walking speed in kilometers per hour.
      * @param kcal         The amount of calories the walk needs to burn.
@@ -22,13 +22,13 @@ public class User {
      * @param lat          The user's latitude.
      * @param isRandom     Whether the user wants a random path or not.
      */
-    public User(double mets, double weight, double walkingSpeed, double kcal, double lon, double lat, boolean isRandom) {
+    public User(double met, double weight, double walkingSpeed, double kcal, double lon, double lat, boolean isRandom) {
         double time = 0;
-        if (mets != 0 && weight != 0) {
-            time = kcal * 200 / (mets * 3.5 * weight); //in minutes.
+        if (met != 0 && weight != 0) {
+            time = kcal * 200 / (met * 3.5 * weight); //in minutes.
         }
         this.isRandom = isRandom;
-        this.kcalPerMinute = mets * 3.5 * weight / 200.0;
+        this.kcalPerMinute = met * 3.5 * weight / 200.0;
         this.walkingSpeed = walkingSpeed;
         this.distance = (time / 60 * walkingSpeed) * 1000;
         this.lon = lon;
@@ -57,11 +57,12 @@ public class User {
 
     /**
      * Returns the time the user takes to walk the given distance.
+     *
      * @param distance The distance the user has to walk.
      * @return The time it takes for the user to walk this distance.
      */
     public double getTime(Double distance) {
-        if (distance == 0){
+        if (distance == 0) {
             return 0;
         }
         return distance / 1000 / walkingSpeed * 60;
