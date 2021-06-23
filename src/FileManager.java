@@ -39,23 +39,19 @@ public class FileManager {
         String bbox = generateBbox(beginNode, totalDistance, isRandom);
         DatabaseManager databaseManager = new DatabaseManager();
         List<WayType> wayTypes = databaseManager.getWayTypes();
-        List<String> options = new ArrayList<>();
-        options.add("way");
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("[out:json];(");
         for (WayType wayType : wayTypes) {
-            for (String option : options) {
-                stringBuilder.append(option);
-                stringBuilder.append("[");
-                stringBuilder.append(wayType.getMainType());
-                if (!wayType.getSubType().equals("-1")) {
-                    stringBuilder.append("=");
-                    stringBuilder.append(wayType.getSubType());
-                }
-                stringBuilder.append("](");
-                stringBuilder.append(bbox);
-                stringBuilder.append(");");
+            stringBuilder.append("way");
+            stringBuilder.append("[");
+            stringBuilder.append(wayType.getMainType());
+            if (!wayType.getSubType().equals("-1")) {
+                stringBuilder.append("=");
+                stringBuilder.append(wayType.getSubType());
             }
+            stringBuilder.append("](");
+            stringBuilder.append(bbox);
+            stringBuilder.append(");");
         }
         stringBuilder.append(");(._;>;);out;");
         String query = URLEncoder.encode(stringBuilder.toString(), StandardCharsets.UTF_8);
