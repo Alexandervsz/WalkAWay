@@ -1,10 +1,9 @@
 package algorithm;
 
 import java.util.*;
-import java.util.List;
 
 /**
- * This class generates a path of a given length, or null if a path canot be found.
+ * This class generates a path of a given length, or null if a path cannot be found.
  */
 public class PathFinder {
     private final Set<Way> waySet;
@@ -44,11 +43,11 @@ public class PathFinder {
             currentWay.setPreviousWay(previousWay);
             while (currentWay.equals(new Way("empty"))) {
                 if (currentWay.getDirection() == 1) {
-                    NavigableMap<Integer, Node> waynodes = currentWay.getNodePositionsReversed();
-                    revertPath(waynodes, currentWay);
+                    NavigableMap<Integer, Node> wayNodes = currentWay.getNodePositionsReversed();
+                    revertPath(wayNodes, currentWay);
                 } else if (currentWay.getDirection() == -1) {
-                    TreeMap<Integer, Node> waynodes = currentWay.getNodePositions();
-                    revertPath(waynodes, currentWay);
+                    TreeMap<Integer, Node> wayNodes = currentWay.getNodePositions();
+                    revertPath(wayNodes, currentWay);
                 }
                 currentWay = currentWay.getPreviousWay();
                 if (currentWay == null) {
