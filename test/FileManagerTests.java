@@ -139,7 +139,7 @@ public class FileManagerTests {
         fileManager.generateGpx(fileEmpty, filename, emptyPoints);
         String actual = Files.readString(fileEmpty.toPath());
         Assertions.assertEquals("""
-                <?xml version="1.0" encoding="UTF-8" standalone="no" ?><gpx xmlns="http://www.topografix.com/GPX/1/1" creator="MapSource 6.15.5" version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"><trk>
+                <?xml version="1.0" encoding="UTF-8" standalone="no" ?><gpx xmlns="http://www.topografix.com/GPX/1/1" creator="WalkAWay" version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"><trk>
                 <name>test</name><trkseg>
                 </trkseg></trk></gpx>""", actual);
     }
