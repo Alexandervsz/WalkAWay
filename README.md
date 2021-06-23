@@ -36,8 +36,9 @@ To get started planning some routes you will first need to take care of some thi
 
 ## Setup
 To begin, clone/download this repository and open it in your IDE of choice (IntelliJ IDEA used in the screenshots). Then add the three jar files to the dependencies of the main module, called WalkAWay.
-Then open your pgadmin screen (or terminal) and create a new database named walkaway. Once this is done right click your new database, and select query tool.
-Once this is open run the two scripts inside the db folder of this repository, and execute them. 
+![dependency](AddDependency.png)
+Then open your pgadmin screen (or terminal) and create a new database named walkaway. Once this is done, right-click your new database, and select query tool.
+Copy the two scripts inside the db folder of this repository, and execute them. 
 Then all that's left is opening DatabaseManager.java (src/data) and changing the password to your own PostgreSQL password.
 To confirm everything is working the tests can be executed in the test folder. (For this you will need to add the JUnit4 and JUnit5.7.0 libraries, but your IDE should be able to install them automatically.)
 To start the application simply run UserInputScreen, found under src/gui/UserInputScreen.
