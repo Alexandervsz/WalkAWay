@@ -6,6 +6,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Test class for the PathFinder class.
+ */
 public class PathfinderTests {
     Node start = new Node("start", 5.070738, 52.637090);
     Node node1 = new Node("1", 5.070749, 52.637081);
@@ -29,6 +32,9 @@ public class PathfinderTests {
     Node node15 = new Node("15", 5.070386, 52.636889);
     Way way5 = new Way("5");
 
+    /**
+     * Tests whether getRoute generates the correct path.
+     */
     @Test
     public void testRoute() {
         initialiseNodes();
@@ -61,6 +67,9 @@ public class PathfinderTests {
 
     }
 
+    /**
+     * Tests whether getClosestWay returns the closest way.
+     */
     @Test
     public void testClosestWay() {
         initialiseNodes();
@@ -75,6 +84,9 @@ public class PathfinderTests {
 
     }
 
+    /**
+     * Tests whether walkPath correctly walks the path from input to finish.
+     */
     @Test
     void testWalkPath() {
         Set<Way> waySet = generateWaySet();
@@ -86,8 +98,20 @@ public class PathfinderTests {
         expectedOutput.add(node2);
         expectedOutput.add(node3);
         Assertions.assertEquals(expectedOutput, pathFinder.getPath());
+
+        waySet = generateWaySet();
+        initialiseNodes();
+        pathFinder = new PathFinder(start, waySet, 100);
+        pathFinder.walkPath(way1.getNodePositionsFromPoint(2), node2);
+        expectedOutput = new ArrayList<>();
+        expectedOutput.add(start);
+        expectedOutput.add(node3);
+        Assertions.assertEquals(expectedOutput, pathFinder.getPath());
     }
 
+    /**
+     * Test whether the processWay function is working as intended.
+     */
     @Test
     void processWay() {
         Set<Way> waySet = generateWaySet();
@@ -101,6 +125,9 @@ public class PathfinderTests {
         Assertions.assertEquals(expectedOutput, pathFinder.getPath());
     }
 
+    /**
+     * Refreshes the nodes, since the pathfinding algorithm changes the nodes distanceToCurrentNode.
+     */
     public void initialiseNodes() {
         way1.addNode(1, node1);
         way1.addNode(2, node2);
@@ -119,6 +146,11 @@ public class PathfinderTests {
         way5.addNode(3, node15);
     }
 
+    /**
+     * Initialises the wayset, must be called every test since pathfinder modifies it's contents.
+     *
+     * @return A set with the test ways.
+     */
     public Set<Way> generateWaySet() {
         Set<Way> wayset = new HashSet<>();
         wayset.add(way1);

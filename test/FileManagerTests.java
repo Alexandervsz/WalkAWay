@@ -13,7 +13,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
+/**
+ * Test class which tests FileManager.
+ */
 public class FileManagerTests {
+    /**
+     * Tests if the bounding box is correct at the north pole.
+     */
     @Test
     public void testBboxNorthPole() {
         Node northPole = new Node("north", 0, 90.0000);
@@ -22,24 +28,44 @@ public class FileManagerTests {
 
     }
 
+    /**
+     * Tests if the bounding box is correct at the equator.
+     */
     @Test
-    public void testBboxEquator(){
+    public void testBboxEquator() {
         Node equator = new Node("null", 0, 0);
         testBbox(equator);
 
     }
 
+    /**
+     * Tests if the bounding box is correct at the earstern most point of earth
+     */
     @Test
-    public void testBboxEast(){
-        Node equator = new Node("null", 180, 90);
+    public void testBboxEast() {
+        Node equator = new Node("null", 180, 0);
         testBbox(equator);
 
     }
 
-    public void testBbox(Node node){
-        // Since the Bbox MUST be at least equal to totaldistance in both ways, the fact that the bbox is not 100%
-        // accurate (since its an approximation upon an approximation) doesn't really matter, as long as it's bigger
-        // than the required size.
+    /**
+     * Tests whether the bouding box is correct in the Netherlands.
+     */
+    @Test
+    public void testBboxNl() {
+        Node netherlands = new Node("nl", 5, 52);
+        testBbox(netherlands);
+    }
+
+    /**
+     * Tests the distance between the generated bbox points, it should be at least x2 the input distance in case of
+     * worst case scenario path (straight line). Therefore tests fail when the generated bbox is too small.
+     * Since it uses the haversine formula twice, which leads to a delta of 6%, and inaccuracies of the bounding box
+     * generating algorithm, a delta of 15% is used.
+     *
+     * @param node A position on the map to verify the bbox for.
+     */
+    public void testBbox(Node node) {
         FileManager fileManager = new FileManager();
         boolean test1 = verifyBbox(1, node) > 2;
         boolean test2 = verifyBbox(10, node) > 20;
@@ -50,9 +76,9 @@ public class FileManagerTests {
         boolean test7 = verifyBbox(100000, node) > 200000;
         Assertions.assertAll(
                 () -> Assertions.assertEquals("0.0,0.0,0.0,0.0", fileManager.generateBbox(new Node("0", 0, 0), 0, false)),
-                () -> Assertions.assertEquals(2, verifyBbox(1, node), 2 * 0.15), // uses haversine formula twice so double te error rate.
-                () -> Assertions.assertEquals(20, verifyBbox(10, node),20 * 0.15),
-                () -> Assertions.assertEquals(200, verifyBbox(100, node),200 * 0.15),
+                () -> Assertions.assertEquals(2, verifyBbox(1, node), 2 * 0.15),
+                () -> Assertions.assertEquals(20, verifyBbox(10, node), 20 * 0.15),
+                () -> Assertions.assertEquals(200, verifyBbox(100, node), 200 * 0.15),
                 () -> Assertions.assertEquals(2000, verifyBbox(1000, node), 2000 * 0.15),
                 () -> Assertions.assertEquals(20000, verifyBbox(10000, node), 20000 * 0.15),
                 () -> Assertions.assertEquals(100000, verifyBbox(50000, node), 100000 * 0.15),
@@ -68,6 +94,11 @@ public class FileManagerTests {
         );
     }
 
+    /**
+     * Tests whether the json file is parsed correctly. Also tests if the IO error is raised correctly.
+     *
+     * @throws Exception When the test file cannot be found.
+     */
     @Test
     public void testJson() throws Exception {
         FileManager fileManager = new FileManager();
@@ -90,6 +121,12 @@ public class FileManagerTests {
         }
     }
 
+    /**
+     * Tests whether the gpx file is successfully generated. Can't be tested with sample data since the generation
+     * of the gpx file uses system time. Therefore an empty set is tested.
+     *
+     * @throws IOException If something is wrong with the filepath.
+     */
     @Test
     public void testGPX() throws IOException {
         // Since current time is used during generating of path, only empty file can be verified.
@@ -105,6 +142,13 @@ public class FileManagerTests {
                 </trkseg></trk></gpx>""", actual);
     }
 
+    /**
+     * Generates a Bbox, and then returns the distance between the edge points.
+     *
+     * @param totaldistance The total distance to be walked.
+     * @param testNode      The starting point to base the Bbox on.
+     * @return The distance between the extremities of the bounding box.
+     */
     public double verifyBbox(double totaldistance, Node testNode) {
         FileManager fileManager = new FileManager();
         String Bbox1 = fileManager.generateBbox(testNode, totaldistance, false);

@@ -3,6 +3,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.TreeMap;
 
+/**
+ * Test class for the Way class.
+ */
 public class WayTests {
     Node test1 = new Node("test1", 5.068873, 52.636179);
     Node test2 = new Node("test2", 5.069118, 52.636297);
@@ -12,6 +15,9 @@ public class WayTests {
     Node test6 = new Node("test6", 5.070024, 52.636760);
     Way testWay = new Way("test");
 
+    /**
+     * Tests whether the way returns the right positions and nodes. Also verifies that direction is handled correctly.
+     */
     @Test
     public void testNodePositions() {
         testWay.addNode(1, test2);
