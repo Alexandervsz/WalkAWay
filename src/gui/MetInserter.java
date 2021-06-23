@@ -8,9 +8,9 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 
 /**
- * This class is used to make it easier to insert metvalues into the database. Not meant for end users.
+ * This class is used to make it easier to insert MetValues into the database. Not meant for end users.
  */
-public class MetsInserter extends JFrame {
+public class MetInserter extends JFrame {
     private JPanel mainPanel;
     private JButton confirmButton;
     private JLabel metsLabel;
@@ -28,11 +28,11 @@ public class MetsInserter extends JFrame {
     /**
      * Initializes the layout of the UI.
      */
-    public MetsInserter() {
+    public MetInserter() {
         this.setLocationRelativeTo(null);
-        metsLabel.setText("Please enter the mets value of your activity: ");
-        speedALabel.setText("Please enter the beginning of the speed range of the activity(mph): ");
-        speedBLabel.setText("Please enter the end of the speed range of the activity(mph): ");
+        metsLabel.setText("Please enter the MET value of your activity: ");
+        speedALabel.setText("Please enter the beginning of the speed range of the activity (mph): ");
+        speedBLabel.setText("Please enter the end of the speed range of the activity (mph): ");
         activityLabel.setText("Please enter a description of the activity: ");
         confirmButton.setText("Confirm");
         confirmButton.addActionListener(this::addMets);
@@ -80,6 +80,6 @@ public class MetsInserter extends JFrame {
     }
 
     public static void main(String[] args) {
-        new MetsInserter();
+        new MetInserter();
     }
 }
