@@ -36,10 +36,10 @@ public class Node implements Comparable<Node> {
         double R = 6371000.0;
         double phi1 = lat * Math.PI / 180;
         double phi2 = target.getLat() * Math.PI / 180;
-        double deltaphi = (target.getLat() - lat) * Math.PI / 180;
-        double deltalambda = (target.getLon() - lon) * Math.PI / 180;
-        double a = Math.sin(deltaphi / 2) * Math.sin(deltaphi / 2) + Math.cos(phi1) * Math.cos(phi2) *
-                Math.sin(deltalambda / 2) * Math.sin(deltalambda / 2);
+        double deltaPhi = (target.getLat() - lat) * Math.PI / 180;
+        double deltaLambda = (target.getLon() - lon) * Math.PI / 180;
+        double a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) + Math.cos(phi1) * Math.cos(phi2) *
+                Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         distanceToCurrentNode = R * c; // In meters.
         return R * c;
@@ -62,7 +62,7 @@ public class Node implements Comparable<Node> {
     }
 
     /**
-     * @return The lattitude in decimal degrees.
+     * @return The latitude in decimal degrees.
      */
     public double getLat() {
         return lat;
