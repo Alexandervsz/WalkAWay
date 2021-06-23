@@ -36,6 +36,8 @@ public class PathFinder {
      * the node it entered. Once the path has been traversed, it checks whether the required distance has been met,
      * and starts over again if needed. Also, when it meets a dead end, it follows the routes back to either start
      * (no path found) or until a viable path is found.
+     *
+     * @return The route generated.
      */
     public List<Node> getRoute() {
         while (totalDistance < requiredDistance) {

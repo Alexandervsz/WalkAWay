@@ -68,6 +68,10 @@ public class Node implements Comparable<Node> {
         return lat;
     }
 
+    /**
+     * Returns the id
+     * @return A string containing the id.
+     */
     public String getId() {
         return id;
     }

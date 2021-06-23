@@ -79,6 +79,10 @@ public class MetInserter extends JFrame {
         }
     }
 
+    /**
+     * Main method to run the met inserter.
+     * @param args Unimplemented.
+     */
     public static void main(String[] args) {
         new MetInserter();
     }

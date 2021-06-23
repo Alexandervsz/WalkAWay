@@ -68,19 +68,34 @@ public class User {
         return distance / 1000 / walkingSpeed * 60;
     }
 
-
+    /**
+     * Returns whather the user wants the path randomize or not.
+     * @return A boolean which represents whether the checkbox was clicked.
+     */
     public boolean isRandom() {
         return isRandom;
     }
 
+    /**
+     * Returns the user's longitude
+     * @return The longitude in decimal degrees.
+     */
     public double getLon() {
         return lon;
     }
 
+    /**
+     * Returns the user's latitude.
+     * @return The latitude in decimal degrees.
+     */
     public double getLat() {
         return lat;
     }
 
+    /**
+     * Returns the user's kcal per minute.
+     * @return the kcal per minute.
+     */
     public double getKcalPerMinute() {
         return kcalPerMinute;
     }
