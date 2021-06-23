@@ -1,17 +1,25 @@
+import algorithm.Node;
+import algorithm.Way;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.TreeMap;
 
+/**
+ * Test class for the algorithm.Way class.
+ */
 public class WayTests {
-    Node test1 = new Node("test1", 5.068873, 52.636179);
-    Node test2 = new Node("test2", 5.069118, 52.636297);
-    Node test3 = new Node("test3", 5.069439, 52.636467);
-    Node test4 = new Node("test4", 5.069630, 52.636555);
-    Node test5 = new Node("test5", 5.069799, 52.636649);
-    Node test6 = new Node("test6", 5.070024, 52.636760);
-    Way testWay = new Way("test");
+    final Node test1 = new Node("test1", 5.068873, 52.636179);
+    final Node test2 = new Node("test2", 5.069118, 52.636297);
+    final Node test3 = new Node("test3", 5.069439, 52.636467);
+    final Node test4 = new Node("test4", 5.069630, 52.636555);
+    final Node test5 = new Node("test5", 5.069799, 52.636649);
+    final Node test6 = new Node("test6", 5.070024, 52.636760);
+    final Way testWay = new Way("test");
 
+    /**
+     * Tests whether the way returns the right positions and nodes. Also verifies that direction is handled correctly.
+     */
     @Test
     public void testNodePositions() {
         testWay.addNode(1, test2);

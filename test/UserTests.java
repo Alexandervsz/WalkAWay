@@ -1,14 +1,20 @@
+import data.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-
+/**
+ * Test class for the data.User class.
+ */
 public class UserTests {
-    User test1 = new User(3.0, 70, 5.1, 200, 5.0626701, 52.6492016, false);
-    User test2 = new User(3.5, 80, 4.9, 65, 0, 0, false);
-    User test3 = new User(8.3, 60, 8, 500, 0, 0, false);
-    User test4 = new User(1, 1, 1, 1.75, 0, 0, false);
-    User test5 = new User(0, 0, 0, 0, 0, 0, false);
+    final User test1 = new User(3.0, 70, 5.1, 200, 5.0626701, 52.6492016, false);
+    final User test2 = new User(3.5, 80, 4.9, 65, 0, 0, false);
+    final User test3 = new User(8.3, 60, 8, 500, 0, 0, false);
+    final User test4 = new User(1, 1, 1, 1.75, 0, 0, false);
+    final User test5 = new User(0, 0, 0, 0, 0, 0, false);
 
+    /**
+     * Tests whether calculated times are correct.
+     */
     @Test
     public void testTime() {
         Assertions.assertAll(
@@ -20,6 +26,9 @@ public class UserTests {
         );
     }
 
+    /**
+     * Tests whether the calculated calories per minute are correct.
+     */
     @Test
     public void testCalories() {
         Assertions.assertAll(
@@ -31,6 +40,9 @@ public class UserTests {
         );
     }
 
+    /**
+     * Tests whether the calculated distances are correct.
+     */
     @Test
     public void testDistance() {
         Assertions.assertAll(
@@ -42,6 +54,9 @@ public class UserTests {
         );
     }
 
+    /**
+     * Tests whether the calculated estimated calories are correct.
+     */
     @Test
     public void testEstimatedKcal() {
         Assertions.assertAll(
@@ -53,8 +68,11 @@ public class UserTests {
         );
     }
 
+    /**
+     * Tests for rounding errors in latitude/longitude.
+     */
     @Test
-    public void testLatLong(){
+    public void testLatLong() {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(5.0626701, test1.getLon()),
                 () -> Assertions.assertEquals(52.6492016, test1.getLat())

@@ -1,10 +1,17 @@
+import data.MetValue;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
+/**
+ * Test class for the toString method of the MetValues class.
+ */
 public class MetValueTests {
 
+    /**
+     * Tests whether the right string is returned based on whether or not the activity has a speed range.
+     */
     @Test
-    public void metValueTests(){
+    public void metValueTests() {
         MetValue test1 = new MetValue(0, 0, 0, "test");
         MetValue test2 = new MetValue(0, 1, 0, "test");
         MetValue test3 = new MetValue(0, 0, 1, "test");
