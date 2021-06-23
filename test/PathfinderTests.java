@@ -13,27 +13,27 @@ import java.util.Set;
  * Test class for the algorithm.PathFinder class.
  */
 public class PathfinderTests {
-    Node start = new Node("start", 5.070738, 52.637090);
-    Node node1 = new Node("1", 5.070749, 52.637081);
-    Node node2 = new Node("2", 5.070773, 52.637073);
-    Node node3 = new Node("3", 5.070797, 52.637066);
-    Way way1 = new Way("1");
-    Node node4 = new Node("4", 5.070942, 52.637018);
-    Node node5 = new Node("5", 5.070970, 52.637007);
-    Node node6 = new Node("6", 5.071000, 52.636997);
-    Way way2 = new Way("2");
-    Node node7 = new Node("7", 5.071037, 52.636981);
-    Node node8 = new Node("8", 5.071066, 52.636971);
-    Node node9 = new Node("9", 5.071087, 52.636961);
-    Way way3 = new Way("3");
-    Node node10 = new Node("10", 5.070760, 52.637236);
-    Node node11 = new Node("11", 5.070749, 52.637283);
-    Node node12 = new Node("12", 5.070733, 52.637327);
-    Way way4 = new Way("4");
-    Node node13 = new Node("13", 5.070498, 52.636946);
-    Node node14 = new Node("14", 5.070437, 52.636923);
-    Node node15 = new Node("15", 5.070386, 52.636889);
-    Way way5 = new Way("5");
+    final Node start = new Node("start", 5.070738, 52.637090);
+    final Node node1 = new Node("1", 5.070749, 52.637081);
+    final Node node2 = new Node("2", 5.070773, 52.637073);
+    final Node node3 = new Node("3", 5.070797, 52.637066);
+    final Way way1 = new Way("1");
+    final Node node4 = new Node("4", 5.070942, 52.637018);
+    final Node node5 = new Node("5", 5.070970, 52.637007);
+    final Node node6 = new Node("6", 5.071000, 52.636997);
+    final Way way2 = new Way("2");
+    final Node node7 = new Node("7", 5.071037, 52.636981);
+    final Node node8 = new Node("8", 5.071066, 52.636971);
+    final Node node9 = new Node("9", 5.071087, 52.636961);
+    final Way way3 = new Way("3");
+    final Node node10 = new Node("10", 5.070760, 52.637236);
+    final Node node11 = new Node("11", 5.070749, 52.637283);
+    final Node node12 = new Node("12", 5.070733, 52.637327);
+    final Way way4 = new Way("4");
+    final Node node13 = new Node("13", 5.070498, 52.636946);
+    final Node node14 = new Node("14", 5.070437, 52.636923);
+    final Node node15 = new Node("15", 5.070386, 52.636889);
+    final Way way5 = new Way("5");
 
     /**
      * Tests whether getRoute generates the correct path.
@@ -150,18 +150,18 @@ public class PathfinderTests {
     }
 
     /**
-     * Initialises the wayset, must be called every test since pathfinder modifies it's contents.
+     * Initialises the waySet, must be called every test since pathfinder modifies it's contents.
      *
      * @return A set with the test ways.
      */
     public Set<Way> generateWaySet() {
-        Set<Way> wayset = new HashSet<>();
-        wayset.add(way1);
-        wayset.add(way2);
-        wayset.add(way3);
-        wayset.add(way4);
-        wayset.add(way5);
-        return wayset;
+        Set<Way> waySet = new HashSet<>();
+        waySet.add(way1);
+        waySet.add(way2);
+        waySet.add(way3);
+        waySet.add(way4);
+        waySet.add(way5);
+        return waySet;
     }
 
 }
