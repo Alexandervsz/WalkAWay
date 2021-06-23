@@ -160,6 +160,10 @@ public class PathFinder {
         return totalDistance;
     }
 
+    /**
+     * Used in testing
+     * @return The generated path.
+     */
     public List<Node> getPath() {
         return path;
     }
