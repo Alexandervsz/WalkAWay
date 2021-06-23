@@ -21,8 +21,8 @@ import java.util.Set;
  * the progress. When it's done it shows some data and the generated path.
  */
 public class PathFindingActivity {
-    User user;
-    Node beginNode;
+    final User user;
+    final Node beginNode;
 
     /**
      * Creates a new pathfinding activity.
