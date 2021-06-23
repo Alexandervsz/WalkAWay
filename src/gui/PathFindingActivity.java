@@ -47,6 +47,9 @@ public class PathFindingActivity {
             protected Void doInBackground() throws IOException, ParseException, InterruptedException {
                 fileManager.getOverpassData(beginNode, user.getDistance(), dialog, user.isRandom());
                 Set<Way> waySet = fileManager.getWaySet();
+                if (waySet.size() == 0){
+                    new PathNotFound();
+                }
                 dialog.setProgress(60);
                 dialog.setText(" Generating path...");
                 PathFinder pathFinder = new PathFinder(beginNode, waySet, user.getDistance());
